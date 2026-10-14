@@ -1,0 +1,1554 @@
+{
+  "institucion": "ISFT 191",
+  "carreras": [
+    {
+      "id": 1,
+      "code": "SOFT",
+      "name": "Tecnicatura Superior en Desarrollo de Software",
+      "resolution": "RS 5847/19",
+      "source_sheet": "Desarrollo de Software",
+      "materias": [
+        {
+          "id": 101,
+          "carrera_id": 1,
+          "code": "SOFT-101",
+          "name": "Análisis Matemático",
+          "year": 1
+        },
+        {
+          "id": 102,
+          "carrera_id": 1,
+          "code": "SOFT-102",
+          "name": "Administración y gestión de base de datos",
+          "year": 1
+        },
+        {
+          "id": 103,
+          "carrera_id": 1,
+          "code": "SOFT-103",
+          "name": "Introducción a la programación",
+          "year": 1
+        },
+        {
+          "id": 104,
+          "carrera_id": 1,
+          "code": "SOFT-104",
+          "name": "Introducción a las redes de datos",
+          "year": 1
+        },
+        {
+          "id": 105,
+          "carrera_id": 1,
+          "code": "SOFT-105",
+          "name": "Sistemas Digitales",
+          "year": 1
+        },
+        {
+          "id": 106,
+          "carrera_id": 1,
+          "code": "SOFT-106",
+          "name": "Sistemas operativos",
+          "year": 1
+        },
+        {
+          "id": 107,
+          "carrera_id": 1,
+          "code": "SOFT-107",
+          "name": "Laboratorio de Hardware",
+          "year": 1
+        },
+        {
+          "id": 108,
+          "carrera_id": 1,
+          "code": "SOFT-108",
+          "name": "Prácticas Profesionalizantes I",
+          "year": 1
+        },
+        {
+          "id": 109,
+          "carrera_id": 1,
+          "code": "SOFT-201",
+          "name": "Inglés I",
+          "year": 2
+        },
+        {
+          "id": 110,
+          "carrera_id": 1,
+          "code": "SOFT-202",
+          "name": "Desarrollo de aplicativos móviles",
+          "year": 2
+        },
+        {
+          "id": 111,
+          "carrera_id": 1,
+          "code": "SOFT-203",
+          "name": "Algebra y lógica",
+          "year": 2
+        },
+        {
+          "id": 112,
+          "carrera_id": 1,
+          "code": "SOFT-204",
+          "name": "Programación",
+          "year": 2
+        },
+        {
+          "id": 113,
+          "carrera_id": 1,
+          "code": "SOFT-205",
+          "name": "Diseño Web",
+          "year": 2
+        },
+        {
+          "id": 114,
+          "carrera_id": 1,
+          "code": "SOFT-206",
+          "name": "Estadística y Probabilidades",
+          "year": 2
+        },
+        {
+          "id": 115,
+          "carrera_id": 1,
+          "code": "SOFT-207",
+          "name": "Desarrollo de sistemas Orientado a Objetos",
+          "year": 2
+        },
+        {
+          "id": 116,
+          "carrera_id": 1,
+          "code": "SOFT-208",
+          "name": "Prácticas Profesionalizantes II",
+          "year": 2
+        },
+        {
+          "id": 117,
+          "carrera_id": 1,
+          "code": "SOFT-301",
+          "name": "Inglés II",
+          "year": 3
+        },
+        {
+          "id": 118,
+          "carrera_id": 1,
+          "code": "SOFT-302",
+          "name": "Gestión de Proyectos",
+          "year": 3
+        },
+        {
+          "id": 119,
+          "carrera_id": 1,
+          "code": "SOFT-303",
+          "name": "Desarrollo de sistemas Web",
+          "year": 3
+        },
+        {
+          "id": 120,
+          "carrera_id": 1,
+          "code": "SOFT-304",
+          "name": "Ingeniería de software",
+          "year": 3
+        },
+        {
+          "id": 121,
+          "carrera_id": 1,
+          "code": "SOFT-305",
+          "name": "Metodología de pruebas de sistemas",
+          "year": 3
+        },
+        {
+          "id": 122,
+          "carrera_id": 1,
+          "code": "SOFT-306",
+          "name": "Prácticas Profesionalizantes III",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "code": "ADU-5309",
+      "name": "Tecnicatura Superior en Régimen Aduanero",
+      "resolution": "RS 5309/24",
+      "source_sheet": "REGIMEN ADUANERO RS 5309/24 ",
+      "materias": [
+        {
+          "id": 201,
+          "carrera_id": 2,
+          "code": "ADU-5309-101",
+          "name": "Inglés 1",
+          "year": 1
+        },
+        {
+          "id": 202,
+          "carrera_id": 2,
+          "code": "ADU-5309-102",
+          "name": "Derecho Comercial, Seguros y Operativa Bancaria",
+          "year": 1
+        },
+        {
+          "id": 203,
+          "carrera_id": 2,
+          "code": "ADU-5309-103",
+          "name": "Régimen Legal",
+          "year": 1
+        },
+        {
+          "id": 204,
+          "carrera_id": 2,
+          "code": "ADU-5309-104",
+          "name": "Importación",
+          "year": 1
+        },
+        {
+          "id": 205,
+          "carrera_id": 2,
+          "code": "ADU-5309-105",
+          "name": "Exportación",
+          "year": 1
+        },
+        {
+          "id": 206,
+          "carrera_id": 2,
+          "code": "ADU-5309-106",
+          "name": "Valoración 1",
+          "year": 1
+        },
+        {
+          "id": 207,
+          "carrera_id": 2,
+          "code": "ADU-5309-107",
+          "name": "Clasificación Arancelaria 1",
+          "year": 1
+        },
+        {
+          "id": 208,
+          "carrera_id": 2,
+          "code": "ADU-5309-108",
+          "name": "Práctica Profesionalizante 1: Aproximación al Campo Laboral",
+          "year": 1
+        },
+        {
+          "id": 209,
+          "carrera_id": 2,
+          "code": "ADU-5309-201",
+          "name": "Inglés 2",
+          "year": 2
+        },
+        {
+          "id": 210,
+          "carrera_id": 2,
+          "code": "ADU-5309-202",
+          "name": "Integración Económica",
+          "year": 2
+        },
+        {
+          "id": 211,
+          "carrera_id": 2,
+          "code": "ADU-5309-203",
+          "name": "Derecho y Procedimiento Tributario",
+          "year": 2
+        },
+        {
+          "id": 212,
+          "carrera_id": 2,
+          "code": "ADU-5309-204",
+          "name": "Regímenes Especiales y Zonas Francas",
+          "year": 2
+        },
+        {
+          "id": 213,
+          "carrera_id": 2,
+          "code": "ADU-5309-205",
+          "name": "Valoración 2",
+          "year": 2
+        },
+        {
+          "id": 214,
+          "carrera_id": 2,
+          "code": "ADU-5309-206",
+          "name": "Clasificación Arancelaria 2",
+          "year": 2
+        },
+        {
+          "id": 215,
+          "carrera_id": 2,
+          "code": "ADU-5309-207",
+          "name": "Comercio Internacional 1",
+          "year": 2
+        },
+        {
+          "id": 216,
+          "carrera_id": 2,
+          "code": "ADU-5309-208",
+          "name": "Práctica Profesionalizante 2: Diseño de Proyectos de Régimen Aduanero",
+          "year": 2
+        },
+        {
+          "id": 217,
+          "carrera_id": 2,
+          "code": "ADU-5309-301",
+          "name": "Inglés 3",
+          "year": 3
+        },
+        {
+          "id": 218,
+          "carrera_id": 2,
+          "code": "ADU-5309-302",
+          "name": "Administración de las Organizaciones",
+          "year": 3
+        },
+        {
+          "id": 219,
+          "carrera_id": 2,
+          "code": "ADU-5309-303",
+          "name": "Negocios Internacionales",
+          "year": 3
+        },
+        {
+          "id": 220,
+          "carrera_id": 2,
+          "code": "ADU-5309-304",
+          "name": "Investigación de Mercados Internacionales",
+          "year": 3
+        },
+        {
+          "id": 221,
+          "carrera_id": 2,
+          "code": "ADU-5309-305",
+          "name": "Logística y Distribución",
+          "year": 3
+        },
+        {
+          "id": 222,
+          "carrera_id": 2,
+          "code": "ADU-5309-306",
+          "name": "Comercio Internacional 2",
+          "year": 3
+        },
+        {
+          "id": 223,
+          "carrera_id": 2,
+          "code": "ADU-5309-307",
+          "name": "Práctica Profesionalizante 3: Gestión de Proyectos de Régimen Aduanero",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "code": "ADU-1896",
+      "name": "Tecnicatura Superior en Régimen Aduanero",
+      "resolution": "RS 1896/09",
+      "source_sheet": "REGIMEN ADUANERO RS 1896/09",
+      "materias": [
+        {
+          "id": 301,
+          "carrera_id": 3,
+          "code": "ADU-1896-101",
+          "name": "Inglés I",
+          "year": 1
+        },
+        {
+          "id": 302,
+          "carrera_id": 3,
+          "code": "ADU-1896-102",
+          "name": "Ética y Deontología Profesional",
+          "year": 1
+        },
+        {
+          "id": 303,
+          "carrera_id": 3,
+          "code": "ADU-1896-103",
+          "name": "Principios de Derecho Comercial, Seguros y Operativa Bancaria",
+          "year": 1
+        },
+        {
+          "id": 304,
+          "carrera_id": 3,
+          "code": "ADU-1896-104",
+          "name": "Régimen Legal",
+          "year": 1
+        },
+        {
+          "id": 305,
+          "carrera_id": 3,
+          "code": "ADU-1896-105",
+          "name": "Importación",
+          "year": 1
+        },
+        {
+          "id": 306,
+          "carrera_id": 3,
+          "code": "ADU-1896-106",
+          "name": "Exportación",
+          "year": 1
+        },
+        {
+          "id": 307,
+          "carrera_id": 3,
+          "code": "ADU-1896-107",
+          "name": "Valoración I",
+          "year": 1
+        },
+        {
+          "id": 308,
+          "carrera_id": 3,
+          "code": "ADU-1896-108",
+          "name": "Clasificación Arancelaria I",
+          "year": 1
+        },
+        {
+          "id": 309,
+          "carrera_id": 3,
+          "code": "ADU-1896-109",
+          "name": "Comercio Exterior I",
+          "year": 1
+        },
+        {
+          "id": 310,
+          "carrera_id": 3,
+          "code": "ADU-1896-110",
+          "name": "Práctica Profesional I",
+          "year": 1
+        },
+        {
+          "id": 311,
+          "carrera_id": 3,
+          "code": "ADU-1896-201",
+          "name": "Inglés II",
+          "year": 2
+        },
+        {
+          "id": 312,
+          "carrera_id": 3,
+          "code": "ADU-1896-202",
+          "name": "Economía",
+          "year": 2
+        },
+        {
+          "id": 313,
+          "carrera_id": 3,
+          "code": "ADU-1896-203",
+          "name": "Derecho y Procedimiento Tributario",
+          "year": 2
+        },
+        {
+          "id": 314,
+          "carrera_id": 3,
+          "code": "ADU-1896-204",
+          "name": "Regímenes Especiales y Zonas Francas",
+          "year": 2
+        },
+        {
+          "id": 315,
+          "carrera_id": 3,
+          "code": "ADU-1896-205",
+          "name": "Valoración II",
+          "year": 2
+        },
+        {
+          "id": 316,
+          "carrera_id": 3,
+          "code": "ADU-1896-206",
+          "name": "Clasificación Arancelaria II",
+          "year": 2
+        },
+        {
+          "id": 317,
+          "carrera_id": 3,
+          "code": "ADU-1896-207",
+          "name": "Comercio Exterior II",
+          "year": 2
+        },
+        {
+          "id": 318,
+          "carrera_id": 3,
+          "code": "ADU-1896-208",
+          "name": "Práctica Profesional II",
+          "year": 2
+        },
+        {
+          "id": 319,
+          "carrera_id": 3,
+          "code": "ADU-1896-301",
+          "name": "Administración de las organizaciones",
+          "year": 3
+        },
+        {
+          "id": 320,
+          "carrera_id": 3,
+          "code": "ADU-1896-302",
+          "name": "Inglés Técnico",
+          "year": 3
+        },
+        {
+          "id": 321,
+          "carrera_id": 3,
+          "code": "ADU-1896-303",
+          "name": "Teoría del Comercio Exterior",
+          "year": 3
+        },
+        {
+          "id": 322,
+          "carrera_id": 3,
+          "code": "ADU-1896-304",
+          "name": "Contabilidad y Costos Presupuestarios",
+          "year": 3
+        },
+        {
+          "id": 323,
+          "carrera_id": 3,
+          "code": "ADU-1896-305",
+          "name": "Investigación de Mercados Externos",
+          "year": 3
+        },
+        {
+          "id": 324,
+          "carrera_id": 3,
+          "code": "ADU-1896-306",
+          "name": "Comercio Exterior III",
+          "year": 3
+        },
+        {
+          "id": 325,
+          "carrera_id": 3,
+          "code": "ADU-1896-307",
+          "name": "Práctica Profesional III",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "code": "LOG-5312",
+      "name": "Tecnicatura Superior en Logística",
+      "resolution": "RS 5312-24",
+      "source_sheet": "LOGISTICA RS. 5312-24",
+      "materias": [
+        {
+          "id": 401,
+          "carrera_id": 4,
+          "code": "LOG-5312-101",
+          "name": "Inglés para Logística 1",
+          "year": 1
+        },
+        {
+          "id": 402,
+          "carrera_id": 4,
+          "code": "LOG-5312-102",
+          "name": "Fundamentos de Matemática para Logística",
+          "year": 1
+        },
+        {
+          "id": 403,
+          "carrera_id": 4,
+          "code": "LOG-5312-103",
+          "name": "Estadística para Logística",
+          "year": 1
+        },
+        {
+          "id": 404,
+          "carrera_id": 4,
+          "code": "LOG-5312-104",
+          "name": "Tecnologías y Sistemas de Información en Logística 1",
+          "year": 1
+        },
+        {
+          "id": 405,
+          "carrera_id": 4,
+          "code": "LOG-5312-105",
+          "name": "Tecnologías y Sistemas de Información en Logística 2",
+          "year": 1
+        },
+        {
+          "id": 406,
+          "carrera_id": 4,
+          "code": "LOG-5312-106",
+          "name": "Fundamentos de Economía para Logística",
+          "year": 1
+        },
+        {
+          "id": 407,
+          "carrera_id": 4,
+          "code": "LOG-5312-107",
+          "name": "Administración de las organizaciones en Logística",
+          "year": 1
+        },
+        {
+          "id": 408,
+          "carrera_id": 4,
+          "code": "LOG-5312-108",
+          "name": "Metodología de la Investigación en Logística 1",
+          "year": 1
+        },
+        {
+          "id": 409,
+          "carrera_id": 4,
+          "code": "LOG-5312-109",
+          "name": "Metodología de la Investigación en Logística 2",
+          "year": 1
+        },
+        {
+          "id": 410,
+          "carrera_id": 4,
+          "code": "LOG-5312-110",
+          "name": "Introducción a la Logística",
+          "year": 1
+        },
+        {
+          "id": 411,
+          "carrera_id": 4,
+          "code": "LOG-5312-111",
+          "name": "PP1: Aproximación al campo laboral",
+          "year": 1
+        },
+        {
+          "id": 412,
+          "carrera_id": 4,
+          "code": "LOG-5312-201",
+          "name": "Inglés para Logística 2",
+          "year": 2
+        },
+        {
+          "id": 413,
+          "carrera_id": 4,
+          "code": "LOG-5312-202",
+          "name": "Tecnologías y Sistemas de Información en Logística 3",
+          "year": 2
+        },
+        {
+          "id": 414,
+          "carrera_id": 4,
+          "code": "LOG-5312-203",
+          "name": "Tecnologías y Sistemas de Información en Logística 4",
+          "year": 2
+        },
+        {
+          "id": 415,
+          "carrera_id": 4,
+          "code": "LOG-5312-204",
+          "name": "Administración de Inventarios y Compras 1",
+          "year": 2
+        },
+        {
+          "id": 416,
+          "carrera_id": 4,
+          "code": "LOG-5312-205",
+          "name": "Administración de Inventarios y Compras 2",
+          "year": 2
+        },
+        {
+          "id": 417,
+          "carrera_id": 4,
+          "code": "LOG-5312-206",
+          "name": "Procesos de Distribución en Logística 1",
+          "year": 2
+        },
+        {
+          "id": 418,
+          "carrera_id": 4,
+          "code": "LOG-5312-207",
+          "name": "Procesos de Distribución en Logística 2",
+          "year": 2
+        },
+        {
+          "id": 419,
+          "carrera_id": 4,
+          "code": "LOG-5312-208",
+          "name": "Logística 1",
+          "year": 2
+        },
+        {
+          "id": 420,
+          "carrera_id": 4,
+          "code": "LOG-5312-209",
+          "name": "PP2: Diseño de Procesos Logísticos",
+          "year": 2
+        },
+        {
+          "id": 421,
+          "carrera_id": 4,
+          "code": "LOG-5312-301",
+          "name": "Portugués para Logística",
+          "year": 3
+        },
+        {
+          "id": 422,
+          "carrera_id": 4,
+          "code": "LOG-5312-302",
+          "name": "Legislación en Logística 1",
+          "year": 3
+        },
+        {
+          "id": 423,
+          "carrera_id": 4,
+          "code": "LOG-5312-303",
+          "name": "Legislación en Logística 2",
+          "year": 3
+        },
+        {
+          "id": 424,
+          "carrera_id": 4,
+          "code": "LOG-5312-304",
+          "name": "Seguridad y Salud Ocupacional en Logística",
+          "year": 3
+        },
+        {
+          "id": 425,
+          "carrera_id": 4,
+          "code": "LOG-5312-305",
+          "name": "Seguridad y Ambiente en Logística",
+          "year": 3
+        },
+        {
+          "id": 426,
+          "carrera_id": 4,
+          "code": "LOG-5312-306",
+          "name": "Gestión de la Calidad en Logística 1",
+          "year": 3
+        },
+        {
+          "id": 427,
+          "carrera_id": 4,
+          "code": "LOG-5312-307",
+          "name": "Gestión de la Calidad en Logística 2",
+          "year": 3
+        },
+        {
+          "id": 428,
+          "carrera_id": 4,
+          "code": "LOG-5312-308",
+          "name": "Logística 2",
+          "year": 3
+        },
+        {
+          "id": 429,
+          "carrera_id": 4,
+          "code": "LOG-5312-309",
+          "name": "PP3: Gestión de Proyectos de Logística",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "code": "LOG-1557",
+      "name": "Tecnicatura Superior en Logística",
+      "resolution": "RS 1557-07",
+      "source_sheet": "LOGISTICA RS. 1557-07",
+      "materias": [
+        {
+          "id": 501,
+          "carrera_id": 5,
+          "code": "LOG-1557-101",
+          "name": "Estadística",
+          "year": 1
+        },
+        {
+          "id": 502,
+          "carrera_id": 5,
+          "code": "LOG-1557-102",
+          "name": "Física Aplicada",
+          "year": 1
+        },
+        {
+          "id": 503,
+          "carrera_id": 5,
+          "code": "LOG-1557-103",
+          "name": "Informática",
+          "year": 1
+        },
+        {
+          "id": 504,
+          "carrera_id": 5,
+          "code": "LOG-1557-104",
+          "name": "Inglés I",
+          "year": 1
+        },
+        {
+          "id": 505,
+          "carrera_id": 5,
+          "code": "LOG-1557-105",
+          "name": "Economía",
+          "year": 1
+        },
+        {
+          "id": 506,
+          "carrera_id": 5,
+          "code": "LOG-1557-106",
+          "name": "Principios de Administración",
+          "year": 1
+        },
+        {
+          "id": 507,
+          "carrera_id": 5,
+          "code": "LOG-1557-107",
+          "name": "Metodología de la Investigación",
+          "year": 1
+        },
+        {
+          "id": 508,
+          "carrera_id": 5,
+          "code": "LOG-1557-108",
+          "name": "Distribución I",
+          "year": 1
+        },
+        {
+          "id": 509,
+          "carrera_id": 5,
+          "code": "LOG-1557-109",
+          "name": "EDI 1 RESOLUCION DE PROBLEMAS",
+          "year": 1
+        },
+        {
+          "id": 510,
+          "carrera_id": 5,
+          "code": "LOG-1557-201",
+          "name": "Inglés II",
+          "year": 2
+        },
+        {
+          "id": 511,
+          "carrera_id": 5,
+          "code": "LOG-1557-202",
+          "name": "Sociología de las Organizaciones",
+          "year": 2
+        },
+        {
+          "id": 512,
+          "carrera_id": 5,
+          "code": "LOG-1557-203",
+          "name": "Administración de Inventario y Compras",
+          "year": 2
+        },
+        {
+          "id": 513,
+          "carrera_id": 5,
+          "code": "LOG-1557-204",
+          "name": "Logística I",
+          "year": 2
+        },
+        {
+          "id": 514,
+          "carrera_id": 5,
+          "code": "LOG-1557-205",
+          "name": "Distribución II",
+          "year": 2
+        },
+        {
+          "id": 515,
+          "carrera_id": 5,
+          "code": "LOG-1557-206",
+          "name": "Calidad de la Producción y el Servicio",
+          "year": 2
+        },
+        {
+          "id": 516,
+          "carrera_id": 5,
+          "code": "LOG-1557-207",
+          "name": "Informática Aplicada",
+          "year": 2
+        },
+        {
+          "id": 517,
+          "carrera_id": 5,
+          "code": "LOG-1557-208",
+          "name": "EDI 2 INFRAESTRUCTURA LOGISTICA REGIONAL",
+          "year": 2
+        },
+        {
+          "id": 518,
+          "carrera_id": 5,
+          "code": "LOG-1557-301",
+          "name": "Portugués",
+          "year": 3
+        },
+        {
+          "id": 519,
+          "carrera_id": 5,
+          "code": "LOG-1557-302",
+          "name": "Logística II",
+          "year": 3
+        },
+        {
+          "id": 520,
+          "carrera_id": 5,
+          "code": "LOG-1557-303",
+          "name": "Seguridad e Higiene",
+          "year": 3
+        },
+        {
+          "id": 521,
+          "carrera_id": 5,
+          "code": "LOG-1557-304",
+          "name": "Practica Profesional",
+          "year": 3
+        },
+        {
+          "id": 522,
+          "carrera_id": 5,
+          "code": "LOG-1557-305",
+          "name": "Legislación",
+          "year": 3
+        },
+        {
+          "id": 523,
+          "carrera_id": 5,
+          "code": "LOG-1557-306",
+          "name": "E.D.I INVESTIGACIÓN OPERATIVA",
+          "year": 3
+        },
+        {
+          "id": 524,
+          "carrera_id": 5,
+          "code": "LOG-1557-307",
+          "name": "E.D.I. LOGÍSTICA PORTUARIA",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "code": "CONT-455",
+      "name": "Tecnicatura Superior en Administración Contable",
+      "resolution": "RS 455-23",
+      "source_sheet": "CONTABLE RS. 455-23",
+      "materias": [
+        {
+          "id": 601,
+          "carrera_id": 6,
+          "code": "CONT-455-101",
+          "name": "Derecho",
+          "year": 1
+        },
+        {
+          "id": 602,
+          "carrera_id": 6,
+          "code": "CONT-455-102",
+          "name": "Inglés 1",
+          "year": 1
+        },
+        {
+          "id": 603,
+          "carrera_id": 6,
+          "code": "CONT-455-103",
+          "name": "Principios de Administración",
+          "year": 1
+        },
+        {
+          "id": 604,
+          "carrera_id": 6,
+          "code": "CONT-455-104",
+          "name": "Economía",
+          "year": 1
+        },
+        {
+          "id": 605,
+          "carrera_id": 6,
+          "code": "CONT-455-105",
+          "name": "Fundamentos de Matemática",
+          "year": 1
+        },
+        {
+          "id": 606,
+          "carrera_id": 6,
+          "code": "CONT-455-106",
+          "name": "Principios de Contabilidad",
+          "year": 1
+        },
+        {
+          "id": 607,
+          "carrera_id": 6,
+          "code": "CONT-455-107",
+          "name": "Gestión Administrativo Contable",
+          "year": 1
+        },
+        {
+          "id": 608,
+          "carrera_id": 6,
+          "code": "CONT-455-108",
+          "name": "Prácticas Profesionalizantes 1: Aproximación al campo laboral",
+          "year": 1
+        },
+        {
+          "id": 609,
+          "carrera_id": 6,
+          "code": "CONT-455-201",
+          "name": "Inglés 2",
+          "year": 2
+        },
+        {
+          "id": 610,
+          "carrera_id": 6,
+          "code": "CONT-455-202",
+          "name": "Tecnologías y Sistemas para Administración",
+          "year": 2
+        },
+        {
+          "id": 611,
+          "carrera_id": 6,
+          "code": "CONT-455-203",
+          "name": "Matemática para Administración",
+          "year": 2
+        },
+        {
+          "id": 612,
+          "carrera_id": 6,
+          "code": "CONT-455-204",
+          "name": "Derecho Laboral",
+          "year": 2
+        },
+        {
+          "id": 613,
+          "carrera_id": 6,
+          "code": "CONT-455-205",
+          "name": "Derecho Comercial",
+          "year": 2
+        },
+        {
+          "id": 614,
+          "carrera_id": 6,
+          "code": "CONT-455-206",
+          "name": "Contabilidad de Gestión",
+          "year": 2
+        },
+        {
+          "id": 615,
+          "carrera_id": 6,
+          "code": "CONT-455-207",
+          "name": "Costos y Planificación",
+          "year": 2
+        },
+        {
+          "id": 616,
+          "carrera_id": 6,
+          "code": "CONT-455-208",
+          "name": "Matemática Financiera",
+          "year": 2
+        },
+        {
+          "id": 617,
+          "carrera_id": 6,
+          "code": "CONT-455-209",
+          "name": "Prácticas Profesionalizantes 2: Diseño de Proyectos de Administración",
+          "year": 2
+        },
+        {
+          "id": 618,
+          "carrera_id": 6,
+          "code": "CONT-455-301",
+          "name": "Administración Financiera",
+          "year": 3
+        },
+        {
+          "id": 619,
+          "carrera_id": 6,
+          "code": "CONT-455-302",
+          "name": "Administración Estratégica",
+          "year": 3
+        },
+        {
+          "id": 620,
+          "carrera_id": 6,
+          "code": "CONT-455-303",
+          "name": "Técnica Impositiva y Laboral",
+          "year": 3
+        },
+        {
+          "id": 621,
+          "carrera_id": 6,
+          "code": "CONT-455-304",
+          "name": "Régimen Tributario",
+          "year": 3
+        },
+        {
+          "id": 622,
+          "carrera_id": 6,
+          "code": "CONT-455-305",
+          "name": "Gestión de Estados Contables",
+          "year": 3
+        },
+        {
+          "id": 623,
+          "carrera_id": 6,
+          "code": "CONT-455-306",
+          "name": "Finanzas de Empresas",
+          "year": 3
+        },
+        {
+          "id": 624,
+          "carrera_id": 6,
+          "code": "CONT-455-307",
+          "name": "Prácticas Profesionalizantes 3: Gestión e Implementación de Proyectos de Administración",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "code": "CONT-273",
+      "name": "Tecnicatura Superior en Administración Contable",
+      "resolution": "RS 273-03",
+      "source_sheet": "CONTABLE RS. 273-03",
+      "materias": [
+        {
+          "id": 701,
+          "carrera_id": 7,
+          "code": "CONT-273-101",
+          "name": "Matemática I",
+          "year": 1
+        },
+        {
+          "id": 702,
+          "carrera_id": 7,
+          "code": "CONT-273-102",
+          "name": "Computación I",
+          "year": 1
+        },
+        {
+          "id": 703,
+          "carrera_id": 7,
+          "code": "CONT-273-103",
+          "name": "Derecho",
+          "year": 1
+        },
+        {
+          "id": 704,
+          "carrera_id": 7,
+          "code": "CONT-273-104",
+          "name": "Economía",
+          "year": 1
+        },
+        {
+          "id": 705,
+          "carrera_id": 7,
+          "code": "CONT-273-105",
+          "name": "Contabilidad",
+          "year": 1
+        },
+        {
+          "id": 706,
+          "carrera_id": 7,
+          "code": "CONT-273-106",
+          "name": "Metodología de la Investigación",
+          "year": 1
+        },
+        {
+          "id": 707,
+          "carrera_id": 7,
+          "code": "CONT-273-107",
+          "name": "Sociología de la Organización",
+          "year": 1
+        },
+        {
+          "id": 708,
+          "carrera_id": 7,
+          "code": "CONT-273-108",
+          "name": "Principios de Administración",
+          "year": 1
+        },
+        {
+          "id": 709,
+          "carrera_id": 7,
+          "code": "CONT-273-109",
+          "name": "Gestión Administrativo Contable",
+          "year": 1
+        },
+        {
+          "id": 710,
+          "carrera_id": 7,
+          "code": "CONT-273-110",
+          "name": "EDI 1 - COMPETENCIA PROFECIONALES Y EMPLEABILIDAD",
+          "year": 1
+        },
+        {
+          "id": 711,
+          "carrera_id": 7,
+          "code": "CONT-273-111",
+          "name": "EDI 1 - ETICA PROFESIONAL",
+          "year": 1
+        },
+        {
+          "id": 712,
+          "carrera_id": 7,
+          "code": "CONT-273-112",
+          "name": "Práctica Instrumental y Experiencia Laboral",
+          "year": 1
+        },
+        {
+          "id": 713,
+          "carrera_id": 7,
+          "code": "CONT-273-113",
+          "name": "Formación Ética y Mundo Contemporáneo",
+          "year": 1
+        },
+        {
+          "id": 714,
+          "carrera_id": 7,
+          "code": "CONT-273-201",
+          "name": "Matemática II",
+          "year": 2
+        },
+        {
+          "id": 715,
+          "carrera_id": 7,
+          "code": "CONT-273-202",
+          "name": "Estadística",
+          "year": 2
+        },
+        {
+          "id": 716,
+          "carrera_id": 7,
+          "code": "CONT-273-203",
+          "name": "Inglés I",
+          "year": 2
+        },
+        {
+          "id": 717,
+          "carrera_id": 7,
+          "code": "CONT-273-204",
+          "name": "Computación II",
+          "year": 2
+        },
+        {
+          "id": 718,
+          "carrera_id": 7,
+          "code": "CONT-273-205",
+          "name": "Contabilidad II",
+          "year": 2
+        },
+        {
+          "id": 719,
+          "carrera_id": 7,
+          "code": "CONT-273-206",
+          "name": "Matemática Financiera",
+          "year": 2
+        },
+        {
+          "id": 720,
+          "carrera_id": 7,
+          "code": "CONT-273-207",
+          "name": "Derecho Laboral",
+          "year": 2
+        },
+        {
+          "id": 721,
+          "carrera_id": 7,
+          "code": "CONT-273-208",
+          "name": "Práctica Profesional I",
+          "year": 2
+        },
+        {
+          "id": 722,
+          "carrera_id": 7,
+          "code": "CONT-273-209",
+          "name": "Derecho Comercial",
+          "year": 2
+        },
+        {
+          "id": 723,
+          "carrera_id": 7,
+          "code": "CONT-273-210",
+          "name": "EDI 2 - COMPETENCIA ADMINISTRATIVA CONTABLE",
+          "year": 2
+        },
+        {
+          "id": 724,
+          "carrera_id": 7,
+          "code": "CONT-273-211",
+          "name": "EDI 2 - TOMA DE DESICIONES",
+          "year": 2
+        },
+        {
+          "id": 725,
+          "carrera_id": 7,
+          "code": "CONT-273-212",
+          "name": "EDI 2 - DESARROLLO DE PROYECTOS PRODUCTIVOS",
+          "year": 2
+        },
+        {
+          "id": 726,
+          "carrera_id": 7,
+          "code": "CONT-273-213",
+          "name": "EDI 2 - SIMULACION DE EMPRESAS",
+          "year": 2
+        },
+        {
+          "id": 727,
+          "carrera_id": 7,
+          "code": "CONT-273-301",
+          "name": "Inglés II",
+          "year": 3
+        },
+        {
+          "id": 728,
+          "carrera_id": 7,
+          "code": "CONT-273-302",
+          "name": "Técnica Impositiva y Laboral",
+          "year": 3
+        },
+        {
+          "id": 729,
+          "carrera_id": 7,
+          "code": "CONT-273-303",
+          "name": "Régimen Tributario",
+          "year": 3
+        },
+        {
+          "id": 730,
+          "carrera_id": 7,
+          "code": "CONT-273-304",
+          "name": "Contabilidad III",
+          "year": 3
+        },
+        {
+          "id": 731,
+          "carrera_id": 7,
+          "code": "CONT-273-305",
+          "name": "Costos y Presupuestos",
+          "year": 3
+        },
+        {
+          "id": 732,
+          "carrera_id": 7,
+          "code": "CONT-273-306",
+          "name": "Administración Financiera",
+          "year": 3
+        },
+        {
+          "id": 733,
+          "carrera_id": 7,
+          "code": "CONT-273-307",
+          "name": "Administración Estratégica",
+          "year": 3
+        },
+        {
+          "id": 734,
+          "carrera_id": 7,
+          "code": "CONT-273-308",
+          "name": "Práctica Profesional II",
+          "year": 3
+        },
+        {
+          "id": 735,
+          "carrera_id": 7,
+          "code": "CONT-273-309",
+          "name": "EDI ECONOMIAS REGIONALES --",
+          "year": 3
+        },
+        {
+          "id": 736,
+          "carrera_id": 7,
+          "code": "CONT-273-310",
+          "name": "EDI 3 - INFORMATICA APLICADA A LA ADMINISTRACION",
+          "year": 3
+        },
+        {
+          "id": 737,
+          "carrera_id": 7,
+          "code": "CONT-273-311",
+          "name": "EDI 3 - CONTROL DE GESTION",
+          "year": 3
+        },
+        {
+          "id": 738,
+          "carrera_id": 7,
+          "code": "CONT-273-312",
+          "name": "EDI 3 - COMPUTACION III",
+          "year": 3
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "code": "GEST",
+      "name": "Tecnicatura Superior en Gestoría",
+      "resolution": "RS 4103/03",
+      "source_sheet": "Gestoria",
+      "materias": [
+        {
+          "id": 801,
+          "carrera_id": 8,
+          "code": "GEST-101",
+          "name": "Sociología de la Administración",
+          "year": 1
+        },
+        {
+          "id": 802,
+          "carrera_id": 8,
+          "code": "GEST-102",
+          "name": "Derecho Constitucional",
+          "year": 1
+        },
+        {
+          "id": 803,
+          "carrera_id": 8,
+          "code": "GEST-103",
+          "name": "Tecnología de la Información aplicada a la gestión Administrativa I",
+          "year": 1
+        },
+        {
+          "id": 804,
+          "carrera_id": 8,
+          "code": "GEST-104",
+          "name": "Derecho Privado I",
+          "year": 1
+        },
+        {
+          "id": 805,
+          "carrera_id": 8,
+          "code": "GEST-105",
+          "name": "Derecho Público Municipal",
+          "year": 1
+        },
+        {
+          "id": 806,
+          "carrera_id": 8,
+          "code": "GEST-106",
+          "name": "Organización Administrativa",
+          "year": 1
+        },
+        {
+          "id": 807,
+          "carrera_id": 8,
+          "code": "GEST-107",
+          "name": "Derecho Tributario I",
+          "year": 1
+        },
+        {
+          "id": 808,
+          "carrera_id": 8,
+          "code": "GEST-108",
+          "name": "Práctica Profesional I",
+          "year": 1
+        },
+        {
+          "id": 809,
+          "carrera_id": 8,
+          "code": "GEST-109",
+          "name": "E.D.I. 1 GESTION DOCUMENTAL",
+          "year": 1
+        },
+        {
+          "id": 810,
+          "carrera_id": 8,
+          "code": "GEST-201",
+          "name": "Servicios Públicos",
+          "year": 2
+        },
+        {
+          "id": 811,
+          "carrera_id": 8,
+          "code": "GEST-202",
+          "name": "Tecnología de la Información aplicada a la Gestión Administrativa II",
+          "year": 2
+        },
+        {
+          "id": 812,
+          "carrera_id": 8,
+          "code": "GEST-203",
+          "name": "Derecho Privado II",
+          "year": 2
+        },
+        {
+          "id": 813,
+          "carrera_id": 8,
+          "code": "GEST-204",
+          "name": "Actividad formal de la Administración",
+          "year": 2
+        },
+        {
+          "id": 814,
+          "carrera_id": 8,
+          "code": "GEST-205",
+          "name": "Organización y funcionamiento de los registros nacionales y provinciales",
+          "year": 2
+        },
+        {
+          "id": 815,
+          "carrera_id": 8,
+          "code": "GEST-206",
+          "name": "Derecho Tributario II",
+          "year": 2
+        },
+        {
+          "id": 816,
+          "carrera_id": 8,
+          "code": "GEST-207",
+          "name": "Práctica Profesional II",
+          "year": 2
+        },
+        {
+          "id": 817,
+          "carrera_id": 8,
+          "code": "GEST-208",
+          "name": "E.D.I. 2 GESTION CONTABLE",
+          "year": 2
+        },
+        {
+          "id": 818,
+          "carrera_id": 8,
+          "code": "GEST-209",
+          "name": "E.D.I. 2 FORMACION PROFESIONAL",
+          "year": 2
+        },
+        {
+          "id": 819,
+          "carrera_id": 8,
+          "code": "GEST-301",
+          "name": "Colegiación, Ética y Deontología profesional",
+          "year": 3
+        },
+        {
+          "id": 820,
+          "carrera_id": 8,
+          "code": "GEST-302",
+          "name": "Inglés Técnico",
+          "year": 3
+        },
+        {
+          "id": 821,
+          "carrera_id": 8,
+          "code": "GEST-303",
+          "name": "Gestión profesional en el registro de la propiedad Automotor y otros registros Mobiliarios",
+          "year": 3
+        },
+        {
+          "id": 822,
+          "carrera_id": 8,
+          "code": "GEST-304",
+          "name": "Gestión profesional Municipal",
+          "year": 3
+        },
+        {
+          "id": 823,
+          "carrera_id": 8,
+          "code": "GEST-305",
+          "name": "Gestión en los organismos provinciales",
+          "year": 3
+        },
+        {
+          "id": 824,
+          "carrera_id": 8,
+          "code": "GEST-306",
+          "name": "Normativas edilicias usuales para la realización de la gestión",
+          "year": 3
+        },
+        {
+          "id": 825,
+          "carrera_id": 8,
+          "code": "GEST-307",
+          "name": "Práctica Profesional III",
+          "year": 3
+        },
+        {
+          "id": 826,
+          "carrera_id": 8,
+          "code": "GEST-308",
+          "name": "E.D.I. 3 - GESTION PREVISIONAL",
+          "year": 3
+        }
+      ]
+    }
+  ]
+}
