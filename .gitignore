@@ -23,3 +23,6 @@ Thumbs.db
 # Output exports & runtime data
 data/output/
 *.tmp
+*.xlsx
+*.xls
+*.csv
