@@ -5,6 +5,7 @@ import WizardStepper from '../components/WizardStepper.astro';
 import StepPersonalData from '../components/StepPersonalData.astro';
 import StepSubjectSelection from '../components/StepSubjectSelection.astro';
 import ReceiptTicket from '../components/ReceiptTicket.astro';
+import LiveSummaryCard from '../components/LiveSummaryCard.astro';
 import { getClientCarrerasDto } from '../lib/academicService';
 
 const carrerasDto = getClientCarrerasDto();
@@ -20,17 +21,24 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   <NoticeBanner />
   <WizardStepper />
 
-  <div class="wizard-shell" id="form-card">
-    <form id="inscripcion-form" novalidate>
-      <StepPersonalData availableYears={availableYears} />
-      <StepSubjectSelection
-        carreras={carrerasDto}
-        preselectedCarrera={preselectedCarrera}
-        availableYears={availableYears}
-      />
-    </form>
+  <!-- Layout Framer Academic Portal: 65% Formulario / 35% Resumen en Vivo Fijo -->
+  <div class="portal-workspace-grid" id="portal-workspace">
+    <div class="portal-main-col" id="form-card">
+      <form id="inscripcion-form" novalidate>
+        <StepPersonalData availableYears={availableYears} />
+        <StepSubjectSelection
+          carreras={carrerasDto}
+          preselectedCarrera={preselectedCarrera}
+          availableYears={availableYears}
+        />
+      </form>
 
-    <ReceiptTicket />
+      <ReceiptTicket />
+    </div>
+
+    <div class="portal-side-col" id="portal-side-col">
+      <LiveSummaryCard />
+    </div>
   </div>
 
   <script
@@ -96,6 +104,122 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   let currentStep: WizardStep = 1;
 
+  function getInputEl(id: string): HTMLInputElement | HTMLSelectElement {
+    return document.getElementById(id) as HTMLInputElement | HTMLSelectElement;
+  }
+
+  function getSelectedAnio(): 1 | 2 | 3 | null {
+    const checked = document.querySelector(
+      'input[name="anioMateria"]:checked'
+    ) as HTMLInputElement | null;
+    if (!checked) return null;
+    const val = Number(checked.value);
+    return val === 1 || val === 2 || val === 3 ? val : null;
+  }
+
+  function setLiveDd(id: string, value: string, emptyFallback = '—'): void {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (value) {
+      el.textContent = value;
+      el.classList.remove('is-empty');
+    } else {
+      el.textContent = emptyFallback;
+      el.classList.add('is-empty');
+    }
+  }
+
+  /**
+   * Actualiza en tiempo real la tarjeta derecha "Vista Previa de Solicitud" (LiveSummaryCard)
+   */
+  function updateLiveSummaryCard(): void {
+    const nombre = getInputEl('apellidoNombre')?.value.trim() ?? '';
+    const dni = sanitizeDni(getInputEl('dni')?.value ?? '');
+    const cohorte = getInputEl('cohorte')?.value ?? '';
+    const telefono = getInputEl('telefono')?.value.trim() ?? '';
+    const email = getInputEl('email')?.value.trim() ?? '';
+
+    setLiveDd('live-val-nombre', nombre, 'Sin completar');
+    setLiveDd(
+      'live-val-dni-cohorte',
+      dni || cohorte ? `DNI ${dni || '—'} • Ingreso ${cohorte || '—'}` : '',
+      '—'
+    );
+    setLiveDd(
+      'live-val-contacto',
+      email || telefono ? `${email || '—'} ${telefono ? `(${telefono})` : ''}` : '',
+      '—'
+    );
+
+    const step1Valid = validateStep1Personal({
+      apellidoNombre: nombre,
+      dni,
+      cohorte,
+      telefono,
+      email,
+    }).ok;
+
+    const badge1 = document.getElementById('live-badge-step1');
+    if (badge1) {
+      badge1.textContent = step1Valid ? 'Completo' : 'En curso';
+      badge1.classList.toggle('done', step1Valid);
+    }
+
+    const carreraCode = carreraSelect?.value.trim().toUpperCase() ?? '';
+    const carrera = carreraMap.get(carreraCode);
+    const anio = getSelectedAnio();
+    const materiaCode = materiaSelect?.value ?? '';
+    const materiaObj = carrera?.materias.find((m) => m.code === materiaCode);
+    const modalidadEl = document.querySelector(
+      'input[name="modalidad"]:checked'
+    ) as HTMLInputElement | null;
+    const modalidad = modalidadEl ? modalidadEl.value : 'Regular';
+    const anioCursado = getInputEl('anioCursado')?.value ?? '';
+    const profesor = getInputEl('profesor')?.value.trim() ?? '';
+
+    setLiveDd(
+      'live-val-carrera',
+      carrera
+        ? `${carrera.name}${carrera.resolution ? ` (${carrera.resolution})` : ''}`
+        : '',
+      'Sin seleccionar'
+    );
+    setLiveDd(
+      'live-val-materia',
+      materiaObj ? `${materiaObj.name}` : '',
+      'Sin seleccionar'
+    );
+    setLiveDd(
+      'live-val-condicion',
+      anio ? `${anio}° Año • Condición ${modalidad}` : '',
+      '—'
+    );
+    setLiveDd(
+      'live-val-catedra',
+      anioCursado || profesor
+        ? `Cursada ${anioCursado || '—'} • Prof. ${profesor || '—'}`
+        : '',
+      '—'
+    );
+
+    const step2Valid = Boolean(
+      carrera && anio && materiaObj && anioCursado && profesor.length >= 2
+    );
+    const badge2 = document.getElementById('live-badge-step2');
+    if (badge2) {
+      badge2.textContent = step2Valid ? 'Listo' : 'Pendiente';
+      badge2.classList.toggle('done', step2Valid);
+    }
+
+    const dot = document.getElementById('live-status-dot');
+    const statusText = document.getElementById('live-status-text');
+    if (dot && statusText) {
+      const allReady = step1Valid && step2Valid;
+      dot.classList.toggle('ready', allReady);
+      statusText.textContent = allReady ? 'Listo para confirmar' : 'Resumen en vivo';
+    }
+  }
+
   function transitionToStep(target: WizardStep, moveFocus = true): void {
     currentStep = target;
 
@@ -123,15 +247,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       updateMateriasList();
     }
 
+    updateLiveSummaryCard();
+
     if (moveFocus) {
       const headingId = `heading-step-${target}`;
       const headingEl = document.getElementById(headingId);
       headingEl?.focus({ preventScroll: false });
     }
-  }
-
-  function getInputEl(id: string): HTMLInputElement | HTMLSelectElement {
-    return document.getElementById(id) as HTMLInputElement | HTMLSelectElement;
   }
 
   function updateStudentSummaryPill(): void {
@@ -180,6 +302,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         if (el.getAttribute('aria-invalid') === 'true') {
           setFieldError('dni', validateFieldStep1('dni', el.value));
         }
+        updateLiveSummaryCard();
       });
     }
 
@@ -187,13 +310,17 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       if (el.value.trim().length > 0) {
         setFieldError(field, validateFieldStep1(field, el.value));
       }
+      updateLiveSummaryCard();
     });
 
     el.addEventListener('input', () => {
       if (el.getAttribute('aria-invalid') === 'true') {
         setFieldError(field, validateFieldStep1(field, el.value));
       }
+      updateLiveSummaryCard();
     });
+
+    el.addEventListener('change', updateLiveSummaryCard);
   }
 
   function loadPersonalDraft(): void {
@@ -286,15 +413,6 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     } catch {}
   }
 
-  function getSelectedAnio(): 1 | 2 | 3 | null {
-    const checked = document.querySelector(
-      'input[name="anioMateria"]:checked'
-    ) as HTMLInputElement | null;
-    if (!checked) return null;
-    const val = Number(checked.value);
-    return val === 1 || val === 2 || val === 3 ? val : null;
-  }
-
   function updateYearCountBadges(carrera?: ClientCarreraDto): void {
     for (const yr of [1, 2, 3] as const) {
       const badge = document.getElementById(`badge-count-${yr}`);
@@ -325,6 +443,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         : 'Seleccioná el año (1°, 2° o 3°)...';
       materiaSelect.appendChild(opt);
       materiaHint.textContent = 'Esperando selección de carrera y año...';
+      updateLiveSummaryCard();
       return;
     }
 
@@ -360,6 +479,8 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     materiaHint.textContent = searchQuery
       ? `Filtrando ${filtradas.length} de ${delAnio.length} asignaturas de ${anio}° Año (${carrera.name}).`
       : `Padrón activo: ${delAnio.length} asignaturas oficiales de ${anio}° Año (${carrera.resolution ?? 'Vigente'}).`;
+
+    updateLiveSummaryCard();
   }
 
   carreraSelect.addEventListener('change', () => {
@@ -371,6 +492,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     radio.addEventListener('change', updateMateriasList);
   });
 
+  document.querySelectorAll('input[name="modalidad"]').forEach((radio) => {
+    radio.addEventListener('change', updateLiveSummaryCard);
+  });
+
+  materiaSelect?.addEventListener('change', updateLiveSummaryCard);
+  getInputEl('anioCursado')?.addEventListener('change', updateLiveSummaryCard);
+  getInputEl('profesor')?.addEventListener('input', updateLiveSummaryCard);
   materiaSearch?.addEventListener('input', updateMateriasList);
 
   document.getElementById('btn-to-step-2')?.addEventListener('click', () => {
@@ -432,7 +560,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       li.className = 'session-history-item';
 
       const left = document.createElement('span');
-      left.textContent = `${item.materiaNombre} — ${item.modalidad}`;
+      left.textContent = `${item.materiaNombre} (${item.modalidad})`;
 
       const right = document.createElement('code');
       right.textContent = item.comprobanteId;
@@ -574,11 +702,32 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   loadPersonalDraft();
   loadRecentProfessors();
   updateYearCountBadges(carreraMap.get(carreraSelect.value.trim().toUpperCase()));
+  updateLiveSummaryCard();
 </script>
 
 <style is:global>
-  .wizard-shell {
-    position: relative;
+  /* Grilla Framer Academic Portal (65% Formulario / 35% Resumen en Vivo) */
+  .portal-workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.85fr) minmax(300px, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* Marco Doble Estilo Framer (Double-Bezel Shell) */
+  .framer-shell {
+    background: var(--framer-shell-bg);
+    border: 1px solid var(--framer-shell-border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+  }
+
+  .framer-card {
+    background: var(--surface-card);
+    border: 1px solid var(--bento-border);
+    border-radius: calc(var(--radius-lg) - 5px);
+    padding: 1.75rem;
+    box-shadow: var(--card-shadow);
   }
 
   .form-step {
@@ -586,7 +735,9 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .step-header {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.4rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
   }
 
   .step-header-top {
@@ -594,112 +745,77 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.45rem;
   }
 
-  .bento-tag {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
+  .step-pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
     color: var(--brand-primary);
     background: var(--brand-primary-soft);
-    border: 1px solid rgba(52, 56, 170, 0.16);
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
+    border: 1px solid rgba(52, 56, 170, 0.14);
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+  }
+
+  .step-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--brand-primary);
   }
 
   .step-req-note {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.74rem;
+    font-weight: 600;
     color: var(--text-muted);
   }
 
   .step-title {
-    font-size: 1.35rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 800;
     color: var(--text-main);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     margin-bottom: 0.2rem;
     outline: none;
   }
 
   .step-subtitle {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     color: var(--text-muted);
   }
 
-  /* Grilla Bento Asimétrica Real (12 Columnas) */
-  .bento-grid-asymmetric {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 1.15rem;
-    align-items: stretch;
-  }
-
-  .bento-span-7 {
-    grid-column: span 7;
-  }
-
-  .bento-span-5 {
-    grid-column: span 5;
-  }
-
-  .bento-cell {
-    background: var(--bento-cell-bg);
-    border: 1px solid var(--bento-border);
-    border-radius: var(--radius-lg);
-    padding: 1.4rem;
-    box-shadow: var(--glass-shadow);
-    display: flex;
-    flex-direction: column;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .bento-cell:focus-within {
-    border-color: rgba(52, 56, 170, 0.35);
-    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04),
-      0 12px 28px -6px rgba(52, 56, 170, 0.1);
-  }
-
-  .bento-cell-accent {
-    border-top: 3px solid var(--brand-primary);
-  }
-
-  .bento-cell-header {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  /* Bloques Internos del Formulario */
+  .form-section-block {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
     margin-bottom: 1.15rem;
-    padding-bottom: 0.85rem;
-    border-bottom: 1px solid #f1f5f9;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
   }
 
-  .bento-cell-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: var(--brand-primary-soft);
-    color: var(--brand-primary);
-    border: 1px solid rgba(52, 56, 170, 0.14);
+  .form-section-block:focus-within {
+    background: #ffffff;
+    border-color: rgba(52, 56, 170, 0.35);
+    box-shadow: 0 4px 16px -4px rgba(52, 56, 170, 0.08);
+  }
+
+  .section-block-title {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .cell-index {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid #e2e8f0;
     color: var(--brand-primary);
   }
 
-  .bento-cell-header h3 {
-    font-size: 0.95rem;
+  .section-block-title h3 {
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-main);
     letter-spacing: -0.01em;
@@ -712,24 +828,23 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    background: #ffffff;
-    border: 1px solid var(--bento-border);
+    background: var(--brand-primary-soft);
+    border: 1px solid rgba(52, 56, 170, 0.18);
     border-left: 4px solid var(--brand-primary);
     border-radius: var(--radius-md);
-    padding: 0.85rem 1.15rem;
+    padding: 0.8rem 1.1rem;
     margin-bottom: 1.35rem;
-    box-shadow: var(--glass-shadow);
   }
 
   .active-student-info {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.8rem;
   }
 
   .student-avatar-svg {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 8px;
     background: var(--brand-primary);
     color: #ffffff;
@@ -741,10 +856,10 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .active-student-label {
     display: block;
-    font-size: 0.64rem;
-    font-family: var(--font-mono);
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--brand-primary);
   }
 
@@ -756,7 +871,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .active-student-info strong {
-    font-size: 0.94rem;
+    font-size: 0.92rem;
     color: var(--text-main);
   }
 
@@ -770,13 +885,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: #f8fafc;
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0.38rem 0.8rem;
-    font-size: 0.76rem;
-    font-weight: 600;
+    background: #ffffff;
+    color: var(--brand-primary);
+    border: 1px solid rgba(52, 56, 170, 0.22);
+    border-radius: 8px;
+    padding: 0.36rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -791,13 +906,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.1rem;
+    gap: 1.05rem;
   }
 
   .form-stack {
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 1.05rem;
   }
 
   .field-group {
@@ -847,8 +962,8 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     padding: 0.25rem 0.65rem 0.25rem 1.85rem !important;
     font-size: 0.76rem !important;
     width: 210px;
-    border-radius: 6px !important;
-    background-color: #f8fafc !important;
+    border-radius: 8px !important;
+    background-color: #ffffff !important;
   }
 
   input[type='text'],
@@ -857,18 +972,17 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   input[type='search'],
   select {
     min-height: 44px;
-    padding: 0.55rem 0.8rem;
+    padding: 0.55rem 0.85rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-color);
     font-size: 0.9rem;
     font-family: inherit;
     color: var(--text-main);
     background-color: #ffffff;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
     transition: border-color 0.15s, box-shadow 0.15s;
   }
 
-  /* Custom SVG Chevron para Selects */
   select {
     appearance: none;
     -webkit-appearance: none;
@@ -905,7 +1019,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   select:disabled,
   input:disabled {
-    background-color: #f8fafc;
+    background-color: #f1f5f9;
     color: #94a3b8;
     cursor: not-allowed;
   }
@@ -921,7 +1035,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     color: var(--feedback-error);
   }
 
-  /* Radio Pills con Indicador Técnico */
+  /* Píldoras de Selección Estilo Framer */
   .radio-pills {
     display: flex;
     gap: 0.55rem;
@@ -930,7 +1044,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .pill-option {
     flex: 1;
-    min-width: 110px;
+    min-width: 120px;
     cursor: pointer;
     position: relative;
   }
@@ -946,7 +1060,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     align-items: center;
     gap: 0.5rem;
     min-height: 44px;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.8rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: #ffffff;
@@ -983,13 +1097,12 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .pill-badge {
-    font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 700;
     background: #f1f5f9;
     color: var(--text-muted);
-    padding: 0.12rem 0.42rem;
-    border-radius: 4px;
+    padding: 0.12rem 0.45rem;
+    border-radius: 6px;
   }
 
   .pill-option input:focus-visible + .pill-surface {
@@ -1021,7 +1134,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .step-error {
-    margin-top: 1.15rem;
+    margin-top: 1rem;
     padding: 0.8rem 1rem;
     border-radius: var(--radius-sm);
     background: var(--feedback-error-bg);
@@ -1033,16 +1146,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .step-actions {
     margin-top: 1.25rem;
-    background: #ffffff;
-    border: 1px solid var(--bento-border);
-    border-radius: var(--radius-md);
-    padding: 0.9rem 1.25rem;
+    padding-top: 1.15rem;
+    border-top: 1px solid #f1f5f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
-    box-shadow: var(--glass-shadow);
   }
 
   .step-autosave-note {
@@ -1055,10 +1165,10 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .btn {
     min-height: 44px;
-    padding: 0.6rem 1.25rem;
+    padding: 0.6rem 1.3rem;
     border-radius: var(--radius-sm);
     font-size: 0.86rem;
-    font-weight: 600;
+    font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     border: none;
@@ -1074,7 +1184,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     background: var(--brand-primary);
     color: #ffffff;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18),
-      0 2px 8px rgba(52, 56, 170, 0.24);
+      0 2px 8px rgba(52, 56, 170, 0.22);
   }
 
   .btn-primary:hover {
@@ -1097,27 +1207,24 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     border: 1px solid var(--brand-primary);
   }
 
-  /* Paso 3: Comprobante Swiss Editorial Precision Ticket */
+  /* Paso 3: Comprobante Oficial */
   .receipt-banner {
     display: flex;
     align-items: center;
     gap: 0.95rem;
-    background: #ffffff;
+    background: var(--feedback-success-bg);
     border: 1px solid #bbf7d0;
-    border-left: 4px solid var(--feedback-success);
-    padding: 1rem 1.25rem;
+    padding: 0.95rem 1.15rem;
     border-radius: var(--radius-md);
     margin-bottom: 1.25rem;
-    box-shadow: var(--glass-shadow);
   }
 
   .receipt-check {
     width: 38px;
     height: 38px;
-    border-radius: 8px;
-    background: var(--feedback-success-bg);
-    color: var(--feedback-success);
-    border: 1px solid #bbf7d0;
+    border-radius: 999px;
+    background: var(--feedback-success);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1125,34 +1232,48 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .receipt-banner h2 {
-    font-size: 1.08rem;
-    color: var(--text-main);
+    font-size: 1.05rem;
+    color: #166534;
     outline: none;
   }
 
   .receipt-banner p {
-    font-size: 0.83rem;
-    color: var(--text-muted);
+    font-size: 0.82rem;
+    color: #15803d;
   }
 
   .swiss-ticket {
-    border: 1.5px solid #0f172a;
+    border: 1px solid #cbd5e1;
     border-radius: var(--radius-md);
     background: #ffffff;
     overflow: hidden;
-    box-shadow: var(--glass-shadow);
   }
 
   .swiss-ticket-top {
-    background: #0f172a;
+    background: var(--brand-primary);
     color: #ffffff;
-    padding: 0.9rem 1.35rem;
+    padding: 0.9rem 1.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    border-bottom: 3px solid var(--brand-primary);
+    border-bottom: 3px solid var(--brand-accent);
+  }
+
+  .swiss-ticket-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ticket-logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 2px;
   }
 
   .swiss-ticket-brand {
@@ -1161,26 +1282,26 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .swiss-kicker {
-    font-family: var(--font-mono);
-    font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    color: #94a3b8;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #fde68a;
   }
 
   .swiss-ticket-brand strong {
     font-size: 0.88rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
   }
 
   .swiss-stamp {
     font-family: var(--font-mono);
     font-size: 0.68rem;
     font-weight: 700;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    color: #fde68a;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #ffffff;
     padding: 0.22rem 0.6rem;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 
   .receipt-header {
@@ -1189,7 +1310,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    padding: 1rem 1.35rem;
+    padding: 0.95rem 1.25rem;
     background: #f8fafc;
     border-bottom: 1.5px dashed #cbd5e1;
   }
@@ -1200,14 +1321,14 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .receipt-meta-label {
     display: block;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.66rem;
+    font-weight: 700;
     color: var(--text-muted);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
   }
 
   .receipt-code {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     color: var(--brand-primary);
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
@@ -1215,7 +1336,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .receipt-timestamp {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     font-variant-numeric: tabular-nums;
   }
 
@@ -1223,7 +1344,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    padding: 1.35rem;
+    padding: 1.25rem;
   }
 
   .receipt-grid .full-span {
@@ -1232,17 +1353,17 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .receipt-grid dt {
     font-size: 0.68rem;
+    font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
   }
 
   .receipt-grid dd {
     font-size: 0.92rem;
     font-weight: 700;
     color: var(--text-main);
-    margin-top: 0.15rem;
+    margin-top: 0.12rem;
   }
 
   .tabular-mono {
@@ -1252,7 +1373,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .highlight-materia {
     background: var(--brand-primary-soft);
-    padding: 0.8rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: var(--radius-sm);
     border-left: 3px solid var(--brand-primary);
   }
@@ -1260,7 +1381,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   .swiss-ticket-footer {
     background: #f8fafc;
     border-top: 1px solid #e2e8f0;
-    padding: 0.65rem 1.35rem;
+    padding: 0.65rem 1.25rem;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -1271,11 +1392,10 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   .session-history-bento {
     margin-top: 1.15rem;
-    background: #ffffff;
-    border: 1px solid var(--bento-border);
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-radius: var(--radius-md);
-    padding: 1rem 1.2rem;
-    box-shadow: var(--glass-shadow);
+    padding: 1rem 1.15rem;
   }
 
   .session-history-header {
@@ -1283,7 +1403,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.65rem;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     color: var(--text-main);
   }
 
@@ -1295,13 +1415,12 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .session-count-badge {
-    font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 700;
     background: var(--brand-primary-soft);
     color: var(--brand-primary);
     padding: 0.18rem 0.55rem;
-    border-radius: 4px;
+    border-radius: 999px;
   }
 
   .session-history-list {
@@ -1316,7 +1435,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     justify-content: space-between;
     align-items: center;
     gap: 0.75rem;
-    background: #f8fafc;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: var(--radius-sm);
     padding: 0.5rem 0.8rem;
@@ -1328,8 +1447,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     font-family: var(--font-mono);
     font-size: 0.74rem;
     color: var(--brand-primary);
-    background: #ffffff;
-    border: 1px solid rgba(52, 56, 170, 0.16);
+    background: var(--brand-primary-soft);
     padding: 0.12rem 0.45rem;
     border-radius: 4px;
   }
@@ -1342,27 +1460,26 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .admin-export-drawer {
-    margin-top: 1.25rem;
-    border: 1px solid var(--bento-border);
+    margin-top: 1.15rem;
+    border: 1px solid #e2e8f0;
     border-radius: var(--radius-md);
     padding: 0.75rem 1.1rem;
-    background: #ffffff;
+    background: #f8fafc;
     font-size: 0.8rem;
     color: var(--text-muted);
   }
 
   .admin-export-drawer summary {
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-main);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.78rem;
   }
 
   .admin-export-body {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1370,14 +1487,19 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     gap: 0.75rem;
   }
 
-  @media (max-width: 768px) {
-    .bento-span-7,
-    .bento-span-5 {
-      grid-column: span 12;
+  @media (max-width: 920px) {
+    .portal-workspace-grid {
+      grid-template-columns: 1fr;
     }
+  }
+
+  @media (max-width: 640px) {
     .form-grid,
     .receipt-grid {
       grid-template-columns: 1fr;
+    }
+    .framer-card {
+      padding: 1.15rem;
     }
     .materia-search-input {
       width: 100%;
