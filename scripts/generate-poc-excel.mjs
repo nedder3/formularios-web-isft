@@ -82,5 +82,48 @@ sheetInscripciones.getRow(1).fill = {
   fgColor: { argb: 'FF3438AA' },
 };
 
+// Hoja 3: Configuración Parametrizable de Ventana de Inscripción y Envío (Secretaría Académica)
+const sheetConfig = workbook.addWorksheet('Configuracion_Turnos');
+sheetConfig.columns = [
+  { header: 'Parámetro', key: 'parametro', width: 26 },
+  { header: 'Valor', key: 'valor', width: 26 },
+  { header: 'Descripción para Secretaría Académica', key: 'descripcion', width: 68 },
+];
+
+sheetConfig.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+sheetConfig.getRow(1).fill = {
+  type: 'pattern',
+  pattern: 'solid',
+  fgColor: { argb: 'FF3438AA' },
+};
+
+sheetConfig.addRows([
+  {
+    parametro: 'MODO_VENTANA',
+    valor: 'DEMO_SIEMPRE_ABIERTO',
+    descripcion: 'DEMO_SIEMPRE_ABIERTO (permite probar cualquier día) | POR_CALENDARIO (abre y cierra según los días) | CERRADO_MANUAL',
+  },
+  {
+    parametro: 'DIA_APERTURA',
+    valor: 15,
+    descripcion: 'Día del mes en que se habilita el formulario para los estudiantes (Ej: 15)',
+  },
+  {
+    parametro: 'DIA_CIERRE',
+    valor: 19,
+    descripcion: 'Último día inclusive en que se reciben inscripciones (Ej: 19)',
+  },
+  {
+    parametro: 'DIA_ENVIO_DOCENTES',
+    valor: 20,
+    descripcion: 'Día del mes en que se dispara automáticamente el correo con la planilla a cada docente (Ej: 20)',
+  },
+  {
+    parametro: 'HORA_ENVIO_DOCENTES',
+    valor: 8,
+    descripcion: 'Hora del día de envío automático en huso horario Buenos Aires GMT-3 (Ej: 8 para 08:00 hs)',
+  },
+]);
+
 await workbook.xlsx.writeFile(outFile);
-console.log(`Generado: ${outFile} (${count} asignaturas con 'Docente + Nombre de Materia')`);
+console.log(`Generado: ${outFile} (${count} asignaturas + pestaña Configuracion_Turnos)`);

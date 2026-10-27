@@ -6,21 +6,34 @@
  * ID: 12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g
  *
  * Funcionalidades:
- * 1. doPost(e): Recibe las inscripciones desde el formulario web (GitHub Pages o Local),
- *    aplica deduplicación por (DNI + Materia_Codigo) e impacta en la pestaña
- *    "Inscripciones_Finales".
- * 2. enviarNominasDocentes(): Cruza los alumnos inscriptos hasta la fecha con la
- *    pestaña "Directorio_Docentes" (Docente + Nombre de Materia) y envía por correo
- *    electrónico a cada docente la planilla consolidada de su asignatura (.csv adjunto
- *    + tabla institucional en el cuerpo del mail).
- * 3. instalarTriggerQuincenal(): Programa el disparo automático cada 15 días.
- * 4. Menú "ISFT 191 - Secretaría": Permite disparar el envío en vivo con 1 clic
- *    durante la presentación del PoC.
+ * 1. Parametrización de Ventana de Inscripción (Pestaña "Configuracion_Turnos"):
+ *    Permite a Secretaría Académica definir sin tocar código:
+ *    - DIA_APERTURA (ej. 15): Día en que se habilita la recepción de inscripciones.
+ *    - DIA_CIERRE (ej. 19): Último día habilitado para que los alumnos se anoten.
+ *    - DIA_ENVIO_DOCENTES (ej. 20): Día en que se dispara automáticamente el mail
+ *      con el padrón definitivo a cada docente.
+ *    - MODO_VENTANA: "DEMO_SIEMPRE_ABIERTO" | "POR_CALENDARIO" | "CERRADO_MANUAL".
+ * 2. doGet(e): Devuelve al frontend el estado actual de la ventana y las fechas
+ *    configuradas por Secretaría.
+ * 3. doPost(e): Verifica que la ventana esté abierta, aplica deduplicación por
+ *    (DNI + Materia_Codigo) e impacta en "Inscripciones_Finales" con hora GMT-3.
+ * 4. enviarNominasDocentes(): Cruza los inscriptos con "Directorio_Docentes"
+ *    (Docente + Nombre de Materia) y envía el correo con tabla HTML + CSV adjunto.
  */
 
 const SPREADSHEET_ID = '12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g';
 const SHEET_INSCRIPCIONES = 'Inscripciones_Finales';
 const SHEET_DOCENTES = 'Directorio_Docentes';
+const SHEET_CONFIG = 'Configuracion_Turnos';
+
+// Parámetros por defecto (editables desde la pestaña "Configuracion_Turnos" del Excel)
+const DEFAULT_CONFIG = {
+  MODO_VENTANA: 'DEMO_SIEMPRE_ABIERTO', // Opciones: DEMO_SIEMPRE_ABIERTO | POR_CALENDARIO | CERRADO_MANUAL
+  DIA_APERTURA: 15,                     // Ej: Día 15 abre la inscripción
+  DIA_CIERRE: 19,                       // Ej: Día 19 a las 23:59 cierra la inscripción
+  DIA_ENVIO_DOCENTES: 20,               // Ej: Día 20 se dispara la nómina por mail a los docentes
+  HORA_ENVIO_DOCENTES: 8                // 08:00 hs (America/Argentina/Buenos_Aires GMT-3)
+};
 
 function getSpreadsheet() {
   try {
@@ -31,16 +44,143 @@ function getSpreadsheet() {
 }
 
 /**
- * Crea el menú institucional en la barra superior de Google Sheets para la Demo en vivo.
+ * Crea el menú institucional en la barra superior de Google Sheets.
  */
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('ISFT 191 - Secretaría')
     .addItem('1. Enviar Nóminas a Docentes Ahora (Demo PoC)', 'enviarNominasDocentes')
     .addSeparator()
-    .addItem('2. Activar Envío Programado (Cada 15 días)', 'instalarTriggerQuincenal')
-    .addItem('3. Cargar Alumno de Prueba (Simulación)', 'simularInscripcionDemo')
+    .addItem('2. Configurar Fechas de Apertura y Envío (Día 15 al 20)', 'abrirHojaConfiguracionTurnos')
+    .addItem('3. Activar Cron Automático por Calendario (Evalúa Día 20)', 'instalarTriggerCalendarioParametrizable')
+    .addSeparator()
+    .addItem('4. Cargar Alumno de Prueba (Simulación)', 'simularInscripcionDemo')
     .addToUi();
+}
+
+/**
+ * Obtiene (o crea automáticamente si no existe) la pestaña "Configuracion_Turnos"
+ * para que Secretaría Académica modifique los días de apertura/cierre/envío en celdas simples.
+ */
+function obtenerConfiguracionVentana() {
+  const ss = getSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_CONFIG);
+
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_CONFIG);
+    const rows = [
+      ['Parámetro', 'Valor', 'Descripción para Secretaría Académica'],
+      [
+        'MODO_VENTANA',
+        DEFAULT_CONFIG.MODO_VENTANA,
+        'DEMO_SIEMPRE_ABIERTO (permite probar hoy) | POR_CALENDARIO (respeta días de apertura y cierre) | CERRADO_MANUAL'
+      ],
+      [
+        'DIA_APERTURA',
+        DEFAULT_CONFIG.DIA_APERTURA,
+        'Día del mes en que se habilita el formulario para los estudiantes (Ej: 15)'
+      ],
+      [
+        'DIA_CIERRE',
+        DEFAULT_CONFIG.DIA_CIERRE,
+        'Último día inclusive en que se reciben inscripciones (Ej: 19)'
+      ],
+      [
+        'DIA_ENVIO_DOCENTES',
+        DEFAULT_CONFIG.DIA_ENVIO_DOCENTES,
+        'Día del mes en que se dispara automáticamente el correo con la planilla a cada docente (Ej: 20)'
+      ],
+      [
+        'HORA_ENVIO_DOCENTES',
+        DEFAULT_CONFIG.HORA_ENVIO_DOCENTES,
+        'Hora del día de envío automático en huso horario Buenos Aires GMT-3 (Ej: 8 para 08:00 hs)'
+      ]
+    ];
+    sheet.getRange(1, 1, rows.length, 3).setValues(rows);
+    sheet.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#3438AA').setFontColor('#FFFFFF');
+    sheet.setColumnWidth(1, 220);
+    sheet.setColumnWidth(2, 220);
+    sheet.setColumnWidth(3, 520);
+  }
+
+  const values = sheet.getDataRange().getValues();
+  const cfg = {
+    modoVentana: DEFAULT_CONFIG.MODO_VENTANA,
+    diaApertura: DEFAULT_CONFIG.DIA_APERTURA,
+    diaCierre: DEFAULT_CONFIG.DIA_CIERRE,
+    diaEnvioDocentes: DEFAULT_CONFIG.DIA_ENVIO_DOCENTES,
+    horaEnvioDocentes: DEFAULT_CONFIG.HORA_ENVIO_DOCENTES
+  };
+
+  for (let i = 1; i < values.length; i++) {
+    const key = String(values[i][0] || '').trim().toUpperCase();
+    const val = values[i][1];
+    if (key === 'MODO_VENTANA' && val) cfg.modoVentana = String(val).trim().toUpperCase();
+    if (key === 'DIA_APERTURA' && val !== '') cfg.diaApertura = Number(val) || DEFAULT_CONFIG.DIA_APERTURA;
+    if (key === 'DIA_CIERRE' && val !== '') cfg.diaCierre = Number(val) || DEFAULT_CONFIG.DIA_CIERRE;
+    if (key === 'DIA_ENVIO_DOCENTES' && val !== '') cfg.diaEnvioDocentes = Number(val) || DEFAULT_CONFIG.DIA_ENVIO_DOCENTES;
+    if (key === 'HORA_ENVIO_DOCENTES' && val !== '') cfg.horaEnvioDocentes = Number(val) || DEFAULT_CONFIG.HORA_ENVIO_DOCENTES;
+  }
+
+  const now = new Date();
+  const diaActualAr = Number(
+    Utilities.formatDate(now, 'America/Argentina/Buenos_Aires', 'd')
+  );
+
+  let inscripcionAbierta = true;
+  if (cfg.modoVentana === 'CERRADO_MANUAL') {
+    inscripcionAbierta = false;
+  } else if (cfg.modoVentana === 'POR_CALENDARIO') {
+    inscripcionAbierta = diaActualAr >= cfg.diaApertura && diaActualAr <= cfg.diaCierre;
+  }
+
+  return {
+    modoVentana: cfg.modoVentana,
+    diaApertura: cfg.diaApertura,
+    diaCierre: cfg.diaCierre,
+    diaEnvioDocentes: cfg.diaEnvioDocentes,
+    horaEnvioDocentes: cfg.horaEnvioDocentes,
+    diaActualAr: diaActualAr,
+    inscripcionAbierta: inscripcionAbierta,
+    mensajeCronograma:
+      'Inscripción habilitada del día ' +
+      cfg.diaApertura +
+      ' al ' +
+      cfg.diaCierre +
+      ' - Envío de nóminas a docentes: día ' +
+      cfg.diaEnvioDocentes
+  };
+}
+
+/**
+ * Abre y posiciona a Secretaría en la pestaña "Configuracion_Turnos".
+ */
+function abrirHojaConfiguracionTurnos() {
+  obtenerConfiguracionVentana();
+  const ss = getSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_CONFIG);
+  if (sheet) {
+    ss.setActiveSheet(sheet);
+    ss.toast(
+      'Modificá los días en la columna B (Valor) para ajustar la apertura y el disparo automático.',
+      'Configuración de Turnos Activa',
+      6
+    );
+  }
+}
+
+/**
+ * Endpoint GET para que el formulario web consulte si la ventana de inscripción está abierta
+ * y muestre el cronograma vigente.
+ */
+function doGet() {
+  const status = obtenerConfiguracionVentana();
+  return ContentService.createTextOutput(
+    JSON.stringify({
+      ok: true,
+      ...status
+    })
+  ).setMimeType(ContentService.MimeType.JSON);
 }
 
 /**
@@ -53,6 +193,20 @@ function doPost(e) {
   try {
     const rawBody = e && e.postData && e.postData.contents ? e.postData.contents : '{}';
     const data = JSON.parse(rawBody);
+
+    const estadoVentana = obtenerConfiguracionVentana();
+    if (!estadoVentana.inscripcionAbierta && !data.forzarDemo) {
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          ok: false,
+          cerrada: true,
+          error:
+            'El período de inscripción se encuentra cerrado. (' +
+            estadoVentana.mensajeCronograma +
+            ').'
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
 
     const ss = getSpreadsheet();
     let sheet = ss.getSheetByName(SHEET_INSCRIPCIONES);
@@ -70,7 +224,12 @@ function doPost(e) {
             'America/Argentina/Buenos_Aires',
             "dd/MM/yyyy HH:mm:ss '(GMT-3)'"
           );
-    const comprobanteId = data.comprobanteId || ('ISFT-' + new Date().getFullYear() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase());
+    const comprobanteId =
+      data.comprobanteId ||
+      'ISFT-' +
+        new Date().getFullYear() +
+        '-' +
+        Math.random().toString(36).substring(2, 8).toUpperCase();
 
     const values = sheet.getDataRange().getValues();
     let existingRowIndex = -1;
@@ -94,13 +253,15 @@ function doPost(e) {
       data.cohorte || '',
       data.carreraCode || '',
       data.carreraNombre || '',
-      data.anioMateriaLabel ? (data.anioMateriaLabel + ' (' + data.anioMateria + '° Año)') : String(data.anioMateria || ''),
+      data.anioMateriaLabel
+        ? data.anioMateriaLabel + ' (' + data.anioMateria + '° Año)'
+        : String(data.anioMateria || ''),
       materiaCodigo,
       data.materiaNombre || '',
       data.modalidad || 'Regular',
       data.anioCursado || '',
-      data.profesor || ('Docente ' + (data.materiaNombre || '')),
-      'Pendiente de envío quincenal'
+      data.profesor || 'Docente ' + (data.materiaNombre || ''),
+      'Pendiente de envío (Corte día ' + estadoVentana.diaEnvioDocentes + ')'
     ];
 
     if (existingRowIndex > 0) {
@@ -114,7 +275,8 @@ function doPost(e) {
         ok: true,
         comprobanteId: comprobanteId,
         duplicado: existingRowIndex > 0,
-        fechaIso: fechaIso
+        fechaIso: fechaIso,
+        cronograma: estadoVentana.mensajeCronograma
       })
     ).setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
@@ -127,6 +289,31 @@ function doPost(e) {
 }
 
 /**
+ * Función ejecutada diariamente por el Trigger de Google Apps Script.
+ * Si el día actual en Buenos Aires (GMT-3) coincide con DIA_ENVIO_DOCENTES (ej. día 20),
+ * dispara automáticamente el envío de las planillas a todos los profesores.
+ */
+function evaluarCronDiarioVentana() {
+  const cfg = obtenerConfiguracionVentana();
+  if (cfg.diaActualAr === cfg.diaEnvioDocentes) {
+    Logger.log(
+      'Día de corte alcanzado (Día ' +
+        cfg.diaEnvioDocentes +
+        '). Disparando envío automático de nóminas a docentes...'
+    );
+    enviarNominasDocentes();
+  } else {
+    Logger.log(
+      'Hoy es día ' +
+        cfg.diaActualAr +
+        '. El envío automático está programado para el día ' +
+        cfg.diaEnvioDocentes +
+        '.'
+    );
+  }
+}
+
+/**
  * Lee los alumnos inscriptos hasta la fecha, los agrupa por Materia_Codigo,
  * busca el correo del docente en "Directorio_Docentes" y envía la nómina oficial.
  */
@@ -134,6 +321,7 @@ function enviarNominasDocentes() {
   const ss = getSpreadsheet();
   const sheetIns = ss.getSheetByName(SHEET_INSCRIPCIONES);
   const sheetDoc = ss.getSheetByName(SHEET_DOCENTES);
+  const cfg = obtenerConfiguracionVentana();
 
   if (!sheetIns || !sheetDoc) {
     throw new Error('No se encontraron las hojas Inscripciones_Finales o Directorio_Docentes.');
@@ -158,7 +346,7 @@ function enviarNominasDocentes() {
         anioPlan: String(docentesData[i][3] || ''),
         materiaCode: materiaCode,
         materiaNombre: materiaNombre,
-        docente: docenteTitular || ('Docente ' + materiaNombre),
+        docente: docenteTitular || 'Docente ' + materiaNombre,
         email: emailDocente
       };
     }
@@ -202,7 +390,11 @@ function enviarNominasDocentes() {
     });
   }
 
-  const fechaCorte = Utilities.formatDate(new Date(), 'America/Argentina/Buenos_Aires', 'dd/MM/yyyy HH:mm');
+  const fechaCorte = Utilities.formatDate(
+    new Date(),
+    'America/Argentina/Buenos_Aires',
+    "dd/MM/yyyy HH:mm '(GMT-3)'"
+  );
   let emailsEnviados = 0;
 
   for (const key in gruposPorMateria) {
@@ -212,11 +404,10 @@ function enviarNominasDocentes() {
       carreraNombre: alumnos[0].carreraNombre,
       materiaCode: alumnos[0].materiaCode,
       materiaNombre: alumnos[0].materiaNombre,
-      docente: alumnos[0].profesor || ('Docente ' + alumnos[0].materiaNombre),
+      docente: alumnos[0].profesor || 'Docente ' + alumnos[0].materiaNombre,
       email: 'arij.dev@gmail.com'
     };
 
-    // Construir CSV adjunto compatible con Excel
     const csvHeader = [
       'Comprobante_ID',
       'Fecha_Inscripcion',
@@ -272,11 +463,11 @@ function enviarNominasDocentes() {
       '<div style="font-family:Inter,Arial,sans-serif;max-width:680px;margin:0 auto;border:1px solid #dbe2ef;border-radius:10px;overflow:hidden;">' +
       '<div style="background:#3438AA;color:#ffffff;padding:18px 24px;border-bottom:4px solid #C97026;">' +
       '<div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.9;">ISFT N° 191 - Bahía Blanca - Secretaría Académica</div>' +
-      '<h2 style="margin:6px 0 0;font-size:18px;">Nómina de Inscriptos a Mesa Examinadora</h2>' +
+      '<h2 style="margin:6px 0 0;font-size:18px;">Nómina Oficial de Inscriptos a Mesa Examinadora</h2>' +
       '</div>' +
       '<div style="padding:20px 24px;background:#ffffff;color:#1b1f3b;">' +
       '<p style="margin-top:0;">Estimado/a <strong>' + infoDocente.docente + '</strong>,</p>' +
-      '<p>Se remite el listado actualizado de estudiantes inscriptos hasta el <strong>' + fechaCorte + '</strong> para la mesa examinadora de:</p>' +
+      '<p>Habiendo finalizado la ventana de inscripción (del día <strong>' + cfg.diaApertura + '</strong> al <strong>' + cfg.diaCierre + '</strong>), se remite el padrón definitivo al <strong>' + fechaCorte + '</strong> para la mesa examinadora de:</p>' +
       '<div style="background:#f8fafc;border-left:4px solid #3438AA;padding:12px 16px;margin:14px 0;border-radius:4px;">' +
       '<div><strong>Carrera:</strong> ' + infoDocente.carreraNombre + ' (' + infoDocente.carreraCode + ')</div>' +
       '<div><strong>Asignatura:</strong> ' + infoDocente.materiaNombre + ' [' + infoDocente.materiaCode + ']</div>' +
@@ -314,32 +505,50 @@ function enviarNominasDocentes() {
     emailsEnviados++;
   }
 
-  Logger.log('Proceso finalizado. Correos enviados a docentes: ' + emailsEnviados);
+  try {
+    ss.toast('Se enviaron ' + emailsEnviados + ' nómina(s) por correo a los docentes.', 'Envío Completado', 5);
+  } catch (e) {}
 }
 
 /**
- * Configura el disparo programado cada 15 días de manera automática.
+ * Instala el Trigger diario que evalúa los parámetros de "Configuracion_Turnos"
+ * y dispara automáticamente las nóminas el día configurado (ej. día 20 a las 08:00 hs).
  */
-function instalarTriggerQuincenal() {
+function instalarTriggerCalendarioParametrizable() {
+  const cfg = obtenerConfiguracionVentana();
   const triggers = ScriptApp.getProjectTriggers();
   for (let i = 0; i < triggers.length; i++) {
-    if (triggers[i].getHandlerFunction() === 'enviarNominasDocentes') {
+    const fn = triggers[i].getHandlerFunction();
+    if (fn === 'enviarNominasDocentes' || fn === 'evaluarCronDiarioVentana') {
       ScriptApp.deleteTrigger(triggers[i]);
     }
   }
 
-  ScriptApp.newTrigger('enviarNominasDocentes')
+  ScriptApp.newTrigger('evaluarCronDiarioVentana')
     .timeBased()
-    .everyDays(15)
-    .atHour(8)
+    .everyDays(1)
+    .atHour(cfg.horaEnvioDocentes)
     .create();
 
-  Logger.log('Trigger programado cada 15 días a las 08:00 hs instalado correctamente.');
+  try {
+    getSpreadsheet().toast(
+      'Cron activo: Inscripciones del día ' +
+        cfg.diaApertura +
+        ' al ' +
+        cfg.diaCierre +
+        '. Envío automático a docentes el día ' +
+        cfg.diaEnvioDocentes +
+        ' a las ' +
+        cfg.horaEnvioDocentes +
+        ':00 hs.',
+      'Calendario Parametrizado Activado',
+      6
+    );
+  } catch (e) {}
 }
 
 /**
  * Función auxiliar para insertar una fila de prueba nueva con 1 clic desde Google Sheets.
- * Genera un DNI único cada vez para que la protección anti-duplicados agregue una fila nueva.
  */
 function simularInscripcionDemo() {
   const muestras = [
@@ -356,6 +565,7 @@ function simularInscripcionDemo() {
   doPost({
     postData: {
       contents: JSON.stringify({
+        forzarDemo: true,
         comprobanteId: codigoUnico,
         apellidoNombre: alumno.nombre,
         dni: dniUnico,
