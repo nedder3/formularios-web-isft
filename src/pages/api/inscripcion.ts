@@ -3,11 +3,11 @@ import {
   getCarreraByCode,
   getMateriaInCarrera,
   yearNumberToLabel,
-} from '../../lib/academicService';
-import { inscripcionRepository } from '../../lib/excelService';
-import { checkRateLimit } from '../../lib/rateLimit';
-import { validateStep1Personal, validateStep2Academic } from '../../lib/validation';
-import type { InscripcionFinalPayload } from '../../types/academic';
+} from '../../lib/academicService.ts';
+import { inscripcionRepository } from '../../lib/excelService.ts';
+import { checkRateLimit } from '../../lib/rateLimit.ts';
+import { validateStep1Personal, validateStep2Academic } from '../../lib/validation.ts';
+import type { InscripcionFinalPayload } from '../../types/academic.ts';
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {

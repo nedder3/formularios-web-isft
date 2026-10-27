@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import type { APIRoute } from 'astro';
-import { getCarreraByCode } from '../../../lib/academicService';
-import { getExcelFilePathForCarrera } from '../../../lib/excelService';
+import { getCarreraByCode } from '../../../lib/academicService.ts';
+import { getExcelFilePathForCarrera } from '../../../lib/excelService.ts';
 
 export const GET: APIRoute = async ({ params, request, url }) => {
   // Optional Admin Key guard for production PII protection

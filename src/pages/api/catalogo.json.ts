@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getClientCarrerasDto } from '../../lib/academicService';
+import { getClientCarrerasDto } from '../../lib/academicService.ts';
 
 export const GET: APIRoute = async () => {
   const dto = getClientCarrerasDto();
