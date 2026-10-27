@@ -338,29 +338,48 @@ function instalarTriggerQuincenal() {
 }
 
 /**
- * Función auxiliar para insertar una fila de prueba con 1 clic si se desea probar desde Google Sheets.
+ * Función auxiliar para insertar una fila de prueba nueva con 1 clic desde Google Sheets.
+ * Genera un DNI único cada vez para que la protección anti-duplicados agregue una fila nueva.
  */
 function simularInscripcionDemo() {
+  const muestras = [
+    { nombre: 'Pérez Juan Ignacio', cohorte: '2024', mod: 'Regular' },
+    { nombre: 'Gómez Lucía Valentina', cohorte: '2023', mod: 'Regular' },
+    { nombre: 'Martínez Tomás Ezequiel', cohorte: '2024', mod: 'Libre' },
+    { nombre: 'Rodríguez Sofía Belén', cohorte: '2022', mod: 'Regular' },
+    { nombre: 'Fernández Mateo Nicolás', cohorte: '2025', mod: 'Regular' }
+  ];
+  const alumno = muestras[Math.floor(Math.random() * muestras.length)];
+  const dniUnico = String(40000000 + Math.floor(Math.random() * 8999999));
+  const codigoUnico = 'ISFT-2026-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
   doPost({
     postData: {
       contents: JSON.stringify({
-        comprobanteId: 'ISFT-2026-DEMO01',
-        fechaIso: new Date().toISOString(),
-        apellidoNombre: 'Jaime Ariel',
-        dni: '34945012',
-        telefono: '2914400469',
-        email: 'arij.dev@gmail.com',
-        cohorte: '2023',
+        comprobanteId: codigoUnico,
+        apellidoNombre: alumno.nombre,
+        dni: dniUnico,
+        telefono: '2914' + Math.floor(100000 + Math.random() * 899999),
+        email: 'alumno.' + dniUnico.slice(-4) + '@isft191.edu.ar',
+        cohorte: alumno.cohorte,
         carreraCode: 'SOFT',
         carreraNombre: 'Tecnicatura Superior en Desarrollo de Software',
         anioMateria: 2,
         anioMateriaLabel: 'Segundo',
         materiaCodigo: 'SOFT-203',
         materiaNombre: 'Algebra y lógica',
-        modalidad: 'Regular',
+        modalidad: alumno.mod,
         anioCursado: '2026',
         profesor: 'Docente Algebra y lógica'
       })
     }
   });
+
+  try {
+    getSpreadsheet().toast(
+      'Se agregó a ' + alumno.nombre + ' (DNI ' + dniUnico + ') en SOFT-203.',
+      'Alumno de Prueba Insertado',
+      4
+    );
+  } catch (e) {}
 }
