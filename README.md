@@ -237,3 +237,70 @@ console.log(`Carreras: ${data.carreras.length} | Materias totales: ${total}`);
 # 2. Compilar el proyecto verificando tipos y bundle SSR
 npm run build
 ```
+
+
+---
+
+## 6. Roadmap de Evolución y Checklist de Auditoría Senior
+
+A continuación se documenta el relevamiento integral de mejoras técnicas, arquitectónicas, de seguridad, testing y experiencia de usuario detectadas sobre la base actual, preservando la identidad institucional del **ISFT N° 191 (`#3438AA` / `#D97706`)** y la compatibilidad con **WordPress** y **SIU Guaraní**.
+
+### 6.1 Estructura de Datos, Complejidad y Persistencia (`academicService.ts` / `excelService.ts`)
+- [ ] **Indexación en Memoria $O(1)$ (`Map` Lookup):** Reemplazar las búsquedas lineales `.find()` y `.filter()` repetidas en `getCarreraByCode()`, `getMateriasByCarreraAndYear()` y `POST /api/inscripcion` por estructuras `Map<CarreraCode, Carrera>` y `Map<string, Materia>` precomputadas al hidratar `isft_191_scaffolding.json`.
+- [ ] **Proyección de DTO Ligero para el Cliente:** Evitar serializar campos internos innecesarios (`id`, `carrera_id`, `source_sheet`) en el HTML SSR; inyectar únicamente un payload compacto (`code`, `name`, `resolution`, `materias: [{ code, name, year }]`) reduciendo el tamaño del documento inicial.
+- [ ] **Control de Idempotencia y Deduplicación (`DNI + materiaCodigo`):** Validar antes de insertar en `Inscripciones_<CARRERA>.xlsx` si ya existe una inscripción idéntica para el mismo estudiante y asignatura en el turno vigente, evitando filas duplicadas por doble clic o reenvío de red.
+- [ ] **Registro Transaccional Append-Only (JSONL / SQLite WAL):** Incorporar un log de auditoría ligero (`data/output/audit_log.jsonl`) en paralelo a la escritura de `ExcelJS` para evitar depender únicamente del re-parseo completo del archivo ZIP/XLSX ($O(R)$ por fila) ante volúmenes altos de inscripción.
+
+### 6.2 Subdivisión Modular y Patrones de Diseño
+- [ ] **Descomposición del Monolito `src/pages/index.astro` (941 líneas):** Subdividir la vista principal en componentes cohesivos bajo `src/components/`:
+  - [ ] `src/components/NoticeBanner.astro` (Avisos institucionales y estado de sesión recordada).
+  - [ ] `src/components/WizardStepper.astro` (Indicador de progreso accesible e interactivo).
+  - [ ] `src/components/StepPersonalData.astro` (Formulario del Paso 1: Identidad y Contacto).
+  - [ ] `src/components/StepSubjectSelection.astro` (Formulario del Paso 2: Selección en cascada y datos de cátedra).
+  - [ ] `src/components/ReceiptTicket.astro` (Vista del Paso 3: Comprobante criptográfico e historial de sesión).
+- [ ] **Single Source of Truth (SSOT) en Validación (Specification / Schema Pattern):** Extraer las reglas de validación duplicadas entre el cliente (`index.astro`) y el servidor (`src/pages/api/inscripcion.ts`) hacia un módulo compartido `src/lib/validation.ts` (o esquema `Zod`/`Valibot`), garantizando simetría exacta en mensajes de error y sanitización.
+- [ ] **Patrón Repository (`IInscripcionRepository`):** Abstraer `registrarInscripcionEnExcel` detrás de un contrato de dominio que permita combinar o conmutar `ExcelInscripcionRepository` con un futuro `SiuGuaraniRepository` sin acoplar el endpoint HTTP.
+- [ ] **Máquina de Estados Finita (FSM) en Cliente:** Reemplazar la mutación imperativa dispersa de atributos `.hidden` y clases `.active/.done` por un controlador declarativo de transiciones (`STEP_1_PERSONAL` $\rightarrow$ `STEP_2_ACADEMIC` $\rightarrow$ `STEP_3_RECEIPT`).
+
+### 6.3 Seguridad, Buenas Prácticas y Manejo de Recursos
+- [ ] **Protección de Datos Personales (PII) en `GET /api/excel/[carrera].ts`:** Restringir la descarga del padrón completo `.xlsx` (que contiene DNI, teléfono y correo de todos los inscriptos) mediante autenticación para Secretaría Académica (Token / Basic Auth) y remover el enlace público de descarga masiva de la vista del alumno, dejando al estudiante únicamente su comprobante individual.
+- [ ] **Mitigación de CSV / Excel Formula Injection:** Sanitizar en `excelService.ts` cualquier cadena de entrada (`apellidoNombre`, `profesor`, `email`) que comience con caracteres ejecutables de planilla (`=`, `+`, `-`, `@`, `\t`, `\r`) anteponiendo un apóstrofo de escape (`'`).
+- [ ] **Operaciones de Disco 100% Asíncronas (`node:fs/promises`):** Sustituir `fs.readFileSync`, `fs.existsSync` y `fs.mkdirSync` en `academicService.ts`, `excelService.ts` y `[carrera].ts` por operaciones no bloqueantes del Event Loop y streaming de archivos en la descarga HTTP.
+- [ ] **Rate Limiting por IP / DNI en `POST /api/inscripcion`:** Implementar un limitador en memoria (Token Bucket / Sliding Window) para prevenir abuso automatizado o saturación de la cola `writeLocks`.
+- [ ] **Scripts Multiplataforma en `package.json`:** Reemplazar el prefijo POSIX `ASTRO_TELEMETRY_DISABLED=1` en los scripts `dev`, `build` y `preview` por configuración nativa compatible con Windows PowerShell/CMD y Linux/macOS.
+
+### 6.4 Server-Side Rendering (SSR) y Eficiencia de Carga
+- [ ] **Eliminación de `define:vars` Inline para Habilitar Bundling Vite:** Pasar el catálogo inicial mediante un bloque `<script type="application/json" id="isft-catalog">` o endpoint cacheado (`GET /api/catalogo.json` con `Cache-Control: public, max-age=86400, stale-while-revalidate`), permitiendo que el script del wizard sea compilado, minificado y tipado con TypeScript por Astro.
+- [ ] **Pre-hidratación SSR de Carrera Preseleccionada (`?carrera=CODE`):** Cuando el usuario accede desde WordPress con `?carrera=GEST`, renderizar directamente en el servidor el estado preseleccionado y los contadores de materias por año sin esperar a la ejecución de JavaScript.
+- [ ] **Optimización de Fuentes y Critical Rendering Path (`Layout.astro`):** Unificar las fuentes externas (`Open Sans` + `Roboto` se solicitan juntas aunque `Roboto` actúa solo como fallback) en una única familia tipográfica optimizada con `font-display: swap` o fuentes autoalojadas para eliminar bloqueos de renderizado externo.
+
+### 6.5 Suite de Testing Automatizado (QA)
+- [ ] **Tests Unitarios de Dominio y Padrón (`Vitest`):**
+  - [ ] Verificar invariantes de `isft_191_scaffolding.json` (8 carreras exactas, 211 materias, unicidad de códigos `code`, años válidos `1 | 2 | 3`).
+  - [ ] Probar casos borde del validador (DNI con puntos/espacios, cohortes fuera de rango, materias cruzadas entre carreras o años distintos).
+- [ ] **Test de Estrés y Concurrencia sobre `writeLocks` (`Vitest`):**
+  - [ ] Ejecutar 25 escrituras paralelas (`Promise.all`) sobre una misma carrera y verificar que el archivo `.xlsx` resultante contenga exactamente las 25 filas íntegras y las 10 columnas homogéneas.
+- [ ] **Tests End-to-End del Flujo Académico (`Playwright`):**
+  - [ ] Simular inscripción completa Paso 1 $\rightarrow$ Paso 2 $\rightarrow$ Paso 3, recarga con persistencia `localStorage` y flujo de inscripción consecutiva (`+ Inscribirme a otra materia`).
+
+### 6.6 Rediseño UX/UI: Leyes de UX, Heurísticas, Accesibilidad y Estilo Visual
+
+#### A. Aplicación de Leyes de UX/UI y Heurísticas de Nielsen
+- [ ] **Ley de Proximidad (Gestalt) y Orden Mental en Paso 2:** Reordenar los campos del Paso 2 para respetar el modelo mental del estudiante: `1. Carrera` $\rightarrow$ `2. Año de la Materia` $\rightarrow$ `3. Materia a Rendir` $\rightarrow$ `4. Condición de Cursada (Modalidad, Año de Cursado y Profesor)`. Actualmente `Modalidad` interrumpe la cascada entre `Año` y `Materia`.
+- [ ] **Ley de Hick-Hyman (Reducción de Tiempo de Búsqueda):** Incorporar filtro rápido de texto o agrupación clara en el selector de materias (especialmente crítico en planes con hasta 13 asignaturas por año como `CONT-273`) y autocompletado (`<datalist>`) con los profesores ingresados previamente por el alumno en la sesión.
+- [ ] **Efecto del Gradiente de Meta y Visibilidad del Estado (Heurística H1):**
+  - [ ] Añadir en la cabecera del Paso 2 una **Píldora de Legajo Activo** (`"Inscribiendo a: Pérez Juan (DNI 43.596.839) — [Editar]"`), evitando que el alumno dude de qué datos personales se están enviando.
+  - [ ] Mostrar un aviso explícito con acción de limpieza (`"Datos recordados en este dispositivo • [Cambiar de alumno]"`) cuando `localStorage` autocompleta el Paso 1 (Heurística H3: Control y libertad del usuario, clave en PCs compartidas del instituto).
+- [ ] **Prevención de Errores Inline (Heurística H5):** Validar cada campo en tiempo real (`blur` / `input`) con indicadores visuales por campo y formateo automático (limpieza de puntos en DNI mientras escribe), en vez de mostrar un único cartel de error general al final del formulario.
+- [ ] **Regla del Pico-Final (Peak-End Rule) en Paso 3:** Agregar en la vista del comprobante un historial acumulativo de **"Mesas inscriptas en esta sesión"**, brindando certeza inmediata al estudiante que se anota a 3 o 4 finales seguidos.
+
+#### B. Accesibilidad Web (WCAG 2.1 Nivel AA)
+- [ ] **Gestión Programática de Foco entre Pasos:** Al avanzar o retroceder entre Paso 1, Paso 2 y el Comprobante, trasladar el foco (`element.focus()`) al título del nuevo paso (`tabindex="-1"`) y hacer scroll suave al inicio de la tarjeta.
+- [ ] **Semántica ARIA en Validaciones y Stepper:** Vincular cada `<input>` con su texto de ayuda y error mediante `aria-describedby`, marcar campos inválidos con `aria-invalid="true"`, añadir `role="alert"` a los contenedores de error y `aria-current="step"` al indicador activo del wizard.
+- [ ] **Soporte de Movimiento Reducido:** Respetar `@media (prefers-reduced-motion: reduce)` en todas las micro-transiciones del formulario.
+
+#### C. Propuesta de Estilo Estético: *Institutional Bento Grid + Subtle Liquid Glass*
+Sin alterar los colores oficiales del **ISFT N° 191** (`#3438AA` Azul Institucional y `#D97706` Ámbar Académico), se propone evolucionar la interfaz hacia una fusión de **Bento Grid Modular** + **Subtle Glassmorphism / Liquid Glass** con detalles de **Swiss Editorial Ticket** para el comprobante:
+- [ ] **1. Estructura Bento Grid Modular (Pasos 1 y 2):** Organizar los bloques del formulario en celdas modulares claramente delimitadas (*Bento Cards*: celda de Identidad Académica, celda de Contacto, celda de Resumen de Legajo Activo, celda de Cascada Curricular y celda de Cátedra), mejorando el escaneo visual tanto en escritorio como dentro del `<iframe>` de WordPress.
+- [ ] **2. Superficies Subtle Liquid Glass (Header & Stepper):** Aplicar traslucidez sutil (`backdrop-filter: blur(12px)`, bordes luminosos de `1px` y sombras multicapa suaves teñidas con el azul `#3438AA`) en la barra de progreso flotante y en las píldoras interactivas de selección de año (`1°`, `2°`, `3°`) y modalidad (`Regular`, `Libre`).
+- [ ] **3. Comprobante estilo *Swiss Precision Ticket* (Paso 3):** Rediseñar el comprobante final como un pase oficial de alta legibilidad con tipografía monoespaciada tabular (`font-variant-numeric: tabular-nums`), bordes troquelados académicos, sello de verificación SHA-256 destacado y hoja de impresión `@media print` optimizada en una sola carilla A4.
