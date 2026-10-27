@@ -28,9 +28,9 @@ Cada solicitud se valida contra el padrón curricular oficial e impacta tanto en
   - Escudo oficial del **ISFT N° 191**, paleta institucional (`#3438AA` azul primario y `#C97026` dorado ocre) y tipografías `Plus Jakarta Sans` + `Inter` + `JetBrains Mono`.
   - Grilla de doble columna (**65% Formulario / 35% Resumen de Inscripción fijo en tiempo real**) con marcos *Double-Bezel* estilo Framer, iconografía vectorial SVG pura (cero emojis de sistema), separadores normalizados con guion medio (` - `) y sin indicadores artificiales tipo LED.
 - **Privacidad del Padrón de Inscriptos:** Los alumnos solo visualizan e imprimen su propio comprobante individual (`ISFT-YYYY-XXXXXX`). La descarga de planillas de inscriptos no está expuesta en la interfaz estudiantil; las nóminas se remiten exclusivamente por correo electrónico a cada docente.
-- **Persistencia Dual (Servidor Node.js + Webhook Serverless para GitHub Pages):**
-  - **Modo Servidor (`ExcelJS`):** Cola de exclusión mutua en memoria (`writeLocks`), deduplicación idempotente por `(DNI + Materia)`, sanitización contra *Formula Injection* y registro append-only (`audit_log.jsonl`).
-  - **Modo Simulación / PoC (`Google Apps Script` -> `n8n`):** Envío directo a la planilla maestra en Google Drive personal con envío programado cada 15 días a los correos del directorio docente.
+- **Persistencia Dual 100% Funcional (Servidor Node.js SSR o GitHub Pages + Google Apps Script Serverless):**
+  - **Modo Servidor Institucional (`output: 'server'` + `ExcelJS`):** Cola de exclusión mutua en memoria (`writeLocks`), deduplicación idempotente por `(DNI + Materia)`, sanitización contra *Formula Injection* y registro append-only (`audit_log.jsonl`).
+  - **Modo Estático en GitHub Pages (`output: 'static'` + `Google Apps Script` / `n8n`):** Sin necesidad de reescribir la aplicación ni requerir un servidor Node.js activo, el bundle estático embebe el catálogo completo de 8 carreras y 211 materias (`#isft-catalog-data`), genera firmas verificables `SHA-256` en el navegador (`Web Crypto API`) y se comunica bidireccionalmente con la Web App de **Google Apps Script** (`doGet` + `doPost`) para validar la ventana de inscripción (`Configuracion_Turnos`), deduplicar registros en tiempo real (`Inscripciones_Finales`) y disparar automáticamente las nóminas por correo a cada docente el día de corte.
 
 ---
 
@@ -236,7 +236,7 @@ npm install
 node scripts/generate-poc-excel.mjs
 ```
 
-### 5.3 Ejecución en Desarrollo, Suite de Tests y Build de Producción
+### 5.3 Ejecución en Desarrollo, Suite de Tests y Build Dual (Node SSR / GitHub Pages)
 ```bash
 # Servidor de desarrollo en http://localhost:4321 (barra de desarrollo de Astro deshabilitada)
 npm run dev
@@ -244,10 +244,22 @@ npm run dev
 # Ejecutar suite automatizada (Catálogo O(1), Validación SSOT, E2E y Concurrencia 25x)
 npm test
 
-# Compilación para producción
+# Compilación para servidor Node.js Standalone (SSR)
 npm run build
 npm start
+
+# Compilación estática 100% funcional para GitHub Pages (Serverless vía Google Apps Script)
+ASTRO_STATIC=true npm run build
 ```
+
+### 5.4 Despliegue Continuo en GitHub Pages (`.github/workflows/deploy.yml`)
+El repositorio incluye el workflow oficial de GitHub Actions ([`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml)) que ante cada `push` a la rama `main` compila automáticamente la versión estática (`ASTRO_STATIC=true`, `ASTRO_BASE=/formularios-web-isft`) y la publica en **GitHub Pages**:
+- **URL Pública (GitHub Pages):** `https://nedder3.github.io/formularios-web-isft/`
+- **Funcionamiento End-to-End en GitHub Pages (Sin Servidor Node.js):**
+  1. **Catálogo Académico Pre-hidratado:** Las 8 carreras y 211 asignaturas viajan pre-compiladas en el HTML estático (`#isft-catalog-data`), permitiendo filtrado instantáneo por carrera, año y materia en el navegador.
+  2. **Consulta de Ventana de Inscripción (`GET`):** Al abrir la página, el cliente consulta el endpoint `doGet` de Google Apps Script para verificar si la ventana parametrizada (ej. días `15` al `19` en `Configuracion_Turnos`) está abierta o cerrada.
+  3. **Impacto y Deduplicación en Google Sheets (`POST`):** Al confirmar la inscripción, el navegador envía el payload JSON a `doPost(e)` en Google Apps Script, el cual adquiere un lock transaccional (`LockService`), verifica o actualiza sin duplicar la fila por `(DNI + Materia_Codigo)` en `Inscripciones_Finales` con hora oficial `GMT-3` y devuelve `{ ok, comprobanteId, duplicado }` al navegador.
+  4. **Comprobante PDF con Hash `SHA-256`:** El alumno visualiza e imprime su comprobante oficial directamente desde el navegador sin depender de procesos en servidor.
 
 ---
 
@@ -270,12 +282,12 @@ npm start
   - [x] Eliminación de barras de navegación externas ajenas al módulo de inscripción, indicadores tipo LED / `"En vivo"` y etiquetas de `"Compatible SIU Guaraní"`.
   - [x] Eliminación del cajón de descarga de planillas `.xlsx` en la vista del alumno (`ReceiptTicket.astro`) para resguardar la privacidad del padrón.
 
-### 6.3 Automatización de Nóminas a Docentes y Simulación Serverless (Fase 1 PoC -> Fase 2 n8n)
-- [x] **Generador de Padrón Docente (`scripts/generate-poc-excel.mjs`):** Creación automática de `planillas-generadas/ISFT191_Padron_Docentes_e_Inscripciones.xlsx` con las 211 materias bajo el formato `Docente + Nombre de Materia`.
+### 6.3 Automatización de Nóminas a Docentes y Despliegue Serverless en GitHub Pages (Completado)
+- [x] **Generador de Padrón Docente y Configuración de Turnos (`scripts/generate-poc-excel.mjs`):** Creación automática de `planillas-generadas/ISFT191_Padron_Docentes_e_Inscripciones.xlsx` con las 211 materias bajo el formato `Docente + Nombre de Materia` y la pestaña `Configuracion_Turnos` (apertura día 15, cierre día 19, envío a docentes día 20).
 - [x] **Autocompletado de Docente en Paso 2 (`src/pages/index.astro`):** Al elegir una asignatura se completa automáticamente `Docente <Nombre de Materia>` para garantizar coincidencia exacta con el directorio de correos.
 - [x] **Despliegue de Planilla Maestra en Google Drive Personal (`arij.dev@gmail.com`):**
   - Carpeta en Drive: `ISFT 191 - PoC Inscripcion a Finales` (`ID: 1rKZdAOphvEfXoN06iw3lW0WcvoMy7XId`).
   - Google Sheet activo: `ISFT191_Padron_Docentes_e_Inscripciones` (`ID: 12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g`).
-- [x] **Script de Automatización Google Apps Script (`automation/google-apps-script/Code.gs`):** Incluye webhook `doPost(e)`, envío de correos con tabla HTML institucional + adjunto `.csv` por materia (`enviarNominasDocentes`), programación automática cada 15 días (`instalarTriggerQuincenal`) y menú `ISFT 191 - Secretaría` en Google Sheets.
-- [x] **Activación de Webhook en Producción PoC (`PUBLIC_APPS_SCRIPT_URL`):** Publicado como Aplicación Web en Google Apps Script y vinculado por defecto en `src/pages/index.astro` (verificado con impacto en tiempo real en `Inscripciones_Finales`).
-- [ ] **(Pendiente - Fase 2):** Publicar el frontend estático en **GitHub Pages** y migrar el flujo programado de Google Apps Script a un workflow exportable de **n8n** (`n8n-workflow-isft191.json`).
+- [x] **Script de Automatización Google Apps Script (`automation/google-apps-script/Code.gs`):** Incluye consulta de ventana (`doGet`), webhook con deduplicación e impacto GMT-3 (`doPost`), envío de correos con tabla HTML institucional + adjunto `.csv` por materia (`enviarNominasDocentes`), cron parametrizable (`evaluarYEnviarNominasPorCalendario`) y menú `ISFT 191 - Secretaría` en Google Sheets.
+- [x] **Activación de Webhook Bidireccional (`PUBLIC_APPS_SCRIPT_URL`) y Build Dual para GitHub Pages:** Configuración híbrida en `astro.config.mjs` y pipeline `.github/workflows/deploy.yml` para despliegue estático 100% funcional conectado en vivo con Google Sheets.
+- [ ] **(Opcional - Fase 2):** Migrar el cron de Google Apps Script a un workflow auto-hospedado en **n8n** (`n8n-workflow-isft191.json`) cuando el instituto disponga de servidor propio.
