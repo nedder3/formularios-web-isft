@@ -8,7 +8,7 @@ import type {
   InscripcionFinalPayload,
   InscripcionResult,
 } from '../types/academic';
-import { sanitizeSpreadsheetCell } from './validation';
+import { sanitizeSpreadsheetCell } from './validation.ts';
 
 const OUTPUT_DIR = path.resolve(process.cwd(), 'data/output');
 const AUDIT_LOG_PATH = path.join(OUTPUT_DIR, 'audit_log.jsonl');
