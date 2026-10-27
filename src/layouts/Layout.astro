@@ -16,18 +16,39 @@ const { title, embed = false } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
       rel="stylesheet"
     />
     <style is:global>
       :root {
+        /* Identidad Institucional ISFT N° 191 */
         --brand-primary: #3438aa;
         --brand-primary-dark: #252882;
+        --brand-primary-soft: rgba(52, 56, 170, 0.08);
         --brand-action: #2563eb;
         --brand-accent: #d97706;
         --brand-accent-light: #fef3c7;
-        --surface-bg: #f4f6fb;
+
+        /* Tokens Bento Grid & Subtle Liquid Glass */
+        --surface-bg: #f1f5f9;
+        --surface-mesh: radial-gradient(
+            at 0% 0%,
+            rgba(52, 56, 170, 0.07) 0px,
+            transparent 50%
+          ),
+          radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.06) 0px, transparent 50%);
         --surface-card: #ffffff;
+        --bento-cell-bg: #f8fafc;
+        --bento-border: rgba(52, 56, 170, 0.13);
+        --glass-bg: rgba(255, 255, 255, 0.84);
+        --glass-border: rgba(255, 255, 255, 0.7);
+        --glass-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06),
+          0 2px 6px -1px rgba(52, 56, 170, 0.04);
+
+        /* Tipografía y Semántica */
+        --font-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
         --text-main: #0f172a;
         --text-muted: #475569;
         --border-color: #cbd5e1;
@@ -35,8 +56,9 @@ const { title, embed = false } = Astro.props;
         --feedback-success-bg: #f0fdf4;
         --feedback-error: #dc2626;
         --feedback-error-bg: #fef2f2;
-        --radius-md: 10px;
-        --radius-lg: 14px;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 18px;
       }
 
       * {
@@ -46,27 +68,34 @@ const { title, embed = false } = Astro.props;
       }
 
       body {
-        font-family: 'Open Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: var(--font-sans);
         background-color: var(--surface-bg);
+        background-image: var(--surface-mesh);
+        background-attachment: fixed;
         color: var(--text-main);
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
       }
 
       body.is-embed {
-        background-color: transparent;
+        background: transparent;
       }
 
       .inst-header {
-        background: var(--surface-card);
-        border-bottom: 5px solid var(--brand-primary);
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+        background: var(--glass-bg);
+        backdrop-filter: blur(14px) saturate(160%);
+        -webkit-backdrop-filter: blur(14px) saturate(160%);
+        border-bottom: 4px solid var(--brand-primary);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 30;
       }
 
       .inst-topbar {
-        background: var(--brand-primary);
+        background: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
         color: #ffffff;
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         padding: 0.4rem 1.25rem;
       }
 
@@ -83,7 +112,7 @@ const { title, embed = false } = Astro.props;
       .inst-header-inner {
         max-width: 960px;
         margin: 0 auto;
-        padding: 1rem 1.25rem;
+        padding: 0.9rem 1.25rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -100,7 +129,7 @@ const { title, embed = false } = Astro.props;
       .inst-badge {
         width: 48px;
         height: 48px;
-        border-radius: 10px;
+        border-radius: 12px;
         background: var(--brand-primary);
         color: #ffffff;
         display: flex;
@@ -109,6 +138,7 @@ const { title, embed = false } = Astro.props;
         justify-content: center;
         font-weight: 700;
         border: 2px solid var(--brand-accent);
+        box-shadow: 0 4px 12px rgba(52, 56, 170, 0.25);
         flex-shrink: 0;
       }
 
@@ -124,13 +154,14 @@ const { title, embed = false } = Astro.props;
       }
 
       .inst-title h1 {
-        font-size: 1.2rem;
+        font-size: 1.18rem;
         font-weight: 700;
         color: var(--brand-primary);
+        letter-spacing: -0.01em;
       }
 
       .inst-title p {
-        font-size: 0.85rem;
+        font-size: 0.84rem;
         color: var(--text-muted);
       }
 
@@ -138,20 +169,21 @@ const { title, embed = false } = Astro.props;
         background: var(--brand-accent-light);
         color: #92400e;
         border: 1px solid #fcd34d;
-        padding: 0.3rem 0.7rem;
+        padding: 0.32rem 0.75rem;
         border-radius: 999px;
         font-size: 0.75rem;
-        font-weight: 600;
+        font-weight: 700;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
       }
 
       .main-container {
-        max-width: 860px;
-        margin: 1.75rem auto 3rem;
+        max-width: 880px;
+        margin: 1.6rem auto 3rem;
         padding: 0 1rem;
       }
 
       .inst-footer {
-        max-width: 860px;
+        max-width: 880px;
         margin: 2rem auto;
         padding: 1.25rem 1rem;
         border-top: 1px solid var(--border-color);
@@ -160,16 +192,29 @@ const { title, embed = false } = Astro.props;
         color: var(--text-muted);
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
       @media print {
         .no-print {
           display: none !important;
         }
         body {
-          background: #ffffff;
+          background: #ffffff !important;
+          background-image: none !important;
         }
         .main-container {
           margin: 0;
           max-width: 100%;
+          padding: 0;
         }
       }
     </style>
