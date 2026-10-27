@@ -1,8 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCarreras } from '../lib/academicService';
+import NoticeBanner from '../components/NoticeBanner.astro';
+import WizardStepper from '../components/WizardStepper.astro';
+import StepPersonalData from '../components/StepPersonalData.astro';
+import StepSubjectSelection from '../components/StepSubjectSelection.astro';
+import ReceiptTicket from '../components/ReceiptTicket.astro';
+import { getClientCarrerasDto } from '../lib/academicService';
 
-const carreras = getCarreras();
+const carrerasDto = getClientCarrerasDto();
 const url = Astro.url;
 const preselectedCarrera = url.searchParams.get('carrera') ?? '';
 const isEmbed = url.searchParams.get('embed') === '1';
@@ -12,369 +17,319 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 ---
 
 <Layout title="Inscripción a Finales" embed={isEmbed}>
-  <!-- Aviso Institucional -->
-  <section class="notice-banner no-print" aria-label="Instrucciones de inscripción">
-    <div class="notice-icon">ℹ️</div>
-    <div>
-      <strong>Importante:</strong> Debés completar una inscripción <strong>UNA VEZ POR CADA MATERIA</strong> a rendir. Tus datos personales quedarán recordados en tu dispositivo para agilizar la carga si te anotás a más de un examen final.
-    </div>
-  </section>
+  <NoticeBanner />
+  <WizardStepper />
 
-  <!-- Indicador de Pasos (UX Wizard) -->
-  <nav class="stepper no-print" aria-label="Progreso del formulario">
-    <div class="step active" id="step-indicator-1">
-      <span class="step-num">1</span>
-      <span class="step-label">Datos del Estudiante</span>
-    </div>
-    <div class="step-line"></div>
-    <div class="step" id="step-indicator-2">
-      <span class="step-num">2</span>
-      <span class="step-label">Carrera y Materia</span>
-    </div>
-    <div class="step-line"></div>
-    <div class="step" id="step-indicator-3">
-      <span class="step-num">3</span>
-      <span class="step-label">Comprobante</span>
-    </div>
-  </nav>
-
-  <!-- Tarjeta Principal del Formulario -->
   <div class="card" id="form-card">
     <form id="inscripcion-form" novalidate>
-      <!-- PASO 1: IDENTIFICACIÓN DEL ESTUDIANTE -->
-      <fieldset class="form-step" id="form-step-1">
-        <legend class="step-title">Paso 1: Identificación Personal</legend>
-        <p class="step-subtitle">
-          Verificá que tus datos coincidan con tu legajo académico.
-        </p>
-
-        <div class="form-grid">
-          <div class="field-group full-width">
-            <label for="apellidoNombre">Apellido y Nombre completo <span class="req">*</span></label>
-            <input
-              type="text"
-              id="apellidoNombre"
-              name="apellidoNombre"
-              placeholder="Ej: Pérez Juan Ignacio"
-              autocomplete="name"
-              required
-            />
-            <span class="field-hint">Tal como figura en tu DNI</span>
-          </div>
-
-          <div class="field-group">
-            <label for="dni">DNI (sin puntos) <span class="req">*</span></label>
-            <input
-              type="text"
-              id="dni"
-              name="dni"
-              inputmode="numeric"
-              pattern="[0-9]{7,9}"
-              placeholder="Ej: 43596839"
-              required
-            />
-            <span class="field-hint">Solo números, de 7 a 9 dígitos</span>
-          </div>
-
-          <div class="field-group">
-            <label for="cohorte">Cohorte (Año de ingreso) <span class="req">*</span></label>
-            <select id="cohorte" name="cohorte" required>
-              <option value="">Seleccionar año...</option>
-              {
-                availableYears.map((yr) => (
-                  <option value={yr}>{yr}</option>
-                ))
-              }
-            </select>
-            <span class="field-hint">Año en que ingresaste a la carrera</span>
-          </div>
-
-          <div class="field-group">
-            <label for="telefono">Teléfono / WhatsApp <span class="req">*</span></label>
-            <input
-              type="tel"
-              id="telefono"
-              name="telefono"
-              placeholder="Ej: 2914058716"
-              autocomplete="tel"
-              required
-            />
-            <span class="field-hint">Con código de área, sin 0 ni 15</span>
-          </div>
-
-          <div class="field-group">
-            <label for="email">Dirección de correo electrónico <span class="req">*</span></label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="ejemplo@gmail.com"
-              autocomplete="email"
-              required
-            />
-            <span class="field-hint">Se enviará copia del comprobante</span>
-          </div>
-        </div>
-
-        <div class="step-error" id="error-step-1" hidden></div>
-
-        <div class="step-actions">
-          <span></span>
-          <button type="button" class="btn btn-primary" id="btn-to-step-2">
-            Siguiente: Elegir Materia →
-          </button>
-        </div>
-      </fieldset>
-
-      <!-- PASO 2: SELECCIÓN DINÁMICA DE CARRERA, AÑO Y MATERIA -->
-      <fieldset class="form-step" id="form-step-2" hidden>
-        <legend class="step-title">Paso 2: Selección de Examen Final</legend>
-        <p class="step-subtitle">
-          Seleccioná tu carrera y el año de la asignatura para filtrar las materias habilitadas.
-        </p>
-
-        <div class="form-grid">
-          <div class="field-group full-width">
-            <label for="carreraCode">Carrera y Plan (Resolución) <span class="req">*</span></label>
-            <select id="carreraCode" name="carreraCode" required>
-              <option value="">Seleccioná tu carrera...</option>
-              {
-                carreras.map((c) => (
-                  <option
-                    value={c.code}
-                    selected={preselectedCarrera.toUpperCase() === c.code}
-                  >
-                    {c.name} {c.resolution ? `(${c.resolution})` : ''}
-                  </option>
-                ))
-              }
-            </select>
-          </div>
-
-          <div class="field-group">
-            <label for="anioMateria">
-              Año al que pertenece la materia <span class="req">*</span>
-            </label>
-            <div class="radio-pills" id="anio-pills">
-              <label class="pill-option">
-                <input type="radio" name="anioMateria" value="1" required />
-                <span>1° Año (Primero)</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="anioMateria" value="2" />
-                <span>2° Año (Segundo)</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="anioMateria" value="3" />
-                <span>3° Año (Tercero)</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label for="modalidad">Modalidad de Examen <span class="req">*</span></label>
-            <div class="radio-pills">
-              <label class="pill-option">
-                <input type="radio" name="modalidad" value="Regular" checked required />
-                <span>Regular</span>
-              </label>
-              <label class="pill-option">
-                <input type="radio" name="modalidad" value="Libre" />
-                <span>Libre</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="field-group full-width">
-            <label for="materiaCodigo">Materia a rendir <span class="req">*</span></label>
-            <select id="materiaCodigo" name="materiaCodigo" disabled required>
-              <option value="">Primero seleccioná Carrera y Año...</option>
-            </select>
-            <span class="field-hint" id="materia-count-hint">
-              Esperando selección de carrera y año...
-            </span>
-          </div>
-
-          <div class="field-group">
-            <label for="anioCursado">Año de cursado <span class="req">*</span></label>
-            <select id="anioCursado" name="anioCursado" required>
-              <option value="">Seleccionar año...</option>
-              {
-                availableYears.map((yr) => (
-                  <option value={yr}>{yr}</option>
-                ))
-              }
-            </select>
-            <span class="field-hint">Año en que cursaste la materia</span>
-          </div>
-
-          <div class="field-group">
-            <label for="profesor">Profesor de la cátedra <span class="req">*</span></label>
-            <input
-              type="text"
-              id="profesor"
-              name="profesor"
-              placeholder="Apellido del docente (Ej: Crivelli)"
-              required
-            />
-            <span class="field-hint">Docente con quien cursaste o titular</span>
-          </div>
-        </div>
-
-        <div class="step-error" id="error-step-2" hidden></div>
-
-        <div class="step-actions">
-          <button type="button" class="btn btn-secondary" id="btn-back-step-1">
-            ← Volver a Datos Personales
-          </button>
-          <button type="submit" class="btn btn-primary" id="btn-submit">
-            Confirmar Inscripción a Final
-          </button>
-        </div>
-      </fieldset>
+      <StepPersonalData availableYears={availableYears} />
+      <StepSubjectSelection
+        carreras={carrerasDto}
+        preselectedCarrera={preselectedCarrera}
+        availableYears={availableYears}
+      />
     </form>
 
-    <!-- PASO 3: COMPROBANTE DE INSCRIPCIÓN -->
-    <section id="receipt-view" hidden aria-live="polite">
-      <div class="receipt-banner">
-        <div class="receipt-check">✓</div>
-        <div>
-          <h2>¡Inscripción Registrada con Éxito!</h2>
-          <p>Los datos fueron impactados en la planilla homogénea de tu carrera.</p>
-        </div>
-      </div>
-
-      <div class="receipt-box">
-        <div class="receipt-header">
-          <div>
-            <span class="receipt-meta-label">CÓDIGO DE TRANSACCIÓN</span>
-            <strong class="receipt-code" id="rec-id">—</strong>
-          </div>
-          <div style="text-align: right;">
-            <span class="receipt-meta-label">FECHA Y HORA</span>
-            <strong id="rec-fecha">—</strong>
-          </div>
-        </div>
-
-        <dl class="receipt-grid">
-          <div>
-            <dt>Apellido y Nombre</dt>
-            <dd id="rec-nombre">—</dd>
-          </div>
-          <div>
-            <dt>DNI</dt>
-            <dd id="rec-dni">—</dd>
-          </div>
-          <div>
-            <dt>Correo Electrónico</dt>
-            <dd id="rec-email">—</dd>
-          </div>
-          <div>
-            <dt>Teléfono / Cohorte</dt>
-            <dd id="rec-tel-cohorte">—</dd>
-          </div>
-          <div class="full-span">
-            <dt>Carrera y Resolución</dt>
-            <dd id="rec-carrera">—</dd>
-          </div>
-          <div class="full-span highlight-materia">
-            <dt>Materia Inscripta</dt>
-            <dd id="rec-materia">—</dd>
-          </div>
-          <div>
-            <dt>Año de la Materia / Modalidad</dt>
-            <dd id="rec-anio-mod">—</dd>
-          </div>
-          <div>
-            <dt>Año de Cursado / Profesor</dt>
-            <dd id="rec-cursado-prof">—</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div class="receipt-actions no-print">
-        <button type="button" class="btn btn-primary" id="btn-another-subject">
-          + Inscribirme a otra materia
-        </button>
-        <button type="button" class="btn btn-secondary" id="btn-print">
-          🖨️ Imprimir / Guardar Comprobante PDF
-        </button>
-        <a id="btn-download-excel" href="#" class="btn btn-outline" download>
-          📊 Descargar Excel Homogéneo de la Carrera
-        </a>
-      </div>
-    </section>
+    <ReceiptTicket />
   </div>
+
+  <!-- Isla de Datos JSON Ligera (Habilita compilación y minificación Vite del script cliente) -->
+  <script
+    type="application/json"
+    id="isft-catalog-data"
+    set:html={JSON.stringify(carrerasDto)}
+  />
 </Layout>
 
-<script define:vars={{ carreras }}>
+<script>
+  import type { ClientCarreraDto, InscripcionResult } from '../types/academic';
+  import {
+    sanitizeDni,
+    validateFieldStep1,
+    validateStep1Personal,
+    validateStep2Academic,
+    type Step1Input,
+  } from '../lib/validation';
+
+  type WizardStep = 1 | 2 | 3;
+
   const STORAGE_KEY = 'isft191_student_draft_v1';
+  const PROFESSORS_KEY = 'isft191_recent_professors_v1';
 
-  const form = document.getElementById('inscripcion-form');
-  const step1 = document.getElementById('form-step-1');
-  const step2 = document.getElementById('form-step-2');
-  const receiptView = document.getElementById('receipt-view');
+  const catalogEl = document.getElementById('isft-catalog-data');
+  const carreras: ClientCarreraDto[] = catalogEl?.textContent
+    ? JSON.parse(catalogEl.textContent)
+    : [];
+  const carreraMap = new Map<string, ClientCarreraDto>(
+    carreras.map((c) => [c.code.toUpperCase(), c])
+  );
 
-  const ind1 = document.getElementById('step-indicator-1');
-  const ind2 = document.getElementById('step-indicator-2');
-  const ind3 = document.getElementById('step-indicator-3');
+  const form = document.getElementById('inscripcion-form') as HTMLFormElement;
+  const step1 = document.getElementById('form-step-1') as HTMLFieldSetElement;
+  const step2 = document.getElementById('form-step-2') as HTMLFieldSetElement;
+  const receiptView = document.getElementById('receipt-view') as HTMLElement;
 
-  const errorStep1 = document.getElementById('error-step-1');
-  const errorStep2 = document.getElementById('error-step-2');
+  const ind1 = document.getElementById('step-indicator-1') as HTMLElement;
+  const ind2 = document.getElementById('step-indicator-2') as HTMLElement;
+  const ind3 = document.getElementById('step-indicator-3') as HTMLElement;
+  const lineFill1 = document.getElementById('step-line-fill-1') as HTMLElement;
+  const lineFill2 = document.getElementById('step-line-fill-2') as HTMLElement;
 
-  const carreraSelect = document.getElementById('carreraCode');
-  const materiaSelect = document.getElementById('materiaCodigo');
-  const materiaHint = document.getElementById('materia-count-hint');
-  const submitBtn = document.getElementById('btn-submit');
+  const errorStep1 = document.getElementById('error-step-1') as HTMLElement;
+  const errorStep2 = document.getElementById('error-step-2') as HTMLElement;
 
-  // Cargar datos personales guardados localmente para evitar tipeo repetido
-  function loadPersonalDraft() {
+  const carreraSelect = document.getElementById('carreraCode') as HTMLSelectElement;
+  const materiaSelect = document.getElementById('materiaCodigo') as HTMLSelectElement;
+  const materiaSearch = document.getElementById('materiaSearch') as HTMLInputElement;
+  const materiaHint = document.getElementById('materia-count-hint') as HTMLElement;
+  const submitBtn = document.getElementById('btn-submit') as HTMLButtonElement;
+
+  const draftBanner = document.getElementById('draft-restored-banner') as HTMLElement;
+  const draftText = document.getElementById('draft-restored-text') as HTMLElement;
+  const clearDraftBtn = document.getElementById('btn-clear-draft') as HTMLButtonElement;
+
+  const sessionHistory: Array<{
+    comprobanteId: string;
+    materiaNombre: string;
+    materiaCodigo: string;
+    modalidad: string;
+  }> = [];
+
+  let currentStep: WizardStep = 1;
+
+  /**
+   * Máquina de Estados Finita (FSM) para transiciones de pasos + Accesibilidad WCAG 2.1 AA
+   */
+  function transitionToStep(target: WizardStep, moveFocus = true): void {
+    currentStep = target;
+
+    form.hidden = target === 3;
+    step1.hidden = target !== 1;
+    step2.hidden = target !== 2;
+    receiptView.hidden = target !== 3;
+
+    // Actualizar indicadores ARIA y visuales del Stepper
+    [ind1, ind2, ind3].forEach((el, idx) => {
+      const stepNum = idx + 1;
+      el.classList.toggle('active', stepNum === target);
+      el.classList.toggle('done', stepNum < target);
+      if (stepNum === target) {
+        el.setAttribute('aria-current', 'step');
+      } else {
+        el.removeAttribute('aria-current');
+      }
+    });
+
+    lineFill1?.classList.toggle('filled', target > 1);
+    lineFill2?.classList.toggle('filled', target > 2);
+
+    if (target === 2) {
+      updateStudentSummaryPill();
+      updateMateriasList();
+    }
+
+    if (moveFocus) {
+      const headingId = `heading-step-${target}`;
+      const headingEl = document.getElementById(headingId);
+      headingEl?.focus({ preventScroll: false });
+    }
+  }
+
+  function getInputEl(id: string): HTMLInputElement | HTMLSelectElement {
+    return document.getElementById(id) as HTMLInputElement | HTMLSelectElement;
+  }
+
+  function updateStudentSummaryPill(): void {
+    const nombre = getInputEl('apellidoNombre').value.trim();
+    const dni = sanitizeDni(getInputEl('dni').value);
+    const cohorte = getInputEl('cohorte').value;
+
+    const nameEl = document.getElementById('summary-student-name');
+    const metaEl = document.getElementById('summary-student-meta');
+    if (nameEl) nameEl.textContent = nombre || 'Estudiante';
+    if (metaEl) metaEl.textContent = `DNI ${dni || '—'} • Cohorte ${cohorte || '—'}`;
+  }
+
+  function setFieldError(field: keyof Step1Input, message: string | null): void {
+    const input = document.getElementById(field);
+    const errEl = document.getElementById(`err-${field}`);
+    if (!input || !errEl) return;
+
+    if (message) {
+      input.setAttribute('aria-invalid', 'true');
+      errEl.textContent = message;
+      errEl.hidden = false;
+    } else {
+      input.removeAttribute('aria-invalid');
+      errEl.textContent = '';
+      errEl.hidden = true;
+    }
+  }
+
+  // Validación Inline en tiempo real (Heurística H5)
+  const step1Fields: (keyof Step1Input)[] = [
+    'apellidoNombre',
+    'dni',
+    'cohorte',
+    'telefono',
+    'email',
+  ];
+
+  for (const field of step1Fields) {
+    const el = document.getElementById(field) as HTMLInputElement | null;
+    if (!el) continue;
+
+    if (field === 'dni') {
+      el.addEventListener('input', () => {
+        const cleaned = sanitizeDni(el.value);
+        if (el.value !== cleaned) el.value = cleaned;
+        if (el.getAttribute('aria-invalid') === 'true') {
+          setFieldError('dni', validateFieldStep1('dni', el.value));
+        }
+      });
+    }
+
+    el.addEventListener('blur', () => {
+      if (el.value.trim().length > 0) {
+        setFieldError(field, validateFieldStep1(field, el.value));
+      }
+    });
+
+    el.addEventListener('input', () => {
+      if (el.getAttribute('aria-invalid') === 'true') {
+        setFieldError(field, validateFieldStep1(field, el.value));
+      }
+    });
+  }
+
+  function loadPersonalDraft(): void {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const data = JSON.parse(raw);
-      if (data.apellidoNombre) document.getElementById('apellidoNombre').value = data.apellidoNombre;
-      if (data.dni) document.getElementById('dni').value = data.dni;
-      if (data.telefono) document.getElementById('telefono').value = data.telefono;
-      if (data.email) document.getElementById('email').value = data.email;
-      if (data.cohorte) document.getElementById('cohorte').value = data.cohorte;
+      let restoredAny = false;
+
+      if (data.apellidoNombre) {
+        getInputEl('apellidoNombre').value = data.apellidoNombre;
+        restoredAny = true;
+      }
+      if (data.dni) {
+        getInputEl('dni').value = sanitizeDni(data.dni);
+        restoredAny = true;
+      }
+      if (data.telefono) getInputEl('telefono').value = data.telefono;
+      if (data.email) getInputEl('email').value = data.email;
+      if (data.cohorte) getInputEl('cohorte').value = data.cohorte;
       if (data.carreraCode && !carreraSelect.value) {
         carreraSelect.value = data.carreraCode;
+      }
+
+      if (restoredAny && draftBanner && draftText) {
+        draftText.textContent = `Legajo recordado: ${data.apellidoNombre || 'Estudiante'} (DNI ${data.dni || '—'})`;
+        draftBanner.hidden = false;
       }
     } catch {}
   }
 
-  function savePersonalDraft() {
+  function savePersonalDraft(): void {
     try {
       const draft = {
-        apellidoNombre: document.getElementById('apellidoNombre').value.trim(),
-        dni: document.getElementById('dni').value.replace(/\D/g, ''),
-        telefono: document.getElementById('telefono').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        cohorte: document.getElementById('cohorte').value,
+        apellidoNombre: getInputEl('apellidoNombre').value.trim(),
+        dni: sanitizeDni(getInputEl('dni').value),
+        telefono: getInputEl('telefono').value.trim(),
+        email: getInputEl('email').value.trim(),
+        cohorte: getInputEl('cohorte').value,
         carreraCode: carreraSelect.value,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      if (draftBanner && draftText && draft.apellidoNombre) {
+        draftText.textContent = `Legajo recordado: ${draft.apellidoNombre} (DNI ${draft.dni})`;
+        draftBanner.hidden = false;
+      }
     } catch {}
   }
 
-  function getSelectedAnio() {
-    const checked = document.querySelector('input[name="anioMateria"]:checked');
-    return checked ? Number(checked.value) : null;
+  // Heurística H3: Limpiar datos guardados en PCs compartidas
+  clearDraftBtn?.addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+    ['apellidoNombre', 'dni', 'telefono', 'email', 'cohorte'].forEach((id) => {
+      const el = getInputEl(id);
+      if (el) el.value = '';
+      setFieldError(id as keyof Step1Input, null);
+    });
+    if (draftBanner) draftBanner.hidden = true;
+    transitionToStep(1);
+  });
+
+  // Heurística H6: Autocompletar profesores recientes en la sesión
+  function loadRecentProfessors(): void {
+    try {
+      const raw = sessionStorage.getItem(PROFESSORS_KEY);
+      if (!raw) return;
+      const list: string[] = JSON.parse(raw);
+      const datalist = document.getElementById('recent-professors-list');
+      if (!datalist) return;
+      datalist.innerHTML = '';
+      for (const prof of list) {
+        const opt = document.createElement('option');
+        opt.value = prof;
+        datalist.appendChild(opt);
+      }
+    } catch {}
   }
 
-  // Filtrado reactivo en cascada: Carrera + Año -> Materias
-  function updateMateriasList() {
-    const code = carreraSelect.value;
+  function rememberProfessor(name: string): void {
+    try {
+      const trimmed = name.trim();
+      if (trimmed.length < 2) return;
+      const raw = sessionStorage.getItem(PROFESSORS_KEY);
+      const list: string[] = raw ? JSON.parse(raw) : [];
+      if (!list.includes(trimmed)) {
+        list.unshift(trimmed);
+        sessionStorage.setItem(PROFESSORS_KEY, JSON.stringify(list.slice(0, 8)));
+        loadRecentProfessors();
+      }
+    } catch {}
+  }
+
+  function getSelectedAnio(): 1 | 2 | 3 | null {
+    const checked = document.querySelector(
+      'input[name="anioMateria"]:checked'
+    ) as HTMLInputElement | null;
+    if (!checked) return null;
+    const val = Number(checked.value);
+    return val === 1 || val === 2 || val === 3 ? val : null;
+  }
+
+  function updateYearCountBadges(carrera?: ClientCarreraDto): void {
+    for (const yr of [1, 2, 3] as const) {
+      const badge = document.getElementById(`badge-count-${yr}`);
+      if (badge) {
+        badge.textContent = carrera ? `${carrera.countsByYear[yr]} mat.` : '—';
+      }
+    }
+  }
+
+  // Filtrado reactivo en cascada + búsqueda rápida (Ley de Hick-Hyman)
+  function updateMateriasList(): void {
+    const code = carreraSelect.value.trim().toUpperCase();
+    const carrera = carreraMap.get(code);
+    updateYearCountBadges(carrera);
+
     const anio = getSelectedAnio();
+    const searchQuery = (materiaSearch?.value ?? '').trim().toLowerCase();
+    const previousSelection = materiaSelect.value;
 
     materiaSelect.innerHTML = '';
 
-    if (!code || !anio) {
+    if (!carrera || !anio) {
       materiaSelect.disabled = true;
+      if (materiaSearch) materiaSearch.disabled = true;
       const opt = document.createElement('option');
       opt.value = '';
-      opt.textContent = !code
+      opt.textContent = !carrera
         ? 'Primero seleccioná tu carrera...'
         : 'Seleccioná el año (1°, 2° o 3°)...';
       materiaSelect.appendChild(opt);
@@ -382,119 +337,158 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       return;
     }
 
-    const carrera = carreras.find((c) => c.code === code);
-    if (!carrera) return;
+    if (materiaSearch) materiaSearch.disabled = false;
 
-    const filtradas = carrera.materias.filter((m) => m.year === anio);
+    const delAnio = carrera.materias.filter((m) => m.year === anio);
+    const filtradas = searchQuery
+      ? delAnio.filter(
+          (m) =>
+            m.name.toLowerCase().includes(searchQuery) ||
+            m.code.toLowerCase().includes(searchQuery)
+        )
+      : delAnio;
+
     materiaSelect.disabled = false;
 
     const defaultOpt = document.createElement('option');
     defaultOpt.value = '';
-    defaultOpt.textContent = `Seleccionar materia de ${anio}° Año (${filtradas.length} disponibles)...`;
+    defaultOpt.textContent =
+      filtradas.length > 0
+        ? `Seleccionar materia de ${anio}° Año (${filtradas.length} disponibles)...`
+        : `Sin coincidencias para "${materiaSearch.value}" en ${anio}° Año`;
     materiaSelect.appendChild(defaultOpt);
 
     for (const mat of filtradas) {
       const opt = document.createElement('option');
       opt.value = mat.code;
       opt.textContent = mat.name;
+      if (mat.code === previousSelection) opt.selected = true;
       materiaSelect.appendChild(opt);
     }
 
-    materiaHint.textContent = `Mostrando ${filtradas.length} materias oficiales de ${anio}° Año para ${carrera.name}.`;
+    materiaHint.textContent = searchQuery
+      ? `Filtrando ${filtradas.length} de ${delAnio.length} materias de ${anio}° Año (${carrera.name}).`
+      : `Mostrando ${delAnio.length} materias oficiales de ${anio}° Año para ${carrera.name}.`;
   }
 
-  carreraSelect.addEventListener('change', updateMateriasList);
+  carreraSelect.addEventListener('change', () => {
+    if (materiaSearch) materiaSearch.value = '';
+    updateMateriasList();
+  });
+
   document.querySelectorAll('input[name="anioMateria"]').forEach((radio) => {
     radio.addEventListener('change', updateMateriasList);
   });
 
-  // Validación Paso 1
-  document.getElementById('btn-to-step-2').addEventListener('click', () => {
+  materiaSearch?.addEventListener('input', updateMateriasList);
+
+  // Avance Paso 1 -> Paso 2 usando validador SSOT compartido
+  document.getElementById('btn-to-step-2')?.addEventListener('click', () => {
     errorStep1.hidden = true;
-    const apellidoNombre = document.getElementById('apellidoNombre').value.trim();
-    const dni = document.getElementById('dni').value.replace(/\D/g, '');
-    const cohorte = document.getElementById('cohorte').value;
-    const telefono = document.getElementById('telefono').value.trim();
-    const email = document.getElementById('email').value.trim();
+    const rawStep1: Step1Input = {
+      apellidoNombre: getInputEl('apellidoNombre').value,
+      dni: getInputEl('dni').value,
+      cohorte: getInputEl('cohorte').value,
+      telefono: getInputEl('telefono').value,
+      email: getInputEl('email').value,
+    };
 
-    if (apellidoNombre.length < 3) {
-      errorStep1.textContent = 'Por favor ingresá tu Apellido y Nombre completo.';
-      errorStep1.hidden = false;
-      return;
+    const check = validateStep1Personal(rawStep1);
+    for (const field of step1Fields) {
+      setFieldError(field, check.errors[field] ?? null);
     }
-    if (!/^\d{7,9}$/.test(dni)) {
-      errorStep1.textContent = 'El DNI debe tener entre 7 y 9 números (sin puntos).';
-      errorStep1.hidden = false;
-      return;
-    }
-    if (!cohorte) {
-      errorStep1.textContent = 'Seleccioná tu año de ingreso (Cohorte).';
-      errorStep1.hidden = false;
-      return;
-    }
-    if (telefono.length < 6) {
-      errorStep1.textContent = 'Ingresá un teléfono de contacto válido.';
-      errorStep1.hidden = false;
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errorStep1.textContent = 'Ingresá un correo electrónico válido.';
+
+    if (!check.ok || !check.data) {
+      errorStep1.textContent = check.firstError ?? 'Revisá los campos marcados en rojo.';
       errorStep1.hidden = false;
       return;
     }
 
-    document.getElementById('dni').value = dni;
+    getInputEl('dni').value = check.data.dni;
+    getInputEl('apellidoNombre').value = check.data.apellidoNombre;
     savePersonalDraft();
-
-    step1.hidden = true;
-    step2.hidden = false;
-    ind1.classList.remove('active');
-    ind1.classList.add('done');
-    ind2.classList.add('active');
-    updateMateriasList();
+    transitionToStep(2);
   });
 
-  document.getElementById('btn-back-step-1').addEventListener('click', () => {
-    step2.hidden = true;
-    step1.hidden = false;
-    ind2.classList.remove('active');
-    ind1.classList.remove('done');
-    ind1.classList.add('active');
+  document.getElementById('btn-back-step-1')?.addEventListener('click', () => {
+    transitionToStep(1);
   });
+
+  document.getElementById('btn-summary-edit')?.addEventListener('click', () => {
+    transitionToStep(1);
+  });
+
+  document.getElementById('step-nav-btn-1')?.addEventListener('click', () => {
+    if (currentStep === 2) {
+      transitionToStep(1);
+    }
+  });
+
+  function renderSessionHistory(): void {
+    const box = document.getElementById('session-history-box');
+    const listEl = document.getElementById('session-history-list');
+    const badgeEl = document.getElementById('session-count-badge');
+    if (!box || !listEl || !badgeEl || sessionHistory.length === 0) return;
+
+    box.hidden = false;
+    badgeEl.textContent =
+      sessionHistory.length === 1
+        ? '1 materia registrada hoy'
+        : `${sessionHistory.length} materias registradas hoy`;
+
+    listEl.innerHTML = '';
+    for (const item of sessionHistory) {
+      const li = document.createElement('li');
+      li.className = 'session-history-item';
+
+      const left = document.createElement('span');
+      left.textContent = `${item.materiaNombre} (${item.modalidad})`;
+
+      const right = document.createElement('code');
+      right.textContent = item.comprobanteId;
+
+      li.appendChild(left);
+      li.appendChild(right);
+      listEl.appendChild(li);
+    }
+  }
 
   // Envío SSR al endpoint /api/inscripcion
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorStep2.hidden = true;
 
-    const carreraCode = carreraSelect.value;
-    const anioMateria = getSelectedAnio();
-    const modalidadEl = document.querySelector('input[name="modalidad"]:checked');
-    const modalidad = modalidadEl ? modalidadEl.value : 'Regular';
-    const materiaCodigo = materiaSelect.value;
-    const anioCursado = document.getElementById('anioCursado').value;
-    const profesor = document.getElementById('profesor').value.trim();
+    const modalidadEl = document.querySelector(
+      'input[name="modalidad"]:checked'
+    ) as HTMLInputElement | null;
 
-    if (!carreraCode || !anioMateria || !materiaCodigo || !anioCursado || profesor.length < 2) {
-      errorStep2.textContent = 'Completá todos los campos obligatorios de la materia y cátedra.';
+    const step2Check = validateStep2Academic({
+      carreraCode: carreraSelect.value,
+      anioMateria: getSelectedAnio() ?? 0,
+      modalidad: modalidadEl ? modalidadEl.value : 'Regular',
+      materiaCodigo: materiaSelect.value,
+      anioCursado: getInputEl('anioCursado').value,
+      profesor: getInputEl('profesor').value,
+    });
+
+    if (!step2Check.ok || !step2Check.data) {
+      errorStep2.textContent =
+        step2Check.firstError ??
+        'Completá todos los campos obligatorios de la materia y cátedra.';
       errorStep2.hidden = false;
       return;
     }
 
     savePersonalDraft();
+    rememberProfessor(step2Check.data.profesor);
 
     const payload = {
-      apellidoNombre: document.getElementById('apellidoNombre').value.trim(),
-      dni: document.getElementById('dni').value.replace(/\D/g, ''),
-      telefono: document.getElementById('telefono').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      cohorte: document.getElementById('cohorte').value,
-      carreraCode,
-      anioMateria,
-      modalidad,
-      materiaCodigo,
-      anioCursado,
-      profesor,
+      apellidoNombre: getInputEl('apellidoNombre').value.trim(),
+      dni: sanitizeDni(getInputEl('dni').value),
+      telefono: getInputEl('telefono').value.trim(),
+      email: getInputEl('email').value.trim(),
+      cohorte: getInputEl('cohorte').value,
+      ...step2Check.data,
     };
 
     submitBtn.disabled = true;
@@ -507,34 +501,65 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as InscripcionResult & { error?: string };
       if (!response.ok || !result.ok) {
         throw new Error(result.error || 'Error al registrar la inscripción.');
       }
 
-      // Poblar comprobante
       const d = result.datos;
-      document.getElementById('rec-id').textContent = result.comprobanteId;
-      document.getElementById('rec-fecha').textContent = new Date(result.fechaIso).toLocaleString('es-AR');
-      document.getElementById('rec-nombre').textContent = d.apellidoNombre;
-      document.getElementById('rec-dni').textContent = d.dni;
-      document.getElementById('rec-email').textContent = d.email;
-      document.getElementById('rec-tel-cohorte').textContent = `${d.telefono} (Cohorte ${d.cohorte})`;
-      document.getElementById('rec-carrera').textContent = `${d.carreraNombre} (${d.carreraResolucion})`;
-      document.getElementById('rec-materia').textContent = `${d.materiaNombre} [${d.materiaCodigo}]`;
-      document.getElementById('rec-anio-mod').textContent = `${d.anioMateriaLabel} (${d.anioMateria}° Año) — ${d.modalidad}`;
-      document.getElementById('rec-cursado-prof').textContent = `Cursada ${d.anioCursado} • Prof. ${d.profesor}`;
+      const setText = (id: string, val: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
 
-      const dlBtn = document.getElementById('btn-download-excel');
-      dlBtn.href = `/api/excel/${encodeURIComponent(d.carreraCode)}`;
+      setText('rec-id', result.comprobanteId);
+      setText('rec-fecha', new Date(result.fechaIso).toLocaleString('es-AR'));
+      setText('rec-nombre', d.apellidoNombre);
+      setText('rec-dni', d.dni);
+      setText('rec-email', d.email);
+      setText('rec-tel-cohorte', `${d.telefono} (Cohorte ${d.cohorte})`);
+      setText('rec-carrera', `${d.carreraNombre} (${d.carreraResolucion})`);
+      setText('rec-materia', `${d.materiaNombre} [${d.materiaCodigo}]`);
+      setText(
+        'rec-anio-mod',
+        `${d.anioMateriaLabel} (${d.anioMateria}° Año) — ${d.modalidad}`
+      );
+      setText('rec-cursado-prof', `Cursada ${d.anioCursado} • Prof. ${d.profesor}`);
 
-      form.hidden = true;
-      receiptView.hidden = false;
-      ind2.classList.remove('active');
-      ind2.classList.add('done');
-      ind3.classList.add('active');
-    } catch (err) {
-      errorStep2.textContent = err.message || 'No se pudo procesar la solicitud.';
+      const subtitleEl = document.getElementById('receipt-status-subtitle');
+      if (subtitleEl) {
+        subtitleEl.textContent = result.duplicado
+          ? 'Se actualizó tu inscripción existente para esta materia en la planilla de tu carrera (sin duplicar filas).'
+          : 'Los datos fueron impactados en la planilla homogénea de tu carrera.';
+      }
+
+      const dlBtn = document.getElementById(
+        'btn-download-excel'
+      ) as HTMLAnchorElement | null;
+      if (dlBtn) {
+        dlBtn.href = `/api/excel/${encodeURIComponent(d.carreraCode)}`;
+      }
+
+      const existingIdx = sessionHistory.findIndex(
+        (h) => h.materiaCodigo === d.materiaCodigo
+      );
+      const historyEntry = {
+        comprobanteId: result.comprobanteId,
+        materiaNombre: d.materiaNombre,
+        materiaCodigo: d.materiaCodigo,
+        modalidad: d.modalidad,
+      };
+      if (existingIdx >= 0) {
+        sessionHistory[existingIdx] = historyEntry;
+      } else {
+        sessionHistory.push(historyEntry);
+      }
+      renderSessionHistory();
+
+      transitionToStep(3);
+    } catch (err: unknown) {
+      errorStep2.textContent =
+        err instanceof Error ? err.message : 'No se pudo procesar la solicitud.';
       errorStep2.hidden = false;
     } finally {
       submitBtn.disabled = false;
@@ -543,106 +568,27 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   });
 
   // Inscribir otra materia manteniendo datos del alumno y carrera
-  document.getElementById('btn-another-subject').addEventListener('click', () => {
+  document.getElementById('btn-another-subject')?.addEventListener('click', () => {
     materiaSelect.value = '';
-    document.getElementById('profesor').value = '';
-    receiptView.hidden = true;
-    form.hidden = false;
-    step1.hidden = true;
-    step2.hidden = false;
-    ind3.classList.remove('active');
-    ind2.classList.remove('done');
-    ind2.classList.add('active');
-    updateMateriasList();
+    if (materiaSearch) materiaSearch.value = '';
+    transitionToStep(2);
   });
 
-  document.getElementById('btn-print').addEventListener('click', () => {
+  document.getElementById('btn-print')?.addEventListener('click', () => {
     window.print();
   });
 
   loadPersonalDraft();
+  loadRecentProfessors();
+  updateYearCountBadges(carreraMap.get(carreraSelect.value.trim().toUpperCase()));
 </script>
 
-<style>
-  .notice-banner {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    background: var(--brand-accent-light);
-    border-left: 5px solid var(--brand-accent);
-    padding: 0.9rem 1.1rem;
-    border-radius: var(--radius-md);
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-    color: #78350f;
-  }
-
-  .notice-icon {
-    font-size: 1.15rem;
-    line-height: 1.2;
-  }
-
-  .stepper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    padding: 0 0.5rem;
-  }
-
-  .step {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    font-weight: 600;
-  }
-
-  .step-num {
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    background: #e2e8f0;
-    color: #475569;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.82rem;
-    font-weight: 700;
-  }
-
-  .step.active {
-    color: var(--brand-primary);
-  }
-
-  .step.active .step-num {
-    background: var(--brand-primary);
-    color: #ffffff;
-    box-shadow: 0 0 0 4px rgba(52, 56, 170, 0.15);
-  }
-
-  .step.done {
-    color: var(--feedback-success);
-  }
-
-  .step.done .step-num {
-    background: var(--feedback-success);
-    color: #ffffff;
-  }
-
-  .step-line {
-    flex: 1;
-    height: 2px;
-    background: var(--border-color);
-    margin: 0 0.75rem;
-  }
-
+<style is:global>
   .card {
     background: var(--surface-card);
     border-radius: var(--radius-lg);
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    border: 1px solid var(--bento-border);
+    box-shadow: var(--glass-shadow);
     padding: 2rem;
   }
 
@@ -650,23 +596,169 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     border: none;
   }
 
+  .step-header {
+    margin-bottom: 1.35rem;
+  }
+
+  .bento-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.4rem;
+  }
+
   .step-title {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--brand-primary);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
+    outline: none;
   }
 
   .step-subtitle {
     font-size: 0.9rem;
     color: var(--text-muted);
-    margin-bottom: 1.5rem;
+  }
+
+  /* Celdas Bento Grid Modulares */
+  .bento-grid-step1,
+  .bento-grid-step2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .bento-cell {
+    background: var(--bento-cell-bg);
+    border: 1px solid var(--bento-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .bento-cell:focus-within {
+    border-color: rgba(52, 56, 170, 0.35);
+    box-shadow: 0 4px 18px rgba(52, 56, 170, 0.06);
+  }
+
+  .bento-cell-accent {
+    background: linear-gradient(180deg, rgba(52, 56, 170, 0.03) 0%, #f8fafc 100%);
+  }
+
+  .bento-cell-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .bento-cell-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid var(--bento-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .bento-cell-header h3 {
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .bento-cell-header p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* Píldora de Legajo Activo en Paso 2 */
+  .active-student-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: var(--brand-primary-soft);
+    border: 1px solid rgba(52, 56, 170, 0.2);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .active-student-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .student-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--brand-primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .active-student-label {
+    display: block;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--brand-primary);
+  }
+
+  .active-student-info strong {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    margin-right: 0.5rem;
+  }
+
+  .active-student-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .btn-edit-student {
+    background: #ffffff;
+    color: var(--brand-primary);
+    border: 1px solid rgba(52, 56, 170, 0.25);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-edit-student:hover {
+    background: var(--brand-primary);
+    color: #ffffff;
   }
 
   .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+    gap: 1.15rem;
   }
 
   .field-group {
@@ -679,9 +771,10 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     grid-column: 1 / -1;
   }
 
-  label {
-    font-size: 0.88rem;
-    font-weight: 600;
+  label,
+  .field-label {
+    font-size: 0.86rem;
+    font-weight: 700;
     color: var(--text-main);
   }
 
@@ -689,15 +782,32 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     color: var(--feedback-error);
   }
 
+  .materia-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .materia-search-input {
+    min-height: 34px !important;
+    padding: 0.3rem 0.7rem !important;
+    font-size: 0.8rem !important;
+    width: 240px;
+    border-radius: 999px !important;
+  }
+
   input[type='text'],
   input[type='tel'],
   input[type='email'],
+  input[type='search'],
   select {
     min-height: 46px;
     padding: 0.6rem 0.85rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     border: 1.5px solid var(--border-color);
-    font-size: 0.95rem;
+    font-size: 0.94rem;
     font-family: inherit;
     color: var(--text-main);
     background-color: #ffffff;
@@ -711,27 +821,42 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
   }
 
-  select:disabled {
+  input[aria-invalid='true'],
+  select[aria-invalid='true'] {
+    border-color: var(--feedback-error);
+    background-color: #fffafb;
+  }
+
+  select:disabled,
+  input:disabled {
     background-color: #f1f5f9;
     color: #94a3b8;
     cursor: not-allowed;
   }
 
   .field-hint {
-    font-size: 0.76rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
   }
 
+  .field-inline-error {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--feedback-error);
+  }
+
+  /* Liquid Glass Radio Pills (Ley de Fitts: >= 48px alto) */
   .radio-pills {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.65rem;
     flex-wrap: wrap;
   }
 
   .pill-option {
     flex: 1;
-    min-width: 95px;
+    min-width: 130px;
     cursor: pointer;
+    position: relative;
   }
 
   .pill-option input {
@@ -740,33 +865,64 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     pointer-events: none;
   }
 
-  .pill-option span {
+  .pill-surface {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 46px;
-    padding: 0.5rem 0.75rem;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0.55rem 0.9rem;
     border: 1.5px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 0.86rem;
-    font-weight: 600;
-    color: var(--text-muted);
+    border-radius: 10px;
     background: #ffffff;
-    transition: all 0.15s;
-    text-align: center;
+    transition: all 0.15s ease;
   }
 
-  .pill-option input:checked + span {
+  .pill-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .pill-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .pill-badge {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: var(--text-muted);
+    padding: 0.15rem 0.45rem;
+    border-radius: 6px;
+  }
+
+  .pill-option input:focus-visible + .pill-surface {
+    outline: 2px solid var(--brand-action);
+    outline-offset: 2px;
+  }
+
+  .pill-option input:checked + .pill-surface {
     background: rgba(52, 56, 170, 0.08);
     border-color: var(--brand-primary);
+    box-shadow: 0 2px 10px rgba(52, 56, 170, 0.12);
+  }
+
+  .pill-option input:checked + .pill-surface .pill-title {
     color: var(--brand-primary);
-    box-shadow: 0 0 0 2px rgba(52, 56, 170, 0.12);
+  }
+
+  .pill-option input:checked + .pill-surface .pill-badge {
+    background: var(--brand-primary);
+    color: #ffffff;
   }
 
   .step-error {
-    margin-top: 1.25rem;
+    margin-top: 1.15rem;
     padding: 0.85rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: var(--feedback-error-bg);
     border: 1px solid #fecaca;
     color: var(--feedback-error);
@@ -775,8 +931,8 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .step-actions {
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
     border-top: 1px solid #e2e8f0;
     display: flex;
     justify-content: space-between;
@@ -785,10 +941,15 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     flex-wrap: wrap;
   }
 
+  .step-Autosave-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
   .btn {
-    min-height: 46px;
-    padding: 0.65rem 1.35rem;
-    border-radius: 8px;
+    min-height: 48px;
+    padding: 0.65rem 1.4rem;
+    border-radius: 10px;
     font-size: 0.92rem;
     font-weight: 700;
     font-family: inherit;
@@ -798,12 +959,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.15s, transform 0.1s;
+    transition: background-color 0.15s, transform 0.1s, box-shadow 0.15s;
   }
 
   .btn-primary {
     background: var(--brand-primary);
     color: #ffffff;
+    box-shadow: 0 4px 12px rgba(52, 56, 170, 0.22);
   }
 
   .btn-primary:hover {
@@ -821,20 +983,21 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .btn-outline {
-    background: transparent;
+    background: #ffffff;
     color: var(--brand-primary);
     border: 1.5px solid var(--brand-primary);
   }
 
+  /* Paso 3: Comprobante Swiss Editorial Precision Ticket */
   .receipt-banner {
     display: flex;
     align-items: center;
     gap: 1rem;
     background: var(--feedback-success-bg);
     border: 1px solid #bbf7d0;
-    padding: 1.1rem 1.25rem;
+    padding: 1rem 1.25rem;
     border-radius: var(--radius-md);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.35rem;
   }
 
   .receipt-check {
@@ -854,6 +1017,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   .receipt-banner h2 {
     font-size: 1.15rem;
     color: #166534;
+    outline: none;
   }
 
   .receipt-banner p {
@@ -861,38 +1025,94 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     color: #15803d;
   }
 
-  .receipt-box {
-    border: 1.5px solid #cbd5e1;
+  .swiss-ticket {
+    border: 1.5px solid #0f172a;
     border-radius: var(--radius-md);
-    padding: 1.5rem;
-    background: #fcfdff;
+    background: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  .swiss-ticket-top {
+    background: var(--brand-primary);
+    color: #ffffff;
+    padding: 0.85rem 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .swiss-ticket-brand {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .swiss-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: #fde68a;
+  }
+
+  .swiss-ticket-brand strong {
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+  }
+
+  .swiss-stamp {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(253, 230, 138, 0.6);
+    color: #fde68a;
+    padding: 0.22rem 0.6rem;
+    border-radius: 4px;
   }
 
   .receipt-header {
     display: flex;
     justify-content: space-between;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-    border-bottom: 2px dashed #cbd5e1;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.35rem;
+    background: #f8fafc;
+    border-bottom: 2px dashed #94a3b8;
+  }
+
+  .receipt-date-col {
+    text-align: right;
   }
 
   .receipt-meta-label {
     display: block;
-    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
     color: var(--text-muted);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
   }
 
   .receipt-code {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     color: var(--brand-primary);
-    font-family: monospace;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .receipt-timestamp {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .receipt-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    padding: 1.35rem;
   }
 
   .receipt-grid .full-span {
@@ -900,30 +1120,131 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
   }
 
   .receipt-grid dt {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    font-family: var(--font-mono);
   }
 
   .receipt-grid dd {
     font-size: 0.96rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text-main);
+    margin-top: 0.15rem;
+  }
+
+  .tabular-mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   .highlight-materia {
-    background: rgba(52, 56, 170, 0.06);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
+    background: var(--brand-primary-soft);
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
     border-left: 4px solid var(--brand-primary);
   }
 
+  .swiss-ticket-footer {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 0.65rem 1.35rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+  }
+
+  /* Historial de Sesión (Peak-End Rule) */
+  .session-history-bento {
+    margin-top: 1.25rem;
+    background: var(--bento-cell-bg);
+    border: 1px solid var(--bento-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.2rem;
+  }
+
+  .session-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.65rem;
+    font-size: 0.88rem;
+    color: var(--brand-primary);
+  }
+
+  .session-count-badge {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    background: var(--brand-primary);
+    color: #ffffff;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .session-history-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .session-history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.8rem;
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .session-history-item code {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
   .receipt-actions {
-    margin-top: 1.5rem;
+    margin-top: 1.35rem;
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+  }
+
+  .admin-export-drawer {
+    margin-top: 1.25rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .admin-export-drawer summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .admin-export-body {
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   @media (max-width: 640px) {
@@ -932,10 +1253,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       grid-template-columns: 1fr;
     }
     .card {
-      padding: 1.25rem;
+      padding: 1.15rem;
     }
-    .step-label {
-      display: none;
+    .bento-cell {
+      padding: 1rem;
+    }
+    .materia-search-input {
+      width: 100%;
     }
   }
 </style>
