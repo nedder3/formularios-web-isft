@@ -1,0 +1,22 @@
+{
+  "name": "formularios-web-isft191",
+  "version": "1.0.0",
+  "description": "Sistema de Inscripción a Exámenes Finales - ISFT N° 191 (Astro SSR / SIU Guaraní Ready)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "node ./dist/server/entry.mjs",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nedder3/formularios-web-isft.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@astrojs/node": "^11.1.9",
+    "astro": "^7.4.2",
+    "exceljs": "^4.4.0"
+  }
+}
