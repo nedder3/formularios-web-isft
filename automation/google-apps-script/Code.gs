@@ -62,7 +62,14 @@ function doPost(e) {
 
     const dni = String(data.dni || '').trim();
     const materiaCodigo = String(data.materiaCodigo || '').trim().toUpperCase();
-    const fechaIso = data.fechaIso || new Date().toISOString();
+    const fechaIso =
+      data.fechaIso && String(data.fechaIso).indexOf('GMT-3') !== -1
+        ? data.fechaIso
+        : Utilities.formatDate(
+            new Date(),
+            'America/Argentina/Buenos_Aires',
+            "dd/MM/yyyy HH:mm:ss '(GMT-3)'"
+          );
     const comprobanteId = data.comprobanteId || ('ISFT-' + new Date().getFullYear() + '-' + Math.random().toString(36).substring(2, 8).toUpperCase());
 
     const values = sheet.getDataRange().getValues();

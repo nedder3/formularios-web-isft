@@ -699,6 +699,18 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         };
       }
 
+      const fechaArgentina =
+        new Date(result.fechaIso).toLocaleString('es-AR', {
+          timeZone: 'America/Argentina/Buenos_Aires',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }) + ' (GMT-3)';
+
       if (webhookUrl) {
         fetch(webhookUrl, {
           method: 'POST',
@@ -706,7 +718,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
             comprobanteId: result.comprobanteId,
-            fechaIso: result.fechaIso,
+            fechaIso: fechaArgentina,
             ...result.datos,
           }),
         }).catch(() => {});
@@ -719,7 +731,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       };
 
       setText('rec-id', result.comprobanteId);
-      setText('rec-fecha', new Date(result.fechaIso).toLocaleString('es-AR'));
+      setText('rec-fecha', fechaArgentina);
       setText('rec-nombre', d.apellidoNombre);
       setText('rec-dni', d.dni);
       setText('rec-email', d.email);
