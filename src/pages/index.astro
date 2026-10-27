@@ -627,6 +627,9 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     submitBtn.textContent = 'Procesando inscripción...';
 
     try {
+      const DEFAULT_APPS_SCRIPT_URL =
+        'https://script.google.com/macros/s/AKfycbzBJx8f9QONJXbTc_uJmcuxyaaYeg-1mdjZFXsrdaO6msI-Mito7nvXKw29_1xPWzff/exec';
+
       const urlParams = new URLSearchParams(window.location.search);
       const queryWebhook = urlParams.get('webhook');
       if (queryWebhook) {
@@ -639,7 +642,8 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         import.meta.env.PUBLIC_APPS_SCRIPT_URL ||
         (typeof localStorage !== 'undefined'
           ? localStorage.getItem('isft191_webhook_url')
-          : null);
+          : null) ||
+        DEFAULT_APPS_SCRIPT_URL;
 
       let result: (InscripcionResult & { error?: string }) | null = null;
 

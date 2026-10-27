@@ -245,5 +245,5 @@ npm start
   - Carpeta en Drive: `ISFT 191 - PoC Inscripcion a Finales` (`ID: 1rKZdAOphvEfXoN06iw3lW0WcvoMy7XId`).
   - Google Sheet activo: `ISFT191_Padron_Docentes_e_Inscripciones` (`ID: 12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g`).
 - [x] **Script de Automatización Google Apps Script (`automation/google-apps-script/Code.gs`):** Incluye webhook `doPost(e)`, envío de correos con tabla HTML institucional + adjunto `.csv` por materia (`enviarNominasDocentes`), programación automática cada 15 días (`instalarTriggerQuincenal`) y menú `ISFT 191 - Secretaría` en Google Sheets.
-- [ ] **(Pendiente - Activación Final PoC):** Pegar `Code.gs` en `Extensiones -> Apps Script` dentro del Google Sheet personal, publicar como **Aplicación web (`Cualquier persona`)** y fijar la URL resultante en `PUBLIC_APPS_SCRIPT_URL` / GitHub Pages.
+- [x] **Activación de Webhook en Producción PoC (`PUBLIC_APPS_SCRIPT_URL`):** Publicado como Aplicación Web en Google Apps Script y vinculado por defecto en `src/pages/index.astro` (verificado con impacto en tiempo real en `Inscripciones_Finales`).
 - [ ] **(Pendiente - Fase 2):** Publicar el frontend estático en **GitHub Pages** y migrar el flujo programado de Google Apps Script a un workflow exportable de **n8n** (`n8n-workflow-isft191.json`).
