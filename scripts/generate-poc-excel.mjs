@@ -125,5 +125,35 @@ sheetConfig.addRows([
   },
 ]);
 
+// Hoja 4: Histórico de Inscripciones Despachadas a Docentes (Archivo Definitivo)
+const sheetHistorico = workbook.addWorksheet('Historico');
+sheetHistorico.columns = [
+  { header: 'ID Comprobante', key: 'comprobanteId', width: 20 },
+  { header: 'Fecha y Hora (GMT-3)', key: 'fechaIso', width: 24 },
+  { header: 'Apellido y Nombre', key: 'apellidoNombre', width: 30 },
+  { header: 'DNI', key: 'dni', width: 15 },
+  { header: 'Teléfono', key: 'telefono', width: 16 },
+  { header: 'Correo Electrónico', key: 'email', width: 28 },
+  { header: 'Cohorte', key: 'cohorte', width: 12 },
+  { header: 'Carrera_Codigo', key: 'carreraCode', width: 16 },
+  { header: 'Carrera_Nombre', key: 'carreraNombre', width: 38 },
+  { header: 'Año de la Materia', key: 'anioMateriaLabel', width: 18 },
+  { header: 'Código Materia', key: 'materiaCodigo', width: 16 },
+  { header: 'Asignatura a Rendir', key: 'materiaNombre', width: 36 },
+  { header: 'Modalidad Examen', key: 'modalidad', width: 16 },
+  { header: 'Año de Cursada', key: 'anioCursado', width: 15 },
+  { header: 'Docente Cátedra', key: 'profesor', width: 40 },
+  { header: 'Estado Envío Docente', key: 'estadoEnvio', width: 28 },
+  { header: 'Fecha Despacho Docente (GMT-3)', key: 'fechaDespacho', width: 26 },
+  { header: 'Email Docente Destino', key: 'emailDocente', width: 28 },
+];
+
+sheetHistorico.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+sheetHistorico.getRow(1).fill = {
+  type: 'pattern',
+  pattern: 'solid',
+  fgColor: { argb: 'FF3438AA' },
+};
+
 await workbook.xlsx.writeFile(outFile);
-console.log(`Generado: ${outFile} (${count} asignaturas + pestaña Configuracion_Turnos)`);
+console.log(`Generado: ${outFile} (${count} asignaturas + Configuracion_Turnos + Historico)`);

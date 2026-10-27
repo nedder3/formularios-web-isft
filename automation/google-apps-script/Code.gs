@@ -23,6 +23,7 @@
 
 const SPREADSHEET_ID = '12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g';
 const SHEET_INSCRIPCIONES = 'Inscripciones_Finales';
+const SHEET_HISTORICO = 'Historico';
 const SHEET_DOCENTES = 'Directorio_Docentes';
 const SHEET_CONFIG = 'Configuracion_Turnos';
 
@@ -49,12 +50,13 @@ function getSpreadsheet() {
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('ISFT 191 - Secretaría')
-    .addItem('1. Enviar Nóminas a Docentes Ahora (Demo PoC)', 'enviarNominasDocentes')
+    .addItem('1. Enviar Nóminas Pendientes y Archivar en Histórico', 'enviarNominasDocentes')
     .addSeparator()
     .addItem('2. Configurar Fechas de Apertura y Envío (Día 15 al 20)', 'abrirHojaConfiguracionTurnos')
-    .addItem('3. Activar Cron Automático por Calendario (Evalúa Día 20)', 'instalarTriggerCalendarioParametrizable')
+    .addItem('3. Ver Pestaña de Histórico de Inscripciones', 'abrirHojaHistorico')
+    .addItem('4. Activar Cron Automático por Calendario (Evalúa Día 20)', 'instalarTriggerCalendarioParametrizable')
     .addSeparator()
-    .addItem('4. Cargar Alumno de Prueba (Simulación)', 'simularInscripcionDemo')
+    .addItem('5. Cargar Alumno de Prueba (Simulación)', 'simularInscripcionDemo')
     .addToUi();
 }
 
@@ -170,6 +172,60 @@ function abrirHojaConfiguracionTurnos() {
 }
 
 /**
+ * Obtiene (o crea automáticamente si no existe) la pestaña "Historico" donde se archivan
+ * las inscripciones una vez que sus nóminas fueron enviadas por correo a los docentes.
+ */
+function obtenerOCrearHojaHistorico() {
+  const ss = getSpreadsheet();
+  let sheetHist = ss.getSheetByName(SHEET_HISTORICO);
+  if (!sheetHist) {
+    sheetHist = ss.insertSheet(SHEET_HISTORICO);
+    const headers = [
+      'ID Comprobante',
+      'Fecha y Hora (GMT-3)',
+      'Apellido y Nombre',
+      'DNI',
+      'Teléfono',
+      'Correo Electrónico',
+      'Cohorte',
+      'Carrera_Codigo',
+      'Carrera_Nombre',
+      'Año de la Materia',
+      'Código Materia',
+      'Asignatura a Rendir',
+      'Modalidad Examen',
+      'Año de Cursada',
+      'Docente Cátedra',
+      'Estado Envío Docente',
+      'Fecha Despacho Docente (GMT-3)',
+      'Email Docente Destino'
+    ];
+    sheetHist.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheetHist
+      .getRange(1, 1, 1, headers.length)
+      .setFontWeight('bold')
+      .setBackground('#3438AA')
+      .setFontColor('#FFFFFF');
+    sheetHist.setFrozenRows(1);
+  }
+  return sheetHist;
+}
+
+/**
+ * Abre y posiciona a Secretaría en la pestaña "Historico".
+ */
+function abrirHojaHistorico() {
+  const sheetHist = obtenerOCrearHojaHistorico();
+  const ss = getSpreadsheet();
+  ss.setActiveSheet(sheetHist);
+  ss.toast(
+    'Aquí se archivan todas las inscripciones cuyas nóminas ya fueron enviadas a los docentes.',
+    'Histórico de Inscripciones',
+    5
+  );
+}
+
+/**
  * Endpoint GET para que el formulario web consulte si la ventana de inscripción está abierta
  * y muestre el cronograma vigente.
  */
@@ -195,6 +251,15 @@ function doPost(e) {
     const data = JSON.parse(rawBody);
 
     const estadoVentana = obtenerConfiguracionVentana();
+    if (data && data.action === 'status') {
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          ok: true,
+          ...estadoVentana
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
     if (!estadoVentana.inscripcionAbierta && !data.forzarDemo) {
       return ContentService.createTextOutput(
         JSON.stringify({
@@ -314,200 +379,296 @@ function evaluarCronDiarioVentana() {
 }
 
 /**
- * Lee los alumnos inscriptos hasta la fecha, los agrupa por Materia_Codigo,
- * busca el correo del docente en "Directorio_Docentes" y envía la nómina oficial.
+ * Lee únicamente los alumnos pendientes en "Inscripciones_Finales", envía el correo a cada
+ * docente según "Directorio_Docentes" y traslada los registros enviados a la pestaña "Historico"
+ * para que nunca se vuelvan a enviar duplicados en futuros disparos.
  */
 function enviarNominasDocentes() {
-  const ss = getSpreadsheet();
-  const sheetIns = ss.getSheetByName(SHEET_INSCRIPCIONES);
-  const sheetDoc = ss.getSheetByName(SHEET_DOCENTES);
-  const cfg = obtenerConfiguracionVentana();
-
-  if (!sheetIns || !sheetDoc) {
-    throw new Error('No se encontraron las hojas Inscripciones_Finales o Directorio_Docentes.');
-  }
-
-  const docentesData = sheetDoc.getDataRange().getValues();
-  const directorioPorMateria = {};
-
-  for (let i = 1; i < docentesData.length; i++) {
-    const carreraCode = String(docentesData[i][0] || '').trim().toUpperCase();
-    const materiaCode = String(docentesData[i][4] || '').trim().toUpperCase();
-    const materiaNombre = String(docentesData[i][5] || '').trim();
-    const docenteTitular = String(docentesData[i][6] || '').trim();
-    const emailDocente = String(docentesData[i][7] || '').trim();
-    const activo = String(docentesData[i][8] || 'SI').trim().toUpperCase();
-
-    if (materiaCode && emailDocente && activo === 'SI') {
-      directorioPorMateria[carreraCode + ':' + materiaCode] = {
-        carreraCode: carreraCode,
-        carreraNombre: String(docentesData[i][1] || ''),
-        resolucion: String(docentesData[i][2] || ''),
-        anioPlan: String(docentesData[i][3] || ''),
-        materiaCode: materiaCode,
-        materiaNombre: materiaNombre,
-        docente: docenteTitular || 'Docente ' + materiaNombre,
-        email: emailDocente
-      };
-    }
-  }
-
-  const insData = sheetIns.getDataRange().getValues();
-  if (insData.length <= 1) {
-    Logger.log('No hay inscripciones registradas para enviar.');
-    return;
-  }
-
-  const gruposPorMateria = {};
-
-  for (let r = 1; r < insData.length; r++) {
-    const row = insData[r];
-    const carreraCode = String(row[7] || '').trim().toUpperCase();
-    const materiaCode = String(row[10] || '').trim().toUpperCase();
-    if (!materiaCode) continue;
-
-    const key = carreraCode + ':' + materiaCode;
-    if (!gruposPorMateria[key]) {
-      gruposPorMateria[key] = [];
-    }
-    gruposPorMateria[key].push({
-      rowNumber: r + 1,
-      comprobanteId: row[0],
-      fechaIso: row[1],
-      apellidoNombre: row[2],
-      dni: row[3],
-      telefono: row[4],
-      email: row[5],
-      cohorte: row[6],
-      carreraCode: carreraCode,
-      carreraNombre: row[8],
-      anioMateria: row[9],
-      materiaCode: materiaCode,
-      materiaNombre: row[11],
-      modalidad: row[12],
-      anioCursado: row[13],
-      profesor: row[14]
-    });
-  }
-
-  const fechaCorte = Utilities.formatDate(
-    new Date(),
-    'America/Argentina/Buenos_Aires',
-    "dd/MM/yyyy HH:mm '(GMT-3)'"
-  );
-  let emailsEnviados = 0;
-
-  for (const key in gruposPorMateria) {
-    const alumnos = gruposPorMateria[key];
-    const infoDocente = directorioPorMateria[key] || {
-      carreraCode: alumnos[0].carreraCode,
-      carreraNombre: alumnos[0].carreraNombre,
-      materiaCode: alumnos[0].materiaCode,
-      materiaNombre: alumnos[0].materiaNombre,
-      docente: alumnos[0].profesor || 'Docente ' + alumnos[0].materiaNombre,
-      email: 'arij.dev@gmail.com'
-    };
-
-    const csvHeader = [
-      'Comprobante_ID',
-      'Fecha_Inscripcion',
-      'DNI',
-      'Apellido_y_Nombre',
-      'Condicion',
-      'Anio_Cursada',
-      'Cohorte_Ingreso',
-      'Correo_Alumno',
-      'Telefono',
-      'Docente_Catedra'
-    ].join(';');
-
-    const csvRows = alumnos.map(function (a) {
-      return [
-        a.comprobanteId,
-        a.fechaIso,
-        a.dni,
-        '"' + String(a.apellidoNombre).replace(/"/g, '""') + '"',
-        a.modalidad,
-        a.anioCursado,
-        a.cohorte,
-        a.email,
-        a.telefono,
-        '"' + String(infoDocente.docente).replace(/"/g, '""') + '"'
-      ].join(';');
-    });
-
-    const csvContent = '\uFEFF' + [csvHeader].concat(csvRows).join('\r\n');
-    const attachmentBlob = Utilities.newBlob(
-      csvContent,
-      'text/csv;charset=utf-8',
-      'Nomina_Inscriptos_' + infoDocente.materiaCode + '.csv'
-    );
-
-    const filasHtml = alumnos
-      .map(function (a, idx) {
-        return (
-          '<tr>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + (idx + 1) + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-family:monospace;">' + a.dni + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-weight:600;">' + a.apellidoNombre + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.modalidad + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.anioCursado + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.email + '</td>' +
-          '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-family:monospace;">' + a.comprobanteId + '</td>' +
-          '</tr>'
-        );
-      })
-      .join('');
-
-    const htmlBody =
-      '<div style="font-family:Inter,Arial,sans-serif;max-width:680px;margin:0 auto;border:1px solid #dbe2ef;border-radius:10px;overflow:hidden;">' +
-      '<div style="background:#3438AA;color:#ffffff;padding:18px 24px;border-bottom:4px solid #C97026;">' +
-      '<div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.9;">ISFT N° 191 - Bahía Blanca - Secretaría Académica</div>' +
-      '<h2 style="margin:6px 0 0;font-size:18px;">Nómina Oficial de Inscriptos a Mesa Examinadora</h2>' +
-      '</div>' +
-      '<div style="padding:20px 24px;background:#ffffff;color:#1b1f3b;">' +
-      '<p style="margin-top:0;">Estimado/a <strong>' + infoDocente.docente + '</strong>,</p>' +
-      '<p>Habiendo finalizado la ventana de inscripción (del día <strong>' + cfg.diaApertura + '</strong> al <strong>' + cfg.diaCierre + '</strong>), se remite el padrón definitivo al <strong>' + fechaCorte + '</strong> para la mesa examinadora de:</p>' +
-      '<div style="background:#f8fafc;border-left:4px solid #3438AA;padding:12px 16px;margin:14px 0;border-radius:4px;">' +
-      '<div><strong>Carrera:</strong> ' + infoDocente.carreraNombre + ' (' + infoDocente.carreraCode + ')</div>' +
-      '<div><strong>Asignatura:</strong> ' + infoDocente.materiaNombre + ' [' + infoDocente.materiaCode + ']</div>' +
-      '<div><strong>Total de inscriptos registrados:</strong> ' + alumnos.length + ' estudiante(s)</div>' +
-      '</div>' +
-      '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;">' +
-      '<thead>' +
-      '<tr style="background:#f1f5f9;color:#334155;text-align:left;">' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">#</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">DNI</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Apellido y Nombre</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Condición</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Cursada</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Correo</th>' +
-      '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Comprobante</th>' +
-      '</tr>' +
-      '</thead>' +
-      '<tbody>' + filasHtml + '</tbody>' +
-      '</table>' +
-      '<p style="font-size:12px;color:#64748b;margin-top:20px;">Se adjunta a este correo la planilla compatible con Excel (<code>Nomina_Inscriptos_' + infoDocente.materiaCode + '.csv</code>).</p>' +
-      '</div>' +
-      '</div>';
-
-    MailApp.sendEmail({
-      to: infoDocente.email,
-      subject: '[ISFT N° 191] Nómina de Inscriptos - ' + infoDocente.materiaNombre + ' (' + alumnos.length + ' inscriptos)',
-      htmlBody: htmlBody,
-      attachments: [attachmentBlob]
-    });
-
-    for (let j = 0; j < alumnos.length; j++) {
-      sheetIns.getRange(alumnos[j].rowNumber, 16).setValue('Enviado a docente (' + fechaCorte + ')');
-    }
-
-    emailsEnviados++;
-  }
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
 
   try {
-    ss.toast('Se enviaron ' + emailsEnviados + ' nómina(s) por correo a los docentes.', 'Envío Completado', 5);
-  } catch (e) {}
+    const ss = getSpreadsheet();
+    const sheetIns = ss.getSheetByName(SHEET_INSCRIPCIONES);
+    const sheetDoc = ss.getSheetByName(SHEET_DOCENTES);
+    const sheetHist = obtenerOCrearHojaHistorico();
+    const cfg = obtenerConfiguracionVentana();
+
+    if (!sheetIns || !sheetDoc) {
+      throw new Error('No se encontraron las hojas Inscripciones_Finales o Directorio_Docentes.');
+    }
+
+    const insData = sheetIns.getDataRange().getValues();
+    if (insData.length <= 1) {
+      Logger.log('No hay inscripciones pendientes en Inscripciones_Finales.');
+      try {
+        ss.toast(
+          'No hay inscripciones pendientes en Inscripciones_Finales (los envíos previos ya están en Historico).',
+          'Sin Pendientes',
+          5
+        );
+      } catch (e) {}
+      return;
+    }
+
+    const docentesData = sheetDoc.getDataRange().getValues();
+    const directorioPorMateria = {};
+
+    for (let i = 1; i < docentesData.length; i++) {
+      const carreraCode = String(docentesData[i][0] || '').trim().toUpperCase();
+      const materiaCode = String(docentesData[i][4] || '').trim().toUpperCase();
+      const materiaNombre = String(docentesData[i][5] || '').trim();
+      const docenteTitular = String(docentesData[i][6] || '').trim();
+      const emailDocente = String(docentesData[i][7] || '').trim();
+      const activo = String(docentesData[i][8] || 'SI').trim().toUpperCase();
+
+      if (materiaCode && emailDocente && activo === 'SI') {
+        directorioPorMateria[carreraCode + ':' + materiaCode] = {
+          carreraCode: carreraCode,
+          carreraNombre: String(docentesData[i][1] || ''),
+          resolucion: String(docentesData[i][2] || ''),
+          anioPlan: String(docentesData[i][3] || ''),
+          materiaCode: materiaCode,
+          materiaNombre: materiaNombre,
+          docente: docenteTitular || 'Docente ' + materiaNombre,
+          email: emailDocente
+        };
+      }
+    }
+
+    const fechaCorte = Utilities.formatDate(
+      new Date(),
+      'America/Argentina/Buenos_Aires',
+      "dd/MM/yyyy HH:mm:ss '(GMT-3)'"
+    );
+
+    const gruposPorMateria = {};
+    const filasParaHistorico = [];
+    let migradosPrevios = 0;
+
+    for (let r = 1; r < insData.length; r++) {
+      const row = insData[r];
+      const carreraCode = String(row[7] || '').trim().toUpperCase();
+      const materiaCode = String(row[10] || '').trim().toUpperCase();
+      const estadoActual = String(row[15] || '').trim();
+      if (!materiaCode && !row[0]) continue;
+
+      const key = carreraCode + ':' + materiaCode;
+      const infoDoc = directorioPorMateria[key];
+      const emailDestino = infoDoc ? infoDoc.email : 'arij.dev@gmail.com';
+
+      // Si el registro ya había sido marcado como "Enviado..." anteriormente (ej. los 36 previos),
+      // se pasa directo a "Historico" sin volver a enviarle el mail al docente.
+      if (estadoActual.toUpperCase().indexOf('ENVIADO') === 0) {
+        filasParaHistorico.push([
+          row[0],
+          row[1],
+          row[2],
+          row[3],
+          row[4],
+          row[5],
+          row[6],
+          row[7],
+          row[8],
+          row[9],
+          row[10],
+          row[11],
+          row[12],
+          row[13],
+          row[14],
+          estadoActual,
+          fechaCorte,
+          emailDestino
+        ]);
+        migradosPrevios++;
+        continue;
+      }
+
+      if (!gruposPorMateria[key]) {
+        gruposPorMateria[key] = [];
+      }
+      gruposPorMateria[key].push({
+        rawRow: row,
+        comprobanteId: row[0],
+        fechaIso: row[1],
+        apellidoNombre: row[2],
+        dni: row[3],
+        telefono: row[4],
+        email: row[5],
+        cohorte: row[6],
+        carreraCode: carreraCode,
+        carreraNombre: row[8],
+        anioMateria: row[9],
+        materiaCode: materiaCode,
+        materiaNombre: row[11],
+        modalidad: row[12],
+        anioCursado: row[13],
+        profesor: row[14]
+      });
+    }
+
+    let emailsEnviados = 0;
+    let alumnosNuevosEnviados = 0;
+
+    for (const key in gruposPorMateria) {
+      const alumnos = gruposPorMateria[key];
+      const infoDocente = directorioPorMateria[key] || {
+        carreraCode: alumnos[0].carreraCode,
+        carreraNombre: alumnos[0].carreraNombre,
+        materiaCode: alumnos[0].materiaCode,
+        materiaNombre: alumnos[0].materiaNombre,
+        docente: alumnos[0].profesor || 'Docente ' + alumnos[0].materiaNombre,
+        email: 'arij.dev@gmail.com'
+      };
+
+      const csvHeader = [
+        'Comprobante_ID',
+        'Fecha_Inscripcion',
+        'DNI',
+        'Apellido_y_Nombre',
+        'Condicion',
+        'Anio_Cursada',
+        'Cohorte_Ingreso',
+        'Correo_Alumno',
+        'Telefono',
+        'Docente_Catedra'
+      ].join(';');
+
+      const csvRows = alumnos.map(function (a) {
+        return [
+          a.comprobanteId,
+          a.fechaIso,
+          a.dni,
+          '"' + String(a.apellidoNombre).replace(/"/g, '""') + '"',
+          a.modalidad,
+          a.anioCursado,
+          a.cohorte,
+          a.email,
+          a.telefono,
+          '"' + String(infoDocente.docente).replace(/"/g, '""') + '"'
+        ].join(';');
+      });
+
+      const csvContent = '\uFEFF' + [csvHeader].concat(csvRows).join('\r\n');
+      const attachmentBlob = Utilities.newBlob(
+        csvContent,
+        'text/csv;charset=utf-8',
+        'Nomina_Inscriptos_' + infoDocente.materiaCode + '.csv'
+      );
+
+      const filasHtml = alumnos
+        .map(function (a, idx) {
+          return (
+            '<tr>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + (idx + 1) + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-family:monospace;">' + a.dni + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-weight:600;">' + a.apellidoNombre + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.modalidad + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.anioCursado + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;">' + a.email + '</td>' +
+            '<td style="padding:8px 10px;border-bottom:1px solid #e2e8f0;font-family:monospace;">' + a.comprobanteId + '</td>' +
+            '</tr>'
+          );
+        })
+        .join('');
+
+      const htmlBody =
+        '<div style="font-family:Inter,Arial,sans-serif;max-width:680px;margin:0 auto;border:1px solid #dbe2ef;border-radius:10px;overflow:hidden;">' +
+        '<div style="background:#3438AA;color:#ffffff;padding:18px 24px;border-bottom:4px solid #C97026;">' +
+        '<div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.9;">ISFT N° 191 - Bahía Blanca - Secretaría Académica</div>' +
+        '<h2 style="margin:6px 0 0;font-size:18px;">Nómina Oficial de Inscriptos a Mesa Examinadora</h2>' +
+        '</div>' +
+        '<div style="padding:20px 24px;background:#ffffff;color:#1b1f3b;">' +
+        '<p style="margin-top:0;">Estimado/a <strong>' + infoDocente.docente + '</strong>,</p>' +
+        '<p>Habiendo finalizado la ventana de inscripción (del día <strong>' + cfg.diaApertura + '</strong> al <strong>' + cfg.diaCierre + '</strong>), se remite el padrón definitivo al <strong>' + fechaCorte + '</strong> para la mesa examinadora de:</p>' +
+        '<div style="background:#f8fafc;border-left:4px solid #3438AA;padding:12px 16px;margin:14px 0;border-radius:4px;">' +
+        '<div><strong>Carrera:</strong> ' + infoDocente.carreraNombre + ' (' + infoDocente.carreraCode + ')</div>' +
+        '<div><strong>Asignatura:</strong> ' + infoDocente.materiaNombre + ' [' + infoDocente.materiaCode + ']</div>' +
+        '<div><strong>Total de inscriptos registrados:</strong> ' + alumnos.length + ' estudiante(s)</div>' +
+        '</div>' +
+        '<table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;">' +
+        '<thead>' +
+        '<tr style="background:#f1f5f9;color:#334155;text-align:left;">' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">#</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">DNI</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Apellido y Nombre</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Condición</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Cursada</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Correo</th>' +
+        '<th style="padding:8px 10px;border-bottom:2px solid #cbd5e1;">Comprobante</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' + filasHtml + '</tbody>' +
+        '</table>' +
+        '<p style="font-size:12px;color:#64748b;margin-top:20px;">Se adjunta a este correo la planilla compatible con Excel (<code>Nomina_Inscriptos_' + infoDocente.materiaCode + '.csv</code>).</p>' +
+        '</div>' +
+        '</div>';
+
+      MailApp.sendEmail({
+        to: infoDocente.email,
+        subject: '[ISFT N° 191] Nómina de Inscriptos - ' + infoDocente.materiaNombre + ' (' + alumnos.length + ' inscriptos)',
+        htmlBody: htmlBody,
+        attachments: [attachmentBlob]
+      });
+
+      for (let j = 0; j < alumnos.length; j++) {
+        const raw = alumnos[j].rawRow;
+        filasParaHistorico.push([
+          raw[0],
+          raw[1],
+          raw[2],
+          raw[3],
+          raw[4],
+          raw[5],
+          raw[6],
+          raw[7],
+          raw[8],
+          raw[9],
+          raw[10],
+          raw[11],
+          raw[12],
+          raw[13],
+          raw[14],
+          'Enviado a docente (' + fechaCorte + ')',
+          fechaCorte,
+          infoDocente.email
+        ]);
+        alumnosNuevosEnviados++;
+      }
+
+      emailsEnviados++;
+    }
+
+    // 1. Insertar en lote todas las filas procesadas en la pestaña "Historico"
+    if (filasParaHistorico.length > 0) {
+      const startRowHist = sheetHist.getLastRow() + 1;
+      sheetHist
+        .getRange(startRowHist, 1, filasParaHistorico.length, filasParaHistorico[0].length)
+        .setValues(filasParaHistorico);
+    }
+
+    // 2. Vaciar las filas ya procesadas de "Inscripciones_Finales" (dejando intacto el encabezado en fila 1)
+    const numRowsToDelete = insData.length - 1;
+    if (numRowsToDelete > 0) {
+      sheetIns.deleteRows(2, numRowsToDelete);
+    }
+
+    try {
+      ss.toast(
+        'Se enviaron ' +
+          emailsEnviados +
+          ' correo(s) (' +
+          alumnosNuevosEnviados +
+          ' inscriptos nuevos) y se archivaron ' +
+          filasParaHistorico.length +
+          ' registros en la pestaña Historico.',
+        'Despacho y Pase a Histórico Completado',
+        6
+      );
+    } catch (e) {}
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 /**
