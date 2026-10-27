@@ -1,0 +1,226 @@
+---
+---
+
+<aside class="live-summary-shell no-print" id="live-summary-aside" aria-label="Resumen en vivo de la inscripción">
+  <div class="live-summary-card">
+    <div class="live-summary-header">
+      <div class="live-summary-title-row">
+        <span class="live-pulse" id="live-status-dot" aria-hidden="true"></span>
+        <span class="live-kicker" id="live-status-text">Resumen en vivo</span>
+      </div>
+      <h3>Vista Previa de Solicitud</h3>
+      <p>Se actualiza automáticamente a medida que completás los campos.</p>
+    </div>
+
+    <!-- Bloque 1: Estudiante -->
+    <div class="live-section">
+      <div class="live-section-head">
+        <span>1. Datos del Estudiante</span>
+        <span class="live-step-badge" id="live-badge-step1">Pendiente</span>
+      </div>
+      <dl class="live-dl">
+        <div class="live-row">
+          <dt>Estudiante</dt>
+          <dd id="live-val-nombre" class="is-empty">Sin completar</dd>
+        </div>
+        <div class="live-row">
+          <dt>DNI / Cohorte</dt>
+          <dd id="live-val-dni-cohorte" class="is-empty tabular-mono">—</dd>
+        </div>
+        <div class="live-row">
+          <dt>Contacto</dt>
+          <dd id="live-val-contacto" class="is-empty">—</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Bloque 2: Mesa Examinadora -->
+    <div class="live-section">
+      <div class="live-section-head">
+        <span>2. Mesa Examinadora</span>
+        <span class="live-step-badge" id="live-badge-step2">Pendiente</span>
+      </div>
+      <dl class="live-dl">
+        <div class="live-row">
+          <dt>Tecnicatura</dt>
+          <dd id="live-val-carrera" class="is-empty">Sin seleccionar</dd>
+        </div>
+        <div class="live-row">
+          <dt>Asignatura</dt>
+          <dd id="live-val-materia" class="is-empty">Sin seleccionar</dd>
+        </div>
+        <div class="live-row">
+          <dt>Año y Condición</dt>
+          <dd id="live-val-condicion" class="is-empty">—</dd>
+        </div>
+        <div class="live-row">
+          <dt>Cátedra</dt>
+          <dd id="live-val-catedra" class="is-empty">—</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Garantía Institucional -->
+    <div class="live-footer-note">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span>
+        Impacto directo en el padrón oficial de Secretaría Académica con comprobante verificable.
+      </span>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .live-summary-shell {
+    background: var(--framer-shell-bg);
+    border: 1px solid var(--framer-shell-border);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    position: sticky;
+    top: 6.2rem;
+  }
+
+  .live-summary-card {
+    background: #ffffff;
+    border: 1px solid var(--bento-border);
+    border-radius: calc(var(--radius-lg) - 5px);
+    padding: 1.35rem;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .live-summary-header {
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .live-summary-title-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    margin-bottom: 0.45rem;
+  }
+
+  .live-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--brand-primary);
+  }
+
+  .live-pulse.ready {
+    background: var(--feedback-success);
+  }
+
+  .live-kicker {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .live-summary-header h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.015em;
+  }
+
+  .live-summary-header p {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+  }
+
+  .live-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1rem;
+  }
+
+  .live-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .live-step-badge {
+    font-size: 0.66rem;
+    font-weight: 700;
+    padding: 0.12rem 0.5rem;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+  }
+
+  .live-step-badge.done {
+    background: var(--feedback-success-bg);
+    color: var(--feedback-success);
+    border: 1px solid #bbf7d0;
+  }
+
+  .live-dl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .live-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.08rem;
+  }
+
+  .live-row dt {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .live-row dd {
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--text-main);
+    word-break: break-word;
+  }
+
+  .live-row dd.is-empty {
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  .live-footer-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    background: var(--brand-accent-light);
+    border: 1px solid rgba(201, 112, 38, 0.22);
+    border-radius: var(--radius-sm);
+    padding: 0.7rem 0.85rem;
+    line-height: 1.4;
+  }
+
+  .live-footer-note svg {
+    color: var(--brand-accent);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+</style>

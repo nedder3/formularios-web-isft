@@ -1,7 +1,7 @@
 ---
 ---
 
-<nav class="stepper-glass no-print" aria-label="Progreso del formulario de inscripción">
+<nav class="stepper-framer no-print" aria-label="Progreso del formulario de inscripción">
   <ol class="stepper-list">
     <li class="step active" id="step-indicator-1" aria-current="step">
       <button
@@ -12,8 +12,8 @@
       >
         <span class="step-num" aria-hidden="true">1</span>
         <span class="step-meta">
-          <span class="step-kicker">PASO 01</span>
-          <span class="step-label">Legajo Personal</span>
+          <span class="step-kicker">Paso 1</span>
+          <span class="step-label">Datos del Estudiante</span>
         </span>
       </button>
     </li>
@@ -26,8 +26,8 @@
       <div class="step-btn" tabindex="-1">
         <span class="step-num" aria-hidden="true">2</span>
         <span class="step-meta">
-          <span class="step-kicker">PASO 02</span>
-          <span class="step-label">Carrera y Materia</span>
+          <span class="step-kicker">Paso 2</span>
+          <span class="step-label">Carrera y Asignatura</span>
         </span>
       </div>
     </li>
@@ -40,7 +40,7 @@
       <div class="step-btn" tabindex="-1">
         <span class="step-num" aria-hidden="true">3</span>
         <span class="step-meta">
-          <span class="step-kicker">PASO 03</span>
+          <span class="step-kicker">Paso 3</span>
           <span class="step-label">Comprobante Oficial</span>
         </span>
       </div>
@@ -49,15 +49,13 @@
 </nav>
 
 <style>
-  .stepper-glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
+  .stepper-framer {
+    background: #ffffff;
     border: 1px solid var(--bento-border);
-    border-radius: var(--radius-lg);
-    padding: 0.75rem 1.15rem;
-    margin-bottom: 1.35rem;
-    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--card-shadow);
   }
 
   .stepper-list {
@@ -81,8 +79,8 @@
     border: none;
     font-family: inherit;
     color: var(--text-muted);
-    padding: 0.25rem 0.4rem;
-    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.35rem;
+    border-radius: 8px;
     text-align: left;
     cursor: default;
   }
@@ -97,17 +95,17 @@
   }
 
   .step-num {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    background: #e2e8f0;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
     color: #475569;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    font-family: var(--font-mono);
     transition: all 0.2s ease;
     flex-shrink: 0;
   }
@@ -115,19 +113,19 @@
   .step-meta {
     display: flex;
     flex-direction: column;
-    line-height: 1.15;
+    line-height: 1.2;
   }
 
   .step-kicker {
-    font-size: 0.65rem;
+    font-size: 0.66rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: #64748b;
-    font-family: var(--font-mono);
   }
 
   .step-label {
-    font-size: 0.86rem;
+    font-size: 0.85rem;
     font-weight: 700;
   }
 
@@ -141,8 +139,9 @@
 
   .step.active .step-num {
     background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #ffffff;
-    box-shadow: 0 0 0 4px rgba(52, 56, 170, 0.15);
+    box-shadow: 0 0 0 4px rgba(52, 56, 170, 0.14);
   }
 
   .step.done .step-btn {
@@ -155,16 +154,17 @@
 
   .step.done .step-num {
     background: var(--feedback-success);
+    border-color: var(--feedback-success);
     color: #ffffff;
   }
 
   .step-line {
     flex: 1;
-    height: 3px;
+    height: 2px;
     background: #e2e8f0;
     border-radius: 999px;
     overflow: hidden;
-    margin: 0 0.35rem;
+    margin: 0 0.5rem;
   }
 
   .step-line-fill {
@@ -182,7 +182,7 @@
     .step-meta {
       display: none;
     }
-    .stepper-glass {
+    .stepper-framer {
       padding: 0.6rem 0.9rem;
     }
   }
