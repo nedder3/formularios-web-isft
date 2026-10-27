@@ -11,9 +11,28 @@
       </svg>
     </div>
     <div class="notice-text">
-      <span class="notice-kicker">Normativa de Mesas Examinadoras</span>
+      <div class="notice-top-row">
+        <span class="notice-kicker">Normativa de Mesas Examinadoras</span>
+        <span class="schedule-window-tag" id="schedule-window-pill">
+          Ventana parametrizada: Apertura día 15 al 19 - Envío a docentes: día 20
+        </span>
+      </div>
       <p>
-        Registrá una solicitud <strong>por cada asignatura</strong> a rendir. Tus datos personales quedan recordados para agilizar la carga si te anotás a más de un examen final.
+        Registrá una solicitud <strong>por cada asignatura</strong> a rendir dentro del período habilitado. Al finalizar el llamado, el padrón definitivo se envía automáticamente por correo a cada cátedra.
+      </p>
+    </div>
+  </div>
+
+  <!-- Aviso de Ventana Cerrada (visible cuando Secretaría cierra el turno o fuera de fecha) -->
+  <div class="window-closed-banner" id="window-closed-banner" role="alert" hidden>
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+    </svg>
+    <div>
+      <strong>Período de Inscripción Cerrado</strong>
+      <p id="window-closed-text">
+        La recepción de solicitudes se habilita únicamente dentro del cronograma establecido por Secretaría Académica (del día 15 al 19).
       </p>
     </div>
   </div>
@@ -65,6 +84,19 @@
     margin-top: 0.1rem;
   }
 
+  .notice-text {
+    flex: 1;
+  }
+
+  .notice-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
   .notice-kicker {
     display: block;
     font-size: 0.68rem;
@@ -72,13 +104,45 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--brand-accent);
-    margin-bottom: 0.12rem;
+  }
+
+  .schedule-window-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
+    padding: 0.18rem 0.55rem;
+    border-radius: 6px;
   }
 
   .notice-text p {
     font-size: 0.85rem;
     color: var(--text-main);
     line-height: 1.45;
+  }
+
+  .window-closed-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--feedback-error-bg);
+    border: 1px solid #fca5a5;
+    border-left: 4px solid var(--feedback-error);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.1rem;
+    color: #991b1b;
+  }
+
+  .window-closed-banner strong {
+    display: block;
+    font-size: 0.86rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .window-closed-banner p {
+    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .draft-status-pill {

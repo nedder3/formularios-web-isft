@@ -796,10 +796,65 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     window.print();
   });
 
+  async function syncScheduleWindowStatus(): Promise<void> {
+    const pillEl = document.getElementById('schedule-window-pill');
+    const closedBanner = document.getElementById('window-closed-banner');
+    const closedText = document.getElementById('window-closed-text');
+    const btnStep2 = document.getElementById('btn-to-step-2') as HTMLButtonElement | null;
+
+    const params = new URLSearchParams(window.location.search);
+    const forceClosed = params.get('ventana') === 'cerrada';
+
+    const applyWindowState = (
+      abierta: boolean,
+      diaApertura = 15,
+      diaCierre = 19,
+      diaEnvio = 20
+    ) => {
+      if (pillEl) {
+        pillEl.textContent = `Ventana parametrizada: Apertura día ${diaApertura} al ${diaCierre} - Envío a docentes: día ${diaEnvio}`;
+      }
+      if (closedBanner && closedText) {
+        closedBanner.hidden = abierta;
+        closedText.textContent = `La recepción de solicitudes se habilita del día ${diaApertura} al ${diaCierre}. El día ${diaEnvio} se remiten automáticamente las nóminas a cada docente.`;
+      }
+      if (btnStep2) btnStep2.disabled = !abierta;
+      if (submitBtn) submitBtn.disabled = !abierta;
+    };
+
+    if (forceClosed) {
+      applyWindowState(false, 15, 19, 20);
+      return;
+    }
+
+    try {
+      const DEFAULT_URL =
+        'https://script.google.com/macros/s/AKfycbzBJx8f9QONJXbTc_uJmcuxyaaYeg-1mdjZFXsrdaO6msI-Mito7nvXKw29_1xPWzff/exec';
+      const webhookUrl =
+        params.get('webhook') ||
+        import.meta.env.PUBLIC_APPS_SCRIPT_URL ||
+        localStorage.getItem('isft191_webhook_url') ||
+        DEFAULT_URL;
+      const res = await fetch(webhookUrl, { method: 'GET' });
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof data.inscripcionAbierta === 'boolean') {
+          applyWindowState(
+            data.inscripcionAbierta,
+            data.diaApertura ?? 15,
+            data.diaCierre ?? 19,
+            data.diaEnvioDocentes ?? 20
+          );
+        }
+      }
+    } catch {}
+  }
+
   loadPersonalDraft();
   loadRecentProfessors();
   updateYearCountBadges(carreraMap.get(carreraSelect.value.trim().toUpperCase()));
   updateLiveSummaryCard();
+  syncScheduleWindowStatus();
 </script>
 
 <style is:global>
