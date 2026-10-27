@@ -13,7 +13,7 @@ This skill is **100% self-contained and portable**. It guides the agent to dynam
 ## 0. Anti-Generic / Zero-Emoji Craftsmanship Rule (Mandatory)
 
 Never produce interfaces that look "AI-generated" or template-basic:
-- **Zero System Emojis in UI:** Never use OS emojis (`ℹ️`, `🎓`, `📚`, `🔒`, `🖨️`, etc.) as interface icons. Always use crisp, monochromatic **inline SVG stroke icons** (`stroke="currentColor"`, `stroke-width="1.8"` to `2.2"`) that inherit the brand palette.
+- **Zero System Emojis & Zero Fake LEDs / "//" Separators:** Never use OS emojis (`ℹ️`, `🎓`, `📚`, `🔒`, `🖨️`, etc.), ASCII `//` separators, or glowing "LED status dots" / "Live / En vivo" badges on forms. Always use crisp, monochromatic **inline SVG stroke icons** (`stroke="currentColor"`, `stroke-width="1.8"` to `2.2"`) and clean typographic hierarchy.
 - **True Asymmetric Grids over Stacked Boxes:** Do not nest gray boxes vertically inside a giant white card and call it a Bento Grid. Use true multi-column asymmetric CSS Grids (`grid-template-columns: repeat(12, 1fr)` with `span 7` / `span 5` cells) where each cell is an independent architectural surface.
 - **Custom Native Controls:** Replace default OS `<select>` arrows with custom SVG data-URI chevrons (`appearance: none`), use custom radio/checkbox indicators, and apply `font-variant-numeric: tabular-nums` on IDs, dates, and counters.
 - **Typographic Contrast:** Pair a geometric/grotesque UI font (`Plus Jakarta Sans` or `Inter`, `-0.02em` tracking on headings) with a technical monospace font (`JetBrains Mono`) for section indices (`01.A // ...`), badges, and cryptographic receipts.
