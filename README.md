@@ -52,14 +52,14 @@ Cada solicitud se valida contra el padrón curricular oficial e impacta tanto en
 
 ## 3. Arquitectura del Sistema, Flujo de Planillas Excel y Modelo de Concurrencia
 
-### 3.0 Circuito Ejecutivo (Vista para Directivos, Secretarios y Docentes)
+### 3.0 Circuito Ejecutivo Parametrizable (Vista para Directivos, Secretarios y Docentes)
 
 ![Circuito Ejecutivo de Inscripción a Exámenes Finales - ISFT N° 191](./public/docs/circuito-ejecutivo-isft191.jpg)
 
-1. **El Estudiante se inscribe:** Completa el formulario en 2 pasos desde su celular o PC y descarga su comprobante individual en PDF (`SHA-256`). No tiene acceso a las planillas de otros alumnos.
-2. **Planilla Oficial de Inscriptos (`Inscripciones_Finales`):** Cada inscripción se guarda automáticamente sin duplicados (`DNI + Materia`) y con hora oficial **`America/Argentina/Buenos_Aires (GMT-3)`**.
-3. **Excel de Correos Docentes (`Directorio_Docentes`):** Contiene las 211 materias de las 8 carreras vinculadas con su respectivo `Docente + Nombre de Materia` y dirección de correo electrónico.
-4. **Envío Quincenal al Profesor:** Cada 15 días (o al presionar `1. Enviar Nóminas a Docentes Ahora` en el menú `ISFT 191 - Secretaría`), cada docente recibe en su correo únicamente la tabla y el archivo Excel/CSV adjunto de los alumnos anotados en su materia.
+1. **Apertura de Inscripción (Ej. Día 15):** El formulario web se habilita automáticamente en la fecha configurada por Secretaría. El estudiante se inscribe en 2 pasos y descarga su comprobante en PDF (`SHA-256`).
+2. **Planilla Oficial de Inscriptos (`Inscripciones_Finales`):** Durante los días habilitados (ej. del 15 al 19), cada inscripción se guarda automáticamente sin duplicados (`DNI + Materia`) y con hora oficial **`America/Argentina/Buenos_Aires (GMT-3)`**.
+3. **Cierre y Cruce con Cátedras (`Directorio_Docentes`):** Al finalizar la ventana, el sistema bloquea nuevas inscripciones fuera de término y cruza cada materia con el correo de su respectivo `Docente + Nombre de Materia`.
+4. **Envío Automático al Docente (Ej. Día 20):** En el día de corte configurado en la pestaña `Configuracion_Turnos` (ej. día 20 a las 08:00 hs, o manualmente desde el menú `ISFT 191 - Secretaría`), cada docente recibe en su correo únicamente la tabla y el archivo Excel/CSV adjunto de su materia.
 
 ### 3.1 Flujo Técnico General y Automatización de Envío a Docentes (`flowchart TD`)
 
@@ -132,13 +132,14 @@ sequenceDiagram
 
 ### 3.3 Estructura de las Planillas Excel en el Flujo (`ISFT191_Padron_Docentes_e_Inscripciones.xlsx`)
 
-El archivo maestro generado por [`scripts/generate-poc-excel.mjs`](./scripts/generate-poc-excel.mjs) (y sincronizado en Google Drive) articula 3 tablas de datos:
+El archivo maestro generado por [`scripts/generate-poc-excel.mjs`](./scripts/generate-poc-excel.mjs) (y sincronizado en Google Drive) articula 4 tablas de datos:
 
 | Planilla / Pestaña | Rol en el Flujo | Columnas Oficiales |
 | :--- | :--- | :--- |
-| **1. `Directorio_Docentes`** | Maestro de cátedras (211 filas precargadas) usado para saber a qué correo enviar cada mesa. | `Carrera_Codigo`, `Carrera_Nombre`, `Resolucion`, `Anio_Plan`, `Materia_Codigo`, `Materia_Nombre`, `Docente_Titular` (`Docente + Materia`), `Email_Docente`, `Envio_Activo`, `Frecuencia` |
-| **2. `Inscripciones_Finales`** | Padrón consolidado donde impacta cada `POST` del alumno con deduplicación por `DNI + Materia_Codigo`. | `ID Comprobante`, `Fecha y Hora (GMT-3)`, `Apellido y Nombre`, `DNI`, `Teléfono`, `Correo Electrónico`, `Cohorte`, `Carrera_Codigo`, `Carrera_Nombre`, `Año de la Materia`, `Código Materia`, `Asignatura a Rendir`, `Modalidad Examen`, `Año de Cursada`, `Docente Cátedra`, `Estado Envío Docente` |
-| **3. `Nomina_Inscriptos_<CODIGO>.csv`** | Archivo compatible con Excel generado dinámicamente y enviado como adjunto al correo de cada profesor. | `Comprobante_ID`, `Fecha_Inscripcion`, `DNI`, `Apellido_y_Nombre`, `Condicion`, `Anio_Cursada`, `Cohorte_Ingreso`, `Correo_Alumno`, `Telefono`, `Docente_Catedra` |
+| **1. `Configuracion_Turnos`** | Panel sin código para que Secretaría defina el día de apertura (ej. `15`), cierre (`19`) y disparo de mails a docentes (`20`). | `Parámetro` (`MODO_VENTANA`, `DIA_APERTURA`, `DIA_CIERRE`, `DIA_ENVIO_DOCENTES`, `HORA_ENVIO_DOCENTES`), `Valor`, `Descripción` |
+| **2. `Directorio_Docentes`** | Maestro de cátedras (211 filas precargadas) usado para saber a qué correo enviar cada mesa. | `Carrera_Codigo`, `Carrera_Nombre`, `Resolucion`, `Anio_Plan`, `Materia_Codigo`, `Materia_Nombre`, `Docente_Titular` (`Docente + Materia`), `Email_Docente`, `Envio_Activo`, `Frecuencia` |
+| **3. `Inscripciones_Finales`** | Padrón consolidado donde impacta cada `POST` del alumno con deduplicación por `DNI + Materia_Codigo`. | `ID Comprobante`, `Fecha y Hora (GMT-3)`, `Apellido y Nombre`, `DNI`, `Teléfono`, `Correo Electrónico`, `Cohorte`, `Carrera_Codigo`, `Carrera_Nombre`, `Año de la Materia`, `Código Materia`, `Asignatura a Rendir`, `Modalidad Examen`, `Año de Cursada`, `Docente Cátedra`, `Estado Envío Docente` |
+| **4. `Nomina_Inscriptos_<CODIGO>.csv`** | Archivo compatible con Excel generado dinámicamente y enviado como adjunto al correo de cada profesor el día de corte. | `Comprobante_ID`, `Fecha_Inscripcion`, `DNI`, `Apellido_y_Nombre`, `Condicion`, `Anio_Cursada`, `Cohorte_Ingreso`, `Correo_Alumno`, `Telefono`, `Docente_Catedra` |
 
 ### 3.4 Mapeo a Figma: Investigación UX, User Personas, Branding Kit, Design System y Wireframes
 
