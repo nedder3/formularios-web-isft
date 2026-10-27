@@ -1,60 +1,69 @@
 import type { APIRoute } from 'astro';
-import { getCarreraByCode, yearNumberToLabel } from '../../lib/academicService';
-import { registrarInscripcionEnExcel } from '../../lib/excelService';
-import type { InscripcionFinalPayload, ModalidadExamen } from '../../types/academic';
+import {
+  getCarreraByCode,
+  getMateriaInCarrera,
+  yearNumberToLabel,
+} from '../../lib/academicService';
+import { inscripcionRepository } from '../../lib/excelService';
+import { checkRateLimit } from '../../lib/rateLimit';
+import { validateStep1Personal, validateStep2Academic } from '../../lib/validation';
+import type { InscripcionFinalPayload } from '../../types/academic';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      clientAddress ||
+      'local';
+
+    const rate = checkRateLimit(`ip:${ip}`, 20, 60_000);
+    if (!rate.allowed) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: `Demasiadas solicitudes seguidas. Por favor aguardá ${rate.retryAfterSec} segundos.`,
+        }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': String(rate.retryAfterSec),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
 
-    const carreraCode = String(body.carreraCode ?? '').trim();
-    const apellidoNombre = String(body.apellidoNombre ?? '').trim();
-    const dni = String(body.dni ?? '').replace(/\D/g, '');
-    const telefono = String(body.telefono ?? '').trim();
-    const email = String(body.email ?? '').trim().toLowerCase();
-    const cohorte = String(body.cohorte ?? '').trim();
-    const anioMateriaNum = Number(body.anioMateria) as 1 | 2 | 3;
-    const modalidad = String(body.modalidad ?? '').trim() as ModalidadExamen;
-    const materiaCodigo = String(body.materiaCodigo ?? '').trim();
-    const anioCursado = String(body.anioCursado ?? '').trim();
-    const profesor = String(body.profesor ?? '').trim();
-
-    if (!apellidoNombre || apellidoNombre.length < 3) {
+    const step1Check = validateStep1Personal(body);
+    if (!step1Check.ok || !step1Check.data) {
       return new Response(
-        JSON.stringify({ ok: false, error: 'Ingresá tu Apellido y Nombre completo.' }),
+        JSON.stringify({
+          ok: false,
+          error: step1Check.firstError ?? 'Datos personales inválidos.',
+          fieldErrors: step1Check.errors,
+        }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    if (!/^\d{7,9}$/.test(dni)) {
+    const step2Check = validateStep2Academic(body);
+    if (!step2Check.ok || !step2Check.data) {
       return new Response(
-        JSON.stringify({ ok: false, error: 'El DNI debe contener entre 7 y 9 dígitos numéricos sin puntos.' }),
+        JSON.stringify({
+          ok: false,
+          error: step2Check.firstError ?? 'Datos académicos inválidos.',
+          fieldErrors: step2Check.errors,
+        }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    if (!telefono || telefono.length < 6) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Ingresá un número de teléfono válido.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+    const personal = step1Check.data;
+    const academic = step2Check.data;
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Ingresá una dirección de correo electrónico válida.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!/^\d{4}$/.test(cohorte)) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Seleccioná un año de cohorte válido (4 dígitos).' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const carrera = getCarreraByCode(carreraCode);
+    // O(1) Map lookup for Career
+    const carrera = getCarreraByCode(academic.carreraCode);
     if (!carrera) {
       return new Response(
         JSON.stringify({ ok: false, error: 'La carrera seleccionada no es válida.' }),
@@ -62,15 +71,11 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    if (![1, 2, 3].includes(anioMateriaNum)) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'El año de la materia debe ser 1°, 2° o 3°.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const materia = carrera.materias.find(
-      (m) => m.code === materiaCodigo && m.year === anioMateriaNum
+    // O(1) Map lookup for Subject within Career and Year
+    const materia = getMateriaInCarrera(
+      carrera.code,
+      academic.materiaCodigo,
+      academic.anioMateria
     );
     if (!materia) {
       return new Response(
@@ -82,46 +87,25 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    if (modalidad !== 'Regular' && modalidad !== 'Libre') {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'La modalidad debe ser Regular o Libre.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!/^\d{4}$/.test(anioCursado)) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Indicá un año de cursado válido (4 dígitos).' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!profesor || profesor.length < 2) {
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Indicá el apellido/nombre del profesor de la cátedra.' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
     const payload: InscripcionFinalPayload = {
       carreraCode: carrera.code,
       carreraNombre: carrera.name,
       carreraResolucion: carrera.resolution ?? 'S/R',
-      apellidoNombre,
-      dni,
-      telefono,
-      email,
-      cohorte,
-      anioMateria: anioMateriaNum,
-      anioMateriaLabel: yearNumberToLabel(anioMateriaNum),
-      modalidad,
+      apellidoNombre: personal.apellidoNombre,
+      dni: personal.dni,
+      telefono: personal.telefono,
+      email: personal.email,
+      cohorte: personal.cohorte,
+      anioMateria: academic.anioMateria,
+      anioMateriaLabel: yearNumberToLabel(academic.anioMateria),
+      modalidad: academic.modalidad,
       materiaCodigo: materia.code,
       materiaNombre: materia.name,
-      anioCursado,
-      profesor,
+      anioCursado: academic.anioCursado,
+      profesor: academic.profesor,
     };
 
-    const resultado = await registrarInscripcionEnExcel(payload);
+    const resultado = await inscripcionRepository.registrar(payload);
 
     return new Response(JSON.stringify(resultado), {
       status: 200,
