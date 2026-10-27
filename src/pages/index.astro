@@ -117,7 +117,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     return val === 1 || val === 2 || val === 3 ? val : null;
   }
 
-  function setLiveDd(id: string, value: string, emptyFallback = '—'): void {
+  function setLiveDd(id: string, value: string, emptyFallback = '-'): void {
     const el = document.getElementById(id);
     if (!el) return;
     if (value) {
@@ -142,13 +142,13 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     setLiveDd('live-val-nombre', nombre, 'Sin completar');
     setLiveDd(
       'live-val-dni-cohorte',
-      dni || cohorte ? `DNI ${dni || '—'} • Ingreso ${cohorte || '—'}` : '',
-      '—'
+      dni || cohorte ? `DNI ${dni || '-'} - Ingreso ${cohorte || '-'}` : '',
+      '-'
     );
     setLiveDd(
       'live-val-contacto',
-      email || telefono ? `${email || '—'} ${telefono ? `(${telefono})` : ''}` : '',
-      '—'
+      email || telefono ? `${email || '-'} ${telefono ? `(${telefono})` : ''}` : '',
+      '-'
     );
 
     const step1Valid = validateStep1Personal({
@@ -191,15 +191,15 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     );
     setLiveDd(
       'live-val-condicion',
-      anio ? `${anio}° Año • Condición ${modalidad}` : '',
-      '—'
+      anio ? `${anio}° Año - Condición ${modalidad}` : '',
+      '-'
     );
     setLiveDd(
       'live-val-catedra',
       anioCursado || profesor
-        ? `Cursada ${anioCursado || '—'} • Prof. ${profesor || '—'}`
+        ? `Cursada ${anioCursado || '-'} - Prof. ${profesor || '-'}`
         : '',
-      '—'
+      '-'
     );
 
     const step2Valid = Boolean(
@@ -264,7 +264,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     const nameEl = document.getElementById('summary-student-name');
     const metaEl = document.getElementById('summary-student-meta');
     if (nameEl) nameEl.textContent = nombre || 'Estudiante';
-    if (metaEl) metaEl.textContent = `DNI ${dni || '—'} • Cohorte ${cohorte || '—'}`;
+    if (metaEl) metaEl.textContent = `DNI ${dni || '-'} - Cohorte ${cohorte || '-'}`;
   }
 
   function setFieldError(field: keyof Step1Input, message: string | null): void {
@@ -634,27 +634,20 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       setText('rec-nombre', d.apellidoNombre);
       setText('rec-dni', d.dni);
       setText('rec-email', d.email);
-      setText('rec-tel-cohorte', `${d.telefono} • Cohorte ${d.cohorte}`);
+      setText('rec-tel-cohorte', `${d.telefono} - Cohorte ${d.cohorte}`);
       setText('rec-carrera', `${d.carreraNombre} (${d.carreraResolucion})`);
       setText('rec-materia', `${d.materiaNombre} [${d.materiaCodigo}]`);
       setText(
         'rec-anio-mod',
-        `${d.anioMateriaLabel} (${d.anioMateria}° Año) — ${d.modalidad}`
+        `${d.anioMateriaLabel} (${d.anioMateria}° Año) - ${d.modalidad}`
       );
-      setText('rec-cursado-prof', `Ciclo ${d.anioCursado} • Prof. ${d.profesor}`);
+      setText('rec-cursado-prof', `Ciclo ${d.anioCursado} - Prof. ${d.profesor}`);
 
       const subtitleEl = document.getElementById('receipt-status-subtitle');
       if (subtitleEl) {
         subtitleEl.textContent = result.duplicado
           ? 'Se actualizó tu registro previo para esta asignatura en la planilla oficial (sin duplicar filas).'
           : 'Los datos fueron impactados en la planilla homogénea de tu carrera.';
-      }
-
-      const dlBtn = document.getElementById(
-        'btn-download-excel'
-      ) as HTMLAnchorElement | null;
-      if (dlBtn) {
-        dlBtn.href = `/api/excel/${encodeURIComponent(d.carreraCode)}`;
       }
 
       const existingIdx = sessionHistory.findIndex(
