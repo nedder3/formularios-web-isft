@@ -56,10 +56,10 @@ Cada solicitud se valida contra el padrón curricular oficial e impacta tanto en
 
 ![Circuito Ejecutivo de Inscripción a Exámenes Finales - ISFT N° 191](./public/docs/circuito-ejecutivo-isft191.jpg)
 
-1. **Apertura de Inscripción (Ej. Día 15):** El formulario web se habilita automáticamente en la fecha configurada por Secretaría. El estudiante se inscribe en 2 pasos y descarga su comprobante en PDF (`SHA-256`).
-2. **Planilla Oficial de Inscriptos (`Inscripciones_Finales`):** Durante los días habilitados (ej. del 15 al 19), cada inscripción se guarda automáticamente sin duplicados (`DNI + Materia`) y con hora oficial **`America/Argentina/Buenos_Aires (GMT-3)`**.
-3. **Cierre y Cruce con Cátedras (`Directorio_Docentes`):** Al finalizar la ventana, el sistema bloquea nuevas inscripciones fuera de término y cruza cada materia con el correo de su respectivo `Docente + Nombre de Materia`.
-4. **Envío Automático al Docente (Ej. Día 20):** En el día de corte configurado en la pestaña `Configuracion_Turnos` (ej. día 20 a las 08:00 hs, o manualmente desde el menú `ISFT 191 - Secretaría`), cada docente recibe en su correo únicamente la tabla y el archivo Excel/CSV adjunto de su materia.
+1. **Apertura de Inscripción (Ej. Día 15):** El formulario web consulta en vivo la pestaña `Configuracion_Turnos` y se habilita automáticamente en la fecha configurada por Secretaría. El estudiante se inscribe en 2 pasos y descarga su comprobante en PDF (`SHA-256`). Si la ventana está cerrada, el formulario permanece bloqueado.
+2. **Bandeja Activa de Inscriptos (`Inscripciones_Finales`):** Durante los días habilitados (ej. del 15 al 19), cada inscripción se guarda automáticamente sin duplicados (`DNI + Materia`) y con hora oficial **`America/Argentina/Buenos_Aires (GMT-3)`**.
+3. **Cierre y Cruce con Cátedras (`Directorio_Docentes`):** Al finalizar la ventana, el sistema bloquea nuevas inscripciones fuera de término y cruza cada materia pendiente con el correo de su respectivo `Docente + Nombre de Materia`.
+4. **Envío Automático al Docente y Pase a `Historico` (Ej. Día 20):** En el día de corte configurado en `Configuracion_Turnos` (ej. día 20 a las 08:00 hs, o manualmente desde el menú `ISFT 191 - Secretaría`), cada docente recibe en su correo únicamente la tabla y el archivo Excel/CSV adjunto de su materia, e inmediatamente esos registros se trasladan de `Inscripciones_Finales` a la pestaña **`Historico`** para evitar reenvíos duplicados en futuros llamados.
 
 ### 3.1 Flujo Técnico General y Automatización de Envío a Docentes (`flowchart TD`)
 
@@ -68,7 +68,7 @@ flowchart TD
     subgraph ClientLayer["Capa Cliente (Framer Academic Portal 65/35)"]
         UI["Wizard Modular (Paso 1 / Paso 2 / Comprobante)\n+ LiveSummaryCard en Tiempo Real"]
         Draft["LocalStorage Draft + Historial de Sesión\n(isft191_student_draft_v1)"]
-        Crypto["Generador SHA-256 Web Crypto\n(Fallback Estático GitHub Pages)"]
+        Crypto["Generador SHA-256 Web Crypto\n(Modo Estático GitHub Pages)"]
     end
 
     subgraph ServerLayer["Motor Astro SSR (Servidor Institucional)"]
@@ -78,12 +78,14 @@ flowchart TD
         ExcelEngine["ExcelInscripcionRepository\n(Inscripciones_<CODE>.xlsx + audit_log.jsonl)"]
     end
 
-    subgraph AutomationLayer["Capa Serverless PoC (Google Apps Script / n8n)"]
-        Webhook["Webhook doPost(e)\n(Deduplicación DNI + Materia)"]
-        SheetIns[("Hoja: Inscripciones_Finales\n(Padrón Acumulado de Alumnos)")]
+    subgraph AutomationLayer["Capa Serverless (Google Apps Script / n8n)"]
+        SheetCfg[("Hoja: Configuracion_Turnos\n(Apertura Día 15-19 / Envío Día 20)")]
+        Webhook["Web App doGet() / doPost(e)\n(Validación Ventana + Deduplicación DNI + Materia)"]
+        SheetIns[("Hoja: Inscripciones_Finales\n(Bandeja Activa de Pendientes)")]
         SheetDoc[("Hoja: Directorio_Docentes\n(211 Materias - Docente + Nombre de Materia)")]
-        Cron["Trigger Programado (Cada 15 días)\no Menú Manual de Secretaría"]
-        Mailer["Despacho Gmail / SMTP\n(Tabla HTML + Nómina .CSV/.XLSX Adjunta)"]
+        SheetHist[("Hoja: Historico\n(Archivo Auditado de Nóminas Enviadas)")]
+        Cron["Trigger Diario Parametrizado\no Menú Manual de Secretaría"]
+        Mailer["Despacho Gmail / SMTP\n(Tabla HTML + Nómina .CSV Adjunta)"]
     end
 
     UI <--> Draft
@@ -92,15 +94,18 @@ flowchart TD
     APIPost --> Mutex
     Mutex --> ExcelEngine
 
-    UI -->|Modo PoC / GitHub Pages| Crypto
-    UI -->|POST Webhook| Webhook
+    UI -->|Modo GitHub Pages / Híbrido| Crypto
+    UI <-->|GET Ventana / POST Inscripción| Webhook
+    SheetCfg --> Webhook
     Webhook --> SheetIns
+    SheetCfg --> Cron
     Cron --> SheetIns
     Cron --> SheetDoc
-    Cron -->|Agrupa por Materia_Codigo| Mailer
+    Cron -->|1. Envía Nóminas Nuevas| Mailer
+    Cron -->|2. Archiva y Vacía Bandeja| SheetHist
 ```
 
-### 3.2 Modelo de Concurrencia y Serialización I/O (`sequenceDiagram`)
+### 3.2 Modelo de Concurrencia, Despacho y Pase a Histórico (`sequenceDiagram`)
 
 ```mermaid
 sequenceDiagram
@@ -108,26 +113,30 @@ sequenceDiagram
     participant C1 as Estudiante A (Navegador)
     participant C2 as Estudiante B (Navegador)
     participant API as Astro SSR / Webhook LockService
-    participant Q as Mutex Queue (writeLocks[SOFT])
-    participant DB as Planilla Oficial (ExcelJS / Google Sheet)
-    participant CRON as Scheduler Quincenal (Apps Script / n8n)
+    participant Q as Mutex Queue / ScriptLock
+    participant DB as Inscripciones_Finales (Bandeja Activa)
+    participant HIST as Pestaña Historico (Archivo)
+    participant CRON as Scheduler Día 20 (Apps Script)
     participant DOC as Correo del Docente (Cátedra)
 
+    C1->>API: GET Estado Ventana (Configuracion_Turnos: Días 15 al 19)
+    API-->>C1: 200 OK (inscripcionAbierta: true)
     C1->>API: POST Inscripción (SOFT-203 - Algebra y lógica)
     C2->>API: POST Inscripción (SOFT-203 - Algebra y lógica)
     API->>API: Validación SSOT + Autocompletado "Docente Algebra y lógica"
-    API->>Q: Encola Transacción A
-    API->>Q: Encola Transacción B (espera liberación de Lock)
+    API->>Q: Adquiere Lock Transaccional
     activate Q
     Q->>DB: Upsert Idempotente (DNI + SOFT-203) [Tx A]
-    DB-->>C1: 200 OK + Comprobante ISFT-2026-A1B2C3
+    DB-->>C1: 200 OK + Comprobante ISFT-2026-A1B2C3 (GMT-3)
     Q->>DB: Upsert Idempotente (DNI + SOFT-203) [Tx B]
-    DB-->>C2: 200 OK + Comprobante ISFT-2026-D4E5F6
+    DB-->>C2: 200 OK + Comprobante ISFT-2026-D4E5F6 (GMT-3)
     deactivate Q
 
-    Note over CRON,DOC: Ejecución automática cada 15 días (o manual en Demo PoC)
-    CRON->>DB: Lee inscriptos acumulados + Directorio_Docentes
+    Note over CRON,DOC: Día 20 (08:00 hs GMT-3) o ejecución desde Menú Secretaría
+    CRON->>DB: Lee únicamente inscripciones pendientes
     CRON->>DOC: Envía Mail Institucional + Adjunto Nomina_Inscriptos_SOFT-203.csv
+    CRON->>HIST: Inserta lote enviado con Fecha Despacho y Email Destino
+    CRON->>DB: Limpia filas enviadas (evita reenvíos en futuros disparos)
 ```
 
 ### 3.3 Estructura de las Planillas Excel en el Flujo (`ISFT191_Padron_Docentes_e_Inscripciones.xlsx`)
@@ -164,9 +173,30 @@ Todo el sistema de diseño fue documentado y empaquetado bajo [`design-system/`]
 | :--- | :---: | :--- | :--- |
 | `carrera` | `string` | `?carrera=SOFT` | Preselecciona automáticamente la carrera e hidrata los contadores de materias por año. |
 | `embed` | `0 \| 1` | `?carrera=SOFT&embed=1` | Oculta el encabezado y pie de página institucional para incrustación limpia vía `<iframe>`. |
-| `webhook` | `string` | `?webhook=https://script.google.com/...` | Configura y persiste en `localStorage` la URL del Webhook de Google Apps Script o n8n para demostraciones en vivo. |
+| `ventana` | `cerrada` | `?ventana=cerrada` | Fuerza en el cliente la vista bloqueada de período de inscripción cerrado para pruebas de UI. |
+| `webhook` | `string` | `?webhook=https://script.google.com/...` | Permite sobreescribir en `localStorage` la URL del Webhook de Google Apps Script o n8n. |
 
-### 4.2 Registro de Inscripción (`POST /api/inscripcion` y Payload Webhook)
+### 4.2 Consulta de Estado de Ventana (`GET` Webhook Google Apps Script)
+
+- **Endpoint Activo (`PUBLIC_APPS_SCRIPT_URL`):**
+  `https://script.google.com/macros/s/AKfycbzBJx8f9QONJXbTc_uJmcuxyaaYeg-1mdjZFXsrdaO6msI-Mito7nvXKw29_1xPWzff/exec`
+
+#### Response `200 OK` (`application/json`)
+```json
+{
+  "ok": true,
+  "modoVentana": "DEMO_SIEMPRE_ABIERTO",
+  "diaApertura": 15,
+  "diaCierre": 19,
+  "diaEnvioDocentes": 20,
+  "horaEnvioDocentes": 8,
+  "diaActualAr": 27,
+  "inscripcionAbierta": true,
+  "mensajeCronograma": "Inscripción habilitada del día 15 al 19 - Envío de nóminas a docentes: día 20"
+}
+```
+
+### 4.3 Registro de Inscripción (`POST /api/inscripcion` y Webhook `doPost`)
 
 #### Request Payload (`application/json`)
 ```json
@@ -289,6 +319,6 @@ El repositorio incluye el workflow oficial de GitHub Actions ([`.github/workflow
 - [x] **Despliegue de Planilla Maestra en Google Drive Personal (`arij.dev@gmail.com`):**
   - Carpeta en Drive: `ISFT 191 - PoC Inscripcion a Finales` (`ID: 1rKZdAOphvEfXoN06iw3lW0WcvoMy7XId`).
   - Google Sheet activo: `ISFT191_Padron_Docentes_e_Inscripciones` (`ID: 12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g`).
-- [x] **Script de Automatización Google Apps Script (`automation/google-apps-script/Code.gs`):** Incluye consulta de ventana (`doGet`), webhook con deduplicación e impacto GMT-3 (`doPost`), envío de correos con tabla HTML institucional + adjunto `.csv` por materia (`enviarNominasDocentes`), cron parametrizable (`evaluarYEnviarNominasPorCalendario`) y menú `ISFT 191 - Secretaría` en Google Sheets.
-- [x] **Activación de Webhook Bidireccional (`PUBLIC_APPS_SCRIPT_URL`) y Build Dual para GitHub Pages:** Configuración híbrida en `astro.config.mjs` y pipeline `.github/workflows/deploy.yml` para despliegue estático 100% funcional conectado en vivo con Google Sheets.
+- [x] **Script de Automatización Google Apps Script (`automation/google-apps-script/Code.gs`):** Incluye consulta de ventana (`doGet`), webhook con deduplicación e impacto GMT-3 (`doPost`), envío de correos con tabla HTML institucional + adjunto `.csv` por materia (`enviarNominasDocentes`), **traslado automático de registros enviados desde `Inscripciones_Finales` hacia la pestaña `Historico`** para evitar reenvíos duplicados, cron diario parametrizable (`evaluarCronDiarioVentana`) y menú `ISFT 191 - Secretaría` en Google Sheets.
+- [x] **Activación de Webhook Bidireccional (`PUBLIC_APPS_SCRIPT_URL`) y Build Dual para GitHub Pages:** Endpoint activo (`https://script.google.com/macros/s/AKfycbzBJx8f9QONJXbTc_uJmcuxyaaYeg-1mdjZFXsrdaO6msI-Mito7nvXKw29_1xPWzff/exec`), configuración híbrida en `astro.config.mjs` y pipeline `.github/workflows/deploy.yml` para despliegue estático 100% funcional conectado en vivo con Google Sheets.
 - [ ] **(Opcional - Fase 2):** Migrar el cron de Google Apps Script a un workflow auto-hospedado en **n8n** (`n8n-workflow-isft191.json`) cuando el instituto disponga de servidor propio.
