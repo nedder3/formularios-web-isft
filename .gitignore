@@ -26,3 +26,4 @@ data/output/
 *.xlsx
 *.xls
 *.csv
+/skill.md
