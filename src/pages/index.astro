@@ -712,16 +712,39 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         }) + ' (GMT-3)';
 
       if (webhookUrl) {
-        fetch(webhookUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            comprobanteId: result.comprobanteId,
-            fechaIso: fechaArgentina,
-            ...result.datos,
-          }),
-        }).catch(() => {});
+        try {
+          const webhookRes = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              comprobanteId: result.comprobanteId,
+              fechaIso: fechaArgentina,
+              ...result.datos,
+            }),
+          });
+          if (webhookRes.ok) {
+            const webhookJson = await webhookRes.json();
+            if (webhookJson.cerrada || webhookJson.ok === false) {
+              throw new Error(
+                webhookJson.error ||
+                  'El período de inscripción se encuentra cerrado.'
+              );
+            }
+            if (typeof webhookJson.duplicado === 'boolean') {
+              result.duplicado = webhookJson.duplicado;
+            }
+            if (webhookJson.comprobanteId) {
+              result.comprobanteId = webhookJson.comprobanteId;
+            }
+          }
+        } catch (webhookErr: unknown) {
+          if (
+            webhookErr instanceof Error &&
+            webhookErr.message.includes('inscripción')
+          ) {
+            throw webhookErr;
+          }
+        }
       }
 
       const d = result.datos;
@@ -852,6 +875,20 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
 
   loadPersonalDraft();
   loadRecentProfessors();
+
+  const initParams = new URLSearchParams(window.location.search);
+  const queryCarrera = initParams.get('carrera')?.trim().toUpperCase();
+  if (queryCarrera && carreraMap.has(queryCarrera) && carreraSelect) {
+    carreraSelect.value = queryCarrera;
+    updateMateriasList();
+  }
+  if (initParams.get('embed') === '1') {
+    document.body.classList.add('is-embed');
+    document.querySelectorAll('.inst-header, .inst-footer').forEach((el) => {
+      (el as HTMLElement).hidden = true;
+    });
+  }
+
   updateYearCountBadges(carreraMap.get(carreraSelect.value.trim().toUpperCase()));
   updateLiveSummaryCard();
   syncScheduleWindowStatus();

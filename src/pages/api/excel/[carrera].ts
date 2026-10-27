@@ -4,6 +4,10 @@ import type { APIRoute } from 'astro';
 import { getCarreraByCode } from '../../../lib/academicService.ts';
 import { getExcelFilePathForCarrera } from '../../../lib/excelService.ts';
 
+export function getStaticPaths() {
+  return [];
+}
+
 export const GET: APIRoute = async ({ params, request, url }) => {
   // Optional Admin Key guard for production PII protection
   const requiredKey = process.env.ISFT_ADMIN_KEY;

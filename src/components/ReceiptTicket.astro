@@ -1,4 +1,5 @@
 ---
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <section id="receipt-view" hidden aria-live="polite">
@@ -22,7 +23,7 @@
       <article class="swiss-ticket" aria-label="Comprobante oficial de inscripción">
         <div class="swiss-ticket-top">
           <div class="swiss-ticket-brand-row">
-            <img src="/logo-isft191.png" alt="" class="ticket-logo" width="38" height="38" />
+            <img src={`${baseUrl}/logo-isft191.png`} alt="" class="ticket-logo" width="38" height="38" />
             <div class="swiss-ticket-brand">
               <span class="swiss-kicker">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191 - BAHÍA BLANCA</span>
               <strong>CONSTANCIA DE INSCRIPCIÓN A MESA EXAMINADORA</strong>

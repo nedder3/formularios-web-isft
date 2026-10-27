@@ -5,6 +5,7 @@ interface Props {
 }
 
 const { title, embed = false } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -13,7 +14,7 @@ const { title, embed = false } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title} – ISFT N° 191 Bahía Blanca</title>
-    <link rel="icon" type="image/png" href="/logo-isft191.png" />
+    <link rel="icon" type="image/png" href={`${baseUrl}/logo-isft191.png`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -200,7 +201,7 @@ const { title, embed = false } = Astro.props;
           <div class="inst-header-inner">
             <div class="inst-brand">
               <img
-                src="/logo-isft191.png"
+                src={`${baseUrl}/logo-isft191.png`}
                 alt="Escudo ISFT N° 191 Bahía Blanca"
                 class="inst-logo-img"
                 width="50"
