@@ -1,0 +1,467 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Archivo Figma / Página 2 - Sistema de Diseño (Branding) – ISFT N° 191 Bahía Blanca</title><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/layouts/Layout.astro?astro&amp;type=style&amp;index=0&amp;lang.css">:root {
+        /* Paleta Oficial ISFT N° 191 */
+        --brand-primary: #3438aa;
+        --brand-primary-dark: #24277a;
+        --brand-primary-soft: rgba(52, 56, 170, 0.06);
+        --brand-action: #3438aa;
+        --brand-accent: #c97026;
+        --brand-accent-light: #fdf5ed;
+        --brand-charcoal: #2d2d2d;
+
+        /* Tokens Framer Double-Bezel */
+        --surface-bg: #f8fafc;
+        --surface-card: #ffffff;
+        --framer-shell-bg: rgba(15, 23, 42, 0.025);
+        --framer-shell-border: rgba(15, 23, 42, 0.07);
+        --bento-border: rgba(15, 23, 42, 0.08);
+        --glass-bg: rgba(255, 255, 255, 0.92);
+        --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04),
+          0 10px 28px -6px rgba(15, 23, 42, 0.05);
+
+        /* Tipografía y Semántica */
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --border-color: #cbd5e1;
+        --feedback-success: #15803d;
+        --feedback-success-bg: #f0fdf4;
+        --feedback-error: #dc2626;
+        --feedback-error-bg: #fef2f2;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--surface-bg);
+        color: var(--text-main);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.is-embed {
+        background: transparent;
+      }
+
+      .inst-header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 4px solid var(--brand-primary);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .inst-header-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0.9rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      .inst-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+      }
+
+      .inst-logo-img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 2px;
+        border: 1px solid rgba(52, 56, 170, 0.15);
+        box-shadow: 0 2px 8px rgba(52, 56, 170, 0.08);
+        flex-shrink: 0;
+      }
+
+      .inst-title-kicker {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--brand-accent);
+      }
+
+      .inst-title h1 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--brand-primary);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .inst-title p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .main-container {
+        max-width: 1120px;
+        margin: 1.5rem auto 3.5rem;
+        padding: 0 1.5rem;
+      }
+
+      .inst-footer {
+        max-width: 1120px;
+        margin: 2.5rem auto 2rem;
+        padding: 1.25rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-container,
+        .inst-header-inner,
+        .inst-footer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          background: #ffffff !important;
+        }
+        .main-container {
+          margin: 0;
+          max-width: 100%;
+          padding: 0;
+        }
+      }</style><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/pages/figma/sistema-diseno.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.editorial-sheet[data-astro-cid-kr4gawek] {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 3.5rem;
+  background: #fff;
+  color: #1b1f3b;
+  display: flex;
+  flex-direction: column;
+  gap: 3.25rem;
+}
+
+.editorial-header[data-astro-cid-kr4gawek] {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1.5rem;
+}
+
+.editorial-kicker[data-astro-cid-kr4gawek] {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: #646d8c;
+  margin-bottom: .5rem;
+}
+
+.editorial-header[data-astro-cid-kr4gawek] h1[data-astro-cid-kr4gawek] {
+  font-family: var(--font-display);
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #1b1f3b;
+  letter-spacing: -.02em;
+}
+
+.editorial-section[data-astro-cid-kr4gawek] {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.editorial-section[data-astro-cid-kr4gawek] h2[data-astro-cid-kr4gawek] {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1b1f3b;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: .65rem;
+}
+
+.branding-banner-box[data-astro-cid-kr4gawek] {
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #3438aa;
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 1.5rem;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.branding-emblem-col[data-astro-cid-kr4gawek] {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.branding-emblem-col[data-astro-cid-kr4gawek] strong[data-astro-cid-kr4gawek] {
+  display: block;
+  font-size: 1.05rem;
+  color: #3438aa;
+}
+
+.branding-emblem-col[data-astro-cid-kr4gawek] span[data-astro-cid-kr4gawek] {
+  font-size: .82rem;
+  color: #646d8c;
+}
+
+.branding-rules-col[data-astro-cid-kr4gawek] p[data-astro-cid-kr4gawek] {
+  font-size: .88rem;
+  color: #4a516d;
+  line-height: 1.6;
+}
+
+.palette-5col[data-astro-cid-kr4gawek] {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.1rem;
+}
+
+.swatch-vertical[data-astro-cid-kr4gawek] {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.swatch-top[data-astro-cid-kr4gawek] {
+  height: 115px;
+  width: 100%;
+}
+
+.swatch-body[data-astro-cid-kr4gawek] {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.swatch-body[data-astro-cid-kr4gawek] strong[data-astro-cid-kr4gawek] {
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  color: #1b1f3b;
+}
+
+.swatch-body[data-astro-cid-kr4gawek] code[data-astro-cid-kr4gawek] {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  color: #646d8c;
+}
+
+.swatch-body[data-astro-cid-kr4gawek] p[data-astro-cid-kr4gawek] {
+  font-size: .76rem;
+  color: #4a516d;
+  line-height: 1.45;
+  margin-top: .25rem;
+}
+
+.type-specimen-box[data-astro-cid-kr4gawek], .components-showcase-box[data-astro-cid-kr4gawek] {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.75rem 2rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.specimen-kicker[data-astro-cid-kr4gawek] {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #646d8c;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: .65rem;
+}
+
+.specimen-item[data-astro-cid-kr4gawek] {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.specimen-meta[data-astro-cid-kr4gawek] {
+  font-size: .75rem;
+  color: #646d8c;
+}
+
+.sample-h1[data-astro-cid-kr4gawek] {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1b1f3b;
+  letter-spacing: -.02em;
+}
+
+.sample-h2[data-astro-cid-kr4gawek] {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1b1f3b;
+}
+
+.sample-h3[data-astro-cid-kr4gawek] {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #3438aa;
+}
+
+.sample-label[data-astro-cid-kr4gawek] {
+  font-family: var(--font-sans);
+  font-size: .96rem;
+  font-weight: 600;
+  color: #1b1f3b;
+}
+
+.sample-body[data-astro-cid-kr4gawek] {
+  font-family: var(--font-sans);
+  font-size: .9rem;
+  color: #4a516d;
+  line-height: 1.55;
+}
+
+.sample-mono[data-astro-cid-kr4gawek] {
+  font-family: var(--font-mono);
+  font-size: .95rem;
+  font-weight: 700;
+  color: #1b1f3b;
+}
+
+.states-3col[data-astro-cid-kr4gawek] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.state-card[data-astro-cid-kr4gawek], .wf-mini-card[data-astro-cid-kr4gawek] {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.state-label[data-astro-cid-kr4gawek] {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 700;
+  color: #4a516d;
+  letter-spacing: .05em;
+}
+
+.btn-sim[data-astro-cid-kr4gawek] {
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  font-size: .84rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.primary-normal[data-astro-cid-kr4gawek] {
+  background: #3438aa;
+  color: #fff;
+}
+
+.secondary-normal[data-astro-cid-kr4gawek] {
+  background: #fff;
+  color: #1b1f3b;
+  border: 1px solid #cbd5e1;
+}
+
+.primary-hover[data-astro-cid-kr4gawek] {
+  background: #252882;
+  color: #fff;
+  box-shadow: 0 4px 12px #25288240;
+}
+
+.secondary-hover[data-astro-cid-kr4gawek] {
+  background: #eef0ff;
+  color: #3438aa;
+  border: 1px solid #3438aa;
+}
+
+.pill-sim-active[data-astro-cid-kr4gawek] {
+  background: #eef0ff;
+  border: 1.5px solid #3438aa;
+  color: #3438aa;
+  padding: .65rem .9rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.input-sim-auto[data-astro-cid-kr4gawek] {
+  background: #fff;
+  border: 1.5px solid #3438aa;
+  color: #1b1f3b;
+  padding: .65rem .9rem;
+  border-radius: 8px;
+  font-size: .82rem;
+  font-weight: 600;
+}
+
+.wf-mini-split[data-astro-cid-kr4gawek] {
+  display: grid;
+  grid-template-columns: 1.75fr 1fr;
+  gap: .5rem;
+}
+
+.wf-left[data-astro-cid-kr4gawek], .wf-right[data-astro-cid-kr4gawek], .wf-mini-full[data-astro-cid-kr4gawek] {
+  background: #fff;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  padding: .75rem;
+  font-size: .76rem;
+  color: #4a516d;
+  line-height: 1.4;
+}
+</style><script type="module" src="/@vite/client"></script><script type="module" src="/src/layouts/Layout.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/pages/figma/sistema-diseno.astro?astro&type=style&index=0&lang.css"></script></head><body class="is-embed"><main class="main-container"><div class="editorial-sheet" data-astro-cid-kr4gawek><!-- CABECERA EDITORIAL IDÉNTICA A TU PLANTILLA DE FIGMA --><header class="editorial-header" data-astro-cid-kr4gawek><span class="editorial-kicker" data-astro-cid-kr4gawek>ARCHIVO FIGMA / PÁGINA 2</span><h1 data-astro-cid-kr4gawek>Sistema de Diseño (Branding ISFT N° 191)</h1></header><!-- 1. BRANDING KIT & EMBLEMA OFICIAL --><section class="editorial-section" data-astro-cid-kr4gawek><h2 data-astro-cid-kr4gawek>Identidad Institucional y Emblema Oficial</h2><div class="branding-banner-box" data-astro-cid-kr4gawek><div class="branding-emblem-col" data-astro-cid-kr4gawek><img src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/publichttps://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png" alt="Escudo Oficial ISFT N° 191" width="78" height="78" data-astro-cid-kr4gawek><div data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>ISFT N° 191 - Bahía Blanca</strong><span data-astro-cid-kr4gawek>Instituto Superior de Formación Técnica N° 191</span></div></div><div class="branding-rules-col" data-astro-cid-kr4gawek><p data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>Concepto Framer Academic Portal:</strong> Alineado cromáticamente con <code data-astro-cid-kr4gawek>isft191.edu.ar</code>. Utiliza contenedores de doble bisel (<em data-astro-cid-kr4gawek>Double-Bezel</em>), iconografía vectorial pura (cero emojis), separadores unificados con guion medio (<code data-astro-cid-kr4gawek> - </code>) y foco exclusivo en la autogestión de mesas examinadoras.</p></div></div></section><!-- 2. PALETA DE COLORES (5 TARJETAS VERTICALES COMO EN TU CAPTURA) --><section class="editorial-section" data-astro-cid-kr4gawek><h2 data-astro-cid-kr4gawek>Paleta de Colores</h2><div class="palette-5col" data-astro-cid-kr4gawek><div class="swatch-vertical" data-astro-cid-kr4gawek><div class="swatch-top" style="background: #3438AA;" data-astro-cid-kr4gawek></div><div class="swatch-body" data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>BRAND PRIMARY</strong><code data-astro-cid-kr4gawek>#3438AA</code><p data-astro-cid-kr4gawek>Azul institucional principal (AAA 8.65:1). Usado en cabecera, botones primarios, pasos activos y bordes de foco.</p></div></div><div class="swatch-vertical" data-astro-cid-kr4gawek><div class="swatch-top" style="background: #252882;" data-astro-cid-kr4gawek></div><div class="swatch-body" data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>PRIMARY DARK</strong><code data-astro-cid-kr4gawek>#252882</code><p data-astro-cid-kr4gawek>Azul profundo (AAA 11.4:1). Estado hover de botones principales, acentos de contraste y textos destacados.</p></div></div><div class="swatch-vertical" data-astro-cid-kr4gawek><div class="swatch-top" style="background: #C97026;" data-astro-cid-kr4gawek></div><div class="swatch-body" data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>ACCENT OCHRE</strong><code data-astro-cid-kr4gawek>#C97026</code><p data-astro-cid-kr4gawek>Dorado ocre institucional. Línea superior de cabecera, etiquetas de normativa académica y sellos de verificación.</p></div></div><div class="swatch-vertical" data-astro-cid-kr4gawek><div class="swatch-top" style="background: #1B1F3B;" data-astro-cid-kr4gawek></div><div class="swatch-body" data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>DEEP NAVY TEXT</strong><code data-astro-cid-kr4gawek>#1B1F3B</code><p data-astro-cid-kr4gawek>Texto principal de lectura (AAA 14.8:1). Garantiza máxima legibilidad en etiquetas, selectores y comprobantes.</p></div></div><div class="swatch-vertical" data-astro-cid-kr4gawek><div class="swatch-top" style="background: #EEF2F9; border-bottom: 1px solid #DBE2EF;" data-astro-cid-kr4gawek></div><div class="swatch-body" data-astro-cid-kr4gawek><strong data-astro-cid-kr4gawek>FRAMER BEZEL</strong><code data-astro-cid-kr4gawek>#EEF2F9 / #F6F8FC</code><p data-astro-cid-kr4gawek>Superficie de fondo general y marco exterior de 6px (Double-Bezel) que enmarca las tarjetas blancas (#FFFFFF).</p></div></div></div></section><!-- 3. TIPOGRAFÍAS (CAJAS EDITORIALES COMO EN TU CAPTURA) --><section class="editorial-section" data-astro-cid-kr4gawek><h2 data-astro-cid-kr4gawek>Tipografías</h2><div class="type-specimen-box" data-astro-cid-kr4gawek><div class="specimen-kicker" data-astro-cid-kr4gawek>TIPOGRAFÍA DE TÍTULOS E INSTITUCIONAL (SANS GEOMÉTRICA DE ALTO IMPACTO)</div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>Plus Jakarta Sans - H1 (ExtraBold 36px / Line-height 1.15)</span><div class="sample-h1" data-astro-cid-kr4gawek>Inscripción a Mesas de Exámenes Finales</div></div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>Plus Jakarta Sans - H2 (Bold 24px / Line-height 1.25)</span><div class="sample-h2" data-astro-cid-kr4gawek>Identificación Personal del Estudiante</div></div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>Plus Jakarta Sans - Subtítulo de Tarjeta (SemiBold 18px)</span><div class="sample-h3" data-astro-cid-kr4gawek>Resumen de Inscripción y Padrón Curricular Oficial</div></div></div><div class="type-specimen-box" data-astro-cid-kr4gawek><div class="specimen-kicker" data-astro-cid-kr4gawek>TIPOGRAFÍA DE CUERPO, CONTROLES Y DATOS TABULARES (PRECISIÓN NUMÉRICA)</div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>Inter - Etiquetas y Selectores de Formulario (SemiBold 15px)</span><div class="sample-label" data-astro-cid-kr4gawek>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</div></div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>Inter - Cuerpo e Instrucciones (Regular 14px)</span><div class="sample-body" data-astro-cid-kr4gawek>Registrá una solicitud por cada asignatura a rendir. Tus datos personales quedan recordados localmente para agilizar la carga si te anotás a más de un examen final.</div></div><div class="specimen-item" data-astro-cid-kr4gawek><span class="specimen-meta" data-astro-cid-kr4gawek>JetBrains Mono - DNI, Códigos Curriculares y Comprobante SHA-256 (Bold 15px - tabular-nums)</span><div class="sample-mono" data-astro-cid-kr4gawek>DNI 34945012 - SOFT-203 - ISFT-2026-TEST01 - 27/10/2026 14:47 (GMT-3)</div></div></div></section><!-- 4. COMPONENTES DEL SISTEMA (ESTADOS NORMAL / HOVER / ACTIVO + INPUTS) --><section class="editorial-section" data-astro-cid-kr4gawek><h2 data-astro-cid-kr4gawek>Componentes del Sistema</h2><div class="components-showcase-box" data-astro-cid-kr4gawek><div class="specimen-kicker" data-astro-cid-kr4gawek>VARIANTES DE BOTONES INTERACTIVOS Y PÍLDORAS CURRICULARES</div><div class="states-3col" data-astro-cid-kr4gawek><div class="state-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>01. ESTADO NORMAL</span><div class="btn-sim primary-normal" data-astro-cid-kr4gawek>Confirmar Inscripción a Final</div><div class="btn-sim secondary-normal" data-astro-cid-kr4gawek>Imprimir / Guardar PDF</div></div><div class="state-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>02. ESTADO HOVER (PASAR MOUSE)</span><div class="btn-sim primary-hover" data-astro-cid-kr4gawek>Confirmar Inscripción a Final</div><div class="btn-sim secondary-hover" data-astro-cid-kr4gawek>Imprimir / Guardar PDF</div></div><div class="state-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>03. ESTADO SELECCIONADO / ACTIVO</span><div class="pill-sim-active" data-astro-cid-kr4gawek><span data-astro-cid-kr4gawek>● 2° Año (Segundo)</span><code data-astro-cid-kr4gawek>8 materias</code></div><div class="input-sim-auto" data-astro-cid-kr4gawek>Docente Algebra y lógica</div></div></div></div><div class="components-showcase-box" data-astro-cid-kr4gawek><div class="specimen-kicker" data-astro-cid-kr4gawek>WIREFRAMES ESTRUCTURALES (GRILLA 65% FORMULARIO / 35% RESUMEN FIJO)</div><div class="states-3col" data-astro-cid-kr4gawek><div class="wf-mini-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>PASO 1 - IDENTIFICACIÓN</span><div class="wf-mini-split" data-astro-cid-kr4gawek><div class="wf-left" data-astro-cid-kr4gawek>Formulario Personal (65%)<br data-astro-cid-kr4gawek>Nombre, DNI, Cohorte, Mail</div><div class="wf-right" data-astro-cid-kr4gawek>Resumen Fijo (35%)</div></div></div><div class="wf-mini-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>PASO 2 - CASCADA DE MATERIA</span><div class="wf-mini-split" data-astro-cid-kr4gawek><div class="wf-left" data-astro-cid-kr4gawek>Carrera - Año - Materia (65%)<br data-astro-cid-kr4gawek>Autocompletado Docente</div><div class="wf-right" data-astro-cid-kr4gawek>Resumen Fijo (35%)</div></div></div><div class="wf-mini-card" data-astro-cid-kr4gawek><span class="state-label" data-astro-cid-kr4gawek>PASO 3 - COMPROBANTE SHA-256</span><div class="wf-mini-full" data-astro-cid-kr4gawek>Ticket Oficial ISFT N° 191 (Imprimible PDF)<br data-astro-cid-kr4gawek>+ Impacto en Google Sheet y Mail Quincenal al Docente</div></div></div></div></section></div></main></body></html>

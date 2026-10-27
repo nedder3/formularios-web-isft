@@ -1,0 +1,691 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>3. Prototipo de Alta Fidelidad - ISFT N° 191 – ISFT N° 191 Bahía Blanca</title><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/layouts/Layout.astro?astro&amp;type=style&amp;index=0&amp;lang.css">:root {
+        /* Paleta Oficial ISFT N° 191 */
+        --brand-primary: #3438aa;
+        --brand-primary-dark: #24277a;
+        --brand-primary-soft: rgba(52, 56, 170, 0.06);
+        --brand-action: #3438aa;
+        --brand-accent: #c97026;
+        --brand-accent-light: #fdf5ed;
+        --brand-charcoal: #2d2d2d;
+
+        /* Tokens Framer Double-Bezel */
+        --surface-bg: #f8fafc;
+        --surface-card: #ffffff;
+        --framer-shell-bg: rgba(15, 23, 42, 0.025);
+        --framer-shell-border: rgba(15, 23, 42, 0.07);
+        --bento-border: rgba(15, 23, 42, 0.08);
+        --glass-bg: rgba(255, 255, 255, 0.92);
+        --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04),
+          0 10px 28px -6px rgba(15, 23, 42, 0.05);
+
+        /* Tipografía y Semántica */
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --border-color: #cbd5e1;
+        --feedback-success: #15803d;
+        --feedback-success-bg: #f0fdf4;
+        --feedback-error: #dc2626;
+        --feedback-error-bg: #fef2f2;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--surface-bg);
+        color: var(--text-main);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.is-embed {
+        background: transparent;
+      }
+
+      .inst-header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 4px solid var(--brand-primary);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .inst-header-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0.9rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      .inst-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+      }
+
+      .inst-logo-img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 2px;
+        border: 1px solid rgba(52, 56, 170, 0.15);
+        box-shadow: 0 2px 8px rgba(52, 56, 170, 0.08);
+        flex-shrink: 0;
+      }
+
+      .inst-title-kicker {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--brand-accent);
+      }
+
+      .inst-title h1 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--brand-primary);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .inst-title p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .main-container {
+        max-width: 1120px;
+        margin: 1.5rem auto 3.5rem;
+        padding: 0 1.5rem;
+      }
+
+      .inst-footer {
+        max-width: 1120px;
+        margin: 2.5rem auto 2rem;
+        padding: 1.25rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-container,
+        .inst-header-inner,
+        .inst-footer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          background: #ffffff !important;
+        }
+        .main-container {
+          margin: 0;
+          max-width: 100%;
+          padding: 0;
+        }
+      }</style><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/pages/figma/prototipo.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.figma-page-sheet[data-astro-cid-rfjr2gyk] {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+  background: #f6f8fc;
+}
+
+.sheet-hero[data-astro-cid-rfjr2gyk] {
+  background: #3438aa;
+  color: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  border-bottom: 5px solid #c97026;
+}
+
+.sheet-hero-top[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+}
+
+.sheet-badge[data-astro-cid-rfjr2gyk] {
+  background: #ffffff29;
+  padding: .35rem .75rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.sheet-hero[data-astro-cid-rfjr2gyk] h1[data-astro-cid-rfjr2gyk] {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: .65rem;
+}
+
+.sheet-hero[data-astro-cid-rfjr2gyk] p[data-astro-cid-rfjr2gyk] {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 920px;
+  color: #e2e8f0;
+}
+
+.proto-screen-frame[data-astro-cid-rfjr2gyk] {
+  background: #fff;
+  border: 1px solid #dbe2ef;
+  border-radius: 20px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.proto-screen-bar[data-astro-cid-rfjr2gyk] {
+  background: #1b1f3b;
+  color: #fff;
+  padding: .7rem 1.15rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.proto-inst-header[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border: 1px solid #dbe2ef;
+  border-top: 3px solid #c97026;
+  border-radius: 14px;
+}
+
+.kicker[data-astro-cid-rfjr2gyk] {
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  color: #c97026;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.proto-inst-header[data-astro-cid-rfjr2gyk] h2[data-astro-cid-rfjr2gyk] {
+  font-size: 1.15rem;
+  color: #3438aa;
+  font-weight: 800;
+}
+
+.proto-inst-header[data-astro-cid-rfjr2gyk] p[data-astro-cid-rfjr2gyk] {
+  font-size: .8rem;
+  color: #646d8c;
+}
+
+.proto-workspace-grid[data-astro-cid-rfjr2gyk] {
+  display: grid;
+  grid-template-columns: 1.85fr 1fr;
+  gap: 1.35rem;
+  align-items: start;
+}
+
+.proto-bezel-shell[data-astro-cid-rfjr2gyk] {
+  background: #eef2f9;
+  border: 1px solid #dde3f0;
+  border-radius: 20px;
+  padding: 6px;
+}
+
+.proto-card[data-astro-cid-rfjr2gyk], .proto-summary-card[data-astro-cid-rfjr2gyk] {
+  background: #fff;
+  border: 1px solid #dbe2ef;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.row-between[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .4rem;
+}
+
+.pill-step[data-astro-cid-rfjr2gyk] {
+  background: #eef0ff;
+  color: #3438aa;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .25rem .65rem;
+  border-radius: 99px;
+}
+
+.req-note[data-astro-cid-rfjr2gyk] {
+  font-size: .74rem;
+  color: #646d8c;
+}
+
+.proto-card-head[data-astro-cid-rfjr2gyk] h3[data-astro-cid-rfjr2gyk] {
+  font-size: 1.2rem;
+  color: #1b1f3b;
+  font-weight: 800;
+}
+
+.proto-card-head[data-astro-cid-rfjr2gyk] p[data-astro-cid-rfjr2gyk] {
+  font-size: .85rem;
+  color: #4a516d;
+}
+
+.proto-subblock[data-astro-cid-rfjr2gyk] {
+  background: #fbfdff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.proto-subblock[data-astro-cid-rfjr2gyk] h4[data-astro-cid-rfjr2gyk] {
+  font-size: .88rem;
+  color: #3438aa;
+  font-weight: 800;
+}
+
+.proto-grid-2[data-astro-cid-rfjr2gyk] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .9rem;
+}
+
+.proto-field[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.proto-field[data-astro-cid-rfjr2gyk].full {
+  grid-column: 1 / -1;
+}
+
+.proto-field[data-astro-cid-rfjr2gyk] label[data-astro-cid-rfjr2gyk] {
+  font-size: .78rem;
+  font-weight: 700;
+  color: #1b1f3b;
+}
+
+.proto-input[data-astro-cid-rfjr2gyk] {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: .65rem .85rem;
+  font-size: .86rem;
+  color: #1b1f3b;
+  font-weight: 500;
+}
+
+.proto-input[data-astro-cid-rfjr2gyk].active {
+  border-color: #3438aa;
+  background: #eef0ff;
+  color: #3438aa;
+  font-weight: 700;
+}
+
+.hint[data-astro-cid-rfjr2gyk] {
+  font-size: .72rem;
+  color: #646d8c;
+}
+
+.mono[data-astro-cid-rfjr2gyk] {
+  font-family: var(--font-mono);
+}
+
+.proto-actions[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: .5rem;
+}
+
+.autosave-note[data-astro-cid-rfjr2gyk] {
+  font-size: .76rem;
+  color: #646d8c;
+}
+
+.proto-btn-primary[data-astro-cid-rfjr2gyk] {
+  background: #3438aa;
+  color: #fff;
+  font-size: .85rem;
+  font-weight: 700;
+  padding: .75rem 1.25rem;
+  border-radius: 10px;
+}
+
+.proto-summary-card[data-astro-cid-rfjr2gyk] h4[data-astro-cid-rfjr2gyk] {
+  font-size: 1rem;
+  color: #3438aa;
+  font-weight: 800;
+}
+
+.proto-summary-card[data-astro-cid-rfjr2gyk] p[data-astro-cid-rfjr2gyk] {
+  font-size: .8rem;
+  color: #646d8c;
+}
+
+.proto-sum-block[data-astro-cid-rfjr2gyk] {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: .9rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.sum-head[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  justify-content: space-between;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #1b1f3b;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: .4rem;
+}
+
+.badge-done[data-astro-cid-rfjr2gyk] {
+  background: #dcfce7;
+  color: #15803d;
+  padding: .1rem .45rem;
+  border-radius: 6px;
+  font-size: .68rem;
+}
+
+.badge-pending[data-astro-cid-rfjr2gyk] {
+  background: #fef3c7;
+  color: #b45309;
+  padding: .1rem .45rem;
+  border-radius: 6px;
+  font-size: .68rem;
+}
+
+.sum-row[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  flex-direction: column;
+  font-size: .78rem;
+}
+
+.sum-row[data-astro-cid-rfjr2gyk] span[data-astro-cid-rfjr2gyk] {
+  color: #646d8c;
+  font-size: .7rem;
+}
+
+.sum-row[data-astro-cid-rfjr2gyk] strong[data-astro-cid-rfjr2gyk] {
+  color: #1b1f3b;
+}
+
+.sum-row[data-astro-cid-rfjr2gyk] strong[data-astro-cid-rfjr2gyk].muted {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.proto-active-student[data-astro-cid-rfjr2gyk] {
+  background: #eef0ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .82rem;
+}
+
+.small-kicker[data-astro-cid-rfjr2gyk] {
+  display: block;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #3438aa;
+}
+
+.btn-mini[data-astro-cid-rfjr2gyk] {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  padding: .4rem .75rem;
+  border-radius: 8px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.proto-pills-3[data-astro-cid-rfjr2gyk] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .6rem;
+}
+
+.p-pill[data-astro-cid-rfjr2gyk] {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: .6rem .8rem;
+  font-size: .8rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+}
+
+.p-pill[data-astro-cid-rfjr2gyk].active {
+  background: #eef0ff;
+  border-color: #3438aa;
+  color: #3438aa;
+}
+
+.proto-ticket[data-astro-cid-rfjr2gyk] {
+  border: 1px solid #dbe2ef;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.proto-ticket-head[data-astro-cid-rfjr2gyk] {
+  background: #3438aa;
+  color: #fff;
+  padding: 1.15rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 4px solid #c97026;
+}
+
+.ticket-brand[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
+.stamp-sha[data-astro-cid-rfjr2gyk] {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  background: #ffffff26;
+  padding: .3rem .65rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.proto-ticket-meta[data-astro-cid-rfjr2gyk] {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.proto-ticket-meta[data-astro-cid-rfjr2gyk] span[data-astro-cid-rfjr2gyk] {
+  display: block;
+  font-size: .68rem;
+  color: #646d8c;
+  font-weight: 700;
+}
+
+.proto-ticket-grid[data-astro-cid-rfjr2gyk] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem;
+}
+
+.proto-ticket-grid[data-astro-cid-rfjr2gyk] span[data-astro-cid-rfjr2gyk] {
+  display: block;
+  font-size: .68rem;
+  color: #646d8c;
+  font-weight: 700;
+}
+
+.proto-ticket-grid[data-astro-cid-rfjr2gyk] .full[data-astro-cid-rfjr2gyk] {
+  grid-column: 1 / -1;
+}
+
+.proto-ticket-grid[data-astro-cid-rfjr2gyk] .highlight[data-astro-cid-rfjr2gyk] {
+  background: #eef0ff;
+  border-left: 4px solid #3438aa;
+  padding: .75rem 1rem;
+  border-radius: 8px;
+}
+
+.proto-ticket-foot[data-astro-cid-rfjr2gyk] {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: .85rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: .75rem;
+  color: #646d8c;
+}
+
+.email-preview-card[data-astro-cid-rfjr2gyk] {
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.email-meta-bar[data-astro-cid-rfjr2gyk] {
+  padding: 1rem 1.5rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+  font-size: .82rem;
+  color: #334155;
+}
+
+.email-body-frame[data-astro-cid-rfjr2gyk] {
+  margin: 1.25rem;
+  background: #fff;
+  border: 1px solid #dbe2ef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.email-banner[data-astro-cid-rfjr2gyk] {
+  background: #3438aa;
+  color: #fff;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 4px solid #c97026;
+}
+
+.email-banner[data-astro-cid-rfjr2gyk] span[data-astro-cid-rfjr2gyk] {
+  font-size: .68rem;
+  letter-spacing: .06em;
+  opacity: .9;
+}
+
+.email-banner[data-astro-cid-rfjr2gyk] h3[data-astro-cid-rfjr2gyk] {
+  font-size: 1.1rem;
+  margin-top: .25rem;
+}
+
+.email-content[data-astro-cid-rfjr2gyk] {
+  padding: 1.4rem 1.5rem;
+  font-size: .86rem;
+  color: #1b1f3b;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.email-summary-box[data-astro-cid-rfjr2gyk] {
+  background: #f8fafc;
+  border-left: 4px solid #3438aa;
+  padding: .85rem 1.1rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.email-table[data-astro-cid-rfjr2gyk] {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .8rem;
+}
+
+.email-table[data-astro-cid-rfjr2gyk] th[data-astro-cid-rfjr2gyk] {
+  background: #f1f5f9;
+  text-align: left;
+  padding: .6rem .75rem;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.email-table[data-astro-cid-rfjr2gyk] td[data-astro-cid-rfjr2gyk] {
+  padding: .6rem .75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+</style><script type="module" src="/@vite/client"></script><script type="module" src="/src/layouts/Layout.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/pages/figma/prototipo.astro?astro&type=style&index=0&lang.css"></script></head><body class="is-embed"><main class="main-container"><div class="figma-page-sheet" data-astro-cid-rfjr2gyk><!-- CABECERA EDITORIAL DE LÁMINA 03 --><header class="sheet-hero" data-astro-cid-rfjr2gyk><div class="sheet-hero-top" data-astro-cid-rfjr2gyk><span class="sheet-badge" data-astro-cid-rfjr2gyk>PÁGINA 03 DE 03 - HIGH-FIDELITY SCREENS & EMAIL DISPATCH</span><span class="sheet-meta" data-astro-cid-rfjr2gyk>ISFT N° 191 - BAHÍA BLANCA - PROTOTIPO END-TO-END</span></div><h1 data-astro-cid-rfjr2gyk>Prototipo de Alta Fidelidad (3 Pasos + Correo Docente)</h1><p data-astro-cid-rfjr2gyk>Vistas completas en alta fidelidad del flujo estudiantil (Paso 1, Paso 2 y Comprobante Oficial SHA-256) junto con la vista del correo electrónico automatizado que recibe el docente cada 15 días.</p></header><!-- PANTALLA 01: PASO 1 (IDENTIFICACIÓN PERSONAL) --><section class="proto-screen-frame" data-astro-cid-rfjr2gyk><div class="proto-screen-bar" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>PANTALLA 01 / 04 - PASO 1: IDENTIFICACIÓN PERSONAL DEL ESTUDIANTE</span><code data-astro-cid-rfjr2gyk>Viewport: 1440px - Layout 65% / 35%</code></div><div class="proto-inst-header" data-astro-cid-rfjr2gyk><img src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png" alt="Escudo ISFT 191" width="46" height="46" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><span class="kicker" data-astro-cid-rfjr2gyk>ISFT N° 191 - Bahía Blanca</span><h2 data-astro-cid-rfjr2gyk>Inscripción a Mesas de Exámenes Finales</h2><p data-astro-cid-rfjr2gyk>Formularios académicos unificados por carrera y resolución</p></div></div><div class="proto-workspace-grid" data-astro-cid-rfjr2gyk><div class="proto-bezel-shell" data-astro-cid-rfjr2gyk><div class="proto-card" data-astro-cid-rfjr2gyk><div class="proto-card-head" data-astro-cid-rfjr2gyk><div class="row-between" data-astro-cid-rfjr2gyk><span class="pill-step" data-astro-cid-rfjr2gyk>Paso 1 de 2 - Legajo Estudiantil</span><span class="req-note" data-astro-cid-rfjr2gyk>Campos obligatorios (*)</span></div><h3 data-astro-cid-rfjr2gyk>Identificación Personal del Estudiante</h3><p data-astro-cid-rfjr2gyk>Verificá que los datos ingresados coincidan con tu documento y legajo académico.</p></div><div class="proto-subblock" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Titularidad y Cohorte de Ingreso</h4><div class="proto-grid-2" data-astro-cid-rfjr2gyk><div class="proto-field full" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Apellido y Nombre completo *</label><div class="proto-input" data-astro-cid-rfjr2gyk>Jaime Ariel</div><span class="hint" data-astro-cid-rfjr2gyk>Sin abreviaturas, tal como figura en el DNI</span></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Número de DNI *</label><div class="proto-input mono" data-astro-cid-rfjr2gyk>34945012</div><span class="hint" data-astro-cid-rfjr2gyk>7 a 9 dígitos numéricos, sin puntos</span></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Año de Ingreso (Cohorte) *</label><div class="proto-input" data-astro-cid-rfjr2gyk>2023</div><span class="hint" data-astro-cid-rfjr2gyk>Año de matriculación inicial en la carrera</span></div></div></div><div class="proto-subblock" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Datos de Contacto y Notificación</h4><div class="proto-grid-2" data-astro-cid-rfjr2gyk><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Teléfono Móvil *</label><div class="proto-input mono" data-astro-cid-rfjr2gyk>2914400469</div></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Correo Electrónico *</label><div class="proto-input" data-astro-cid-rfjr2gyk>arij.dev@gmail.com</div></div></div></div><div class="proto-actions" data-astro-cid-rfjr2gyk><span class="autosave-note" data-astro-cid-rfjr2gyk>Recordado localmente para agilizar próximas materias</span><span class="proto-btn-primary" data-astro-cid-rfjr2gyk>Continuar a Selección de Materia -&gt;</span></div></div></div><aside class="proto-bezel-shell" data-astro-cid-rfjr2gyk><div class="proto-summary-card" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Resumen de Inscripción</h4><p data-astro-cid-rfjr2gyk>Verificá los datos declarados antes de confirmar la mesa.</p><div class="proto-sum-block" data-astro-cid-rfjr2gyk><div class="sum-head" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>1. Datos del Estudiante</span><span class="badge-done" data-astro-cid-rfjr2gyk>Completo</span></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Estudiante</span><strong data-astro-cid-rfjr2gyk>Jaime Ariel</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>DNI / Cohorte</span><strong class="mono" data-astro-cid-rfjr2gyk>DNI 34945012 - Ingreso 2023</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Contacto</span><strong data-astro-cid-rfjr2gyk>arij.dev@gmail.com (2914400469)</strong></div></div><div class="proto-sum-block" data-astro-cid-rfjr2gyk><div class="sum-head" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>2. Mesa Examinadora</span><span class="badge-pending" data-astro-cid-rfjr2gyk>Pendiente</span></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Tecnicatura</span><strong class="muted" data-astro-cid-rfjr2gyk>Sin seleccionar</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Asignatura</span><strong class="muted" data-astro-cid-rfjr2gyk>Sin seleccionar</strong></div></div></div></aside></div></section><!-- PANTALLA 02: PASO 2 (SELECCIÓN CURRICULAR Y AUTOCOMPLETADO DOCENTE) --><section class="proto-screen-frame" data-astro-cid-rfjr2gyk><div class="proto-screen-bar" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>PANTALLA 02 / 04 - PASO 2: SELECCIÓN CURRICULAR Y CÁTEDRA AUTOMÁTICA</span><code data-astro-cid-rfjr2gyk>Autocompletado: "Docente + Nombre de Materia"</code></div><div class="proto-workspace-grid" data-astro-cid-rfjr2gyk><div class="proto-bezel-shell" data-astro-cid-rfjr2gyk><div class="proto-card" data-astro-cid-rfjr2gyk><div class="proto-active-student" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><span class="small-kicker" data-astro-cid-rfjr2gyk>LEGAJO ACTIVO</span><strong data-astro-cid-rfjr2gyk>Jaime Ariel</strong><span class="mono" data-astro-cid-rfjr2gyk>DNI 34945012 - Cohorte 2023</span></div><span class="btn-mini" data-astro-cid-rfjr2gyk>Modificar datos</span></div><div class="proto-card-head" data-astro-cid-rfjr2gyk><div class="row-between" data-astro-cid-rfjr2gyk><span class="pill-step" data-astro-cid-rfjr2gyk>Paso 2 de 2 - Selección Curricular</span><span class="req-note" data-astro-cid-rfjr2gyk>8 Planes - 211 Asignaturas</span></div><h3 data-astro-cid-rfjr2gyk>Asignatura y Condición de Examen Final</h3></div><div class="proto-subblock" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Padrón Curricular Oficial</h4><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Tecnicatura y Resolución Ministerial *</label><div class="proto-input" data-astro-cid-rfjr2gyk>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</div></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Año del Plan de Estudios *</label><div class="proto-pills-3" data-astro-cid-rfjr2gyk><div class="p-pill" data-astro-cid-rfjr2gyk>1° Año (Primero) <span data-astro-cid-rfjr2gyk>8</span></div><div class="p-pill active" data-astro-cid-rfjr2gyk>2° Año (Segundo) <span data-astro-cid-rfjr2gyk>8</span></div><div class="p-pill" data-astro-cid-rfjr2gyk>3° Año (Tercero) <span data-astro-cid-rfjr2gyk>6</span></div></div></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Asignatura a Rendir *</label><div class="proto-input active" data-astro-cid-rfjr2gyk>Algebra y lógica</div><span class="hint" data-astro-cid-rfjr2gyk>Padrón activo: 8 asignaturas oficiales de 2° Año (RS 5847/19).</span></div></div><div class="proto-subblock" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Condición de Examen y Cátedra</h4><div class="proto-grid-2" data-astro-cid-rfjr2gyk><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Condición del Estudiante *</label><div class="proto-input active" data-astro-cid-rfjr2gyk>Alumno Regular (Cursada aprobada)</div></div><div class="proto-field" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Año en que cursó la materia *</label><div class="proto-input" data-astro-cid-rfjr2gyk>2026</div></div><div class="proto-field full" data-astro-cid-rfjr2gyk><label data-astro-cid-rfjr2gyk>Docente de la Cátedra (Autocompletado por Padrón) *</label><div class="proto-input active" data-astro-cid-rfjr2gyk>Docente Algebra y lógica</div></div></div></div><div class="proto-actions" data-astro-cid-rfjr2gyk><span class="btn-mini" data-astro-cid-rfjr2gyk>&lt;- Volver a Datos Personales</span><span class="proto-btn-primary" data-astro-cid-rfjr2gyk>Confirmar Inscripción a Final</span></div></div></div><aside class="proto-bezel-shell" data-astro-cid-rfjr2gyk><div class="proto-summary-card" data-astro-cid-rfjr2gyk><h4 data-astro-cid-rfjr2gyk>Resumen de Inscripción</h4><p data-astro-cid-rfjr2gyk>Verificá los datos declarados antes de confirmar la mesa.</p><div class="proto-sum-block" data-astro-cid-rfjr2gyk><div class="sum-head" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>1. Datos del Estudiante</span><span class="badge-done" data-astro-cid-rfjr2gyk>Completo</span></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Estudiante</span><strong data-astro-cid-rfjr2gyk>Jaime Ariel</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>DNI / Cohorte</span><strong class="mono" data-astro-cid-rfjr2gyk>DNI 34945012 - Ingreso 2023</strong></div></div><div class="proto-sum-block" data-astro-cid-rfjr2gyk><div class="sum-head" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>2. Mesa Examinadora</span><span class="badge-done" data-astro-cid-rfjr2gyk>Listo</span></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Tecnicatura</span><strong data-astro-cid-rfjr2gyk>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Asignatura</span><strong data-astro-cid-rfjr2gyk>Algebra y lógica</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Año y Condición</span><strong data-astro-cid-rfjr2gyk>2° Año - Condición Regular</strong></div><div class="sum-row" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Cátedra</span><strong data-astro-cid-rfjr2gyk>Cursada 2026 - Docente Algebra y lógica</strong></div></div></div></aside></div></section><!-- PANTALLA 03: PASO 3 (COMPROBANTE OFICIAL SHA-256) --><section class="proto-screen-frame" data-astro-cid-rfjr2gyk><div class="proto-screen-bar" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>PANTALLA 03 / 04 - PASO 3: COMPROBANTE OFICIAL DEL ALUMNO (SIN DESCARGA DE PADRÓN)</span><code data-astro-cid-rfjr2gyk>Huso Horario: America/Argentina/Buenos_Aires (GMT-3)</code></div><div class="proto-bezel-shell" data-astro-cid-rfjr2gyk><div class="proto-card" data-astro-cid-rfjr2gyk><div class="proto-ticket" data-astro-cid-rfjr2gyk><div class="proto-ticket-head" data-astro-cid-rfjr2gyk><div class="ticket-brand" data-astro-cid-rfjr2gyk><img src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png" alt="Escudo ISFT 191" width="40" height="40" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><span class="kicker" data-astro-cid-rfjr2gyk>INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191 - BAHÍA BLANCA</span><strong data-astro-cid-rfjr2gyk>CONSTANCIA DE INSCRIPCIÓN A MESA EXAMINADORA</strong></div></div><span class="stamp-sha" data-astro-cid-rfjr2gyk>VERIFICADO SHA-256</span></div><div class="proto-ticket-meta" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>CÓDIGO DE COMPROBANTE</span><strong class="mono" data-astro-cid-rfjr2gyk>ISFT-2026-TEST01</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>FECHA Y HORA DE REGISTRO</span><strong class="mono" data-astro-cid-rfjr2gyk>27/10/2026, 14:47:15 (GMT-3)</strong></div></div><div class="proto-ticket-grid" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>APELLIDO Y NOMBRE</span><strong data-astro-cid-rfjr2gyk>Jaime Ariel</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>DOCUMENTO (DNI)</span><strong class="mono" data-astro-cid-rfjr2gyk>34945012</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>CORREO ELECTRÓNICO</span><strong data-astro-cid-rfjr2gyk>arij.dev@gmail.com</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>TELÉFONO / COHORTE</span><strong class="mono" data-astro-cid-rfjr2gyk>2914400469 - Cohorte 2023</strong></div><div class="full" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>TECNICATURA Y RESOLUCIÓN MINISTERIAL</span><strong data-astro-cid-rfjr2gyk>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</strong></div><div class="full highlight" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>ASIGNATURA INSCRIPTA</span><strong data-astro-cid-rfjr2gyk>Algebra y lógica [SOFT-203]</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>AÑO DEL PLAN / CONDICIÓN</span><strong data-astro-cid-rfjr2gyk>Segundo (2° Año) - Regular</strong></div><div data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>CICLO DE CURSADA / CÁTEDRA</span><strong data-astro-cid-rfjr2gyk>Ciclo 2026 - Docente Algebra y lógica</strong></div></div><div class="proto-ticket-foot" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>Carácter de Declaración Jurada - Secretaría Académica ISFT N° 191</span><span class="mono" data-astro-cid-rfjr2gyk>Padrón Homogéneo Oficial</span></div></div></div></div></section><!-- PANTALLA 04: CORREO AUTOMATIZADO QUE RECIBE EL DOCENTE CADA 15 DÍAS --><section class="proto-screen-frame" data-astro-cid-rfjr2gyk><div class="proto-screen-bar" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>PANTALLA 04 / 04 - BACKOFFICE: CORREO QUINCENAL AUTOMÁTICO AL DOCENTE CON EXCEL ADJUNTO</span><code data-astro-cid-rfjr2gyk>Origen: Directorio_Docentes + Inscripciones_Finales</code></div><div class="email-preview-card" data-astro-cid-rfjr2gyk><div class="email-meta-bar" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>De:</strong> Secretaría Académica ISFT N° 191</div><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Para:</strong> Docente Algebra y lógica &lt;arij.dev@gmail.com&gt;</div><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Asunto:</strong> [ISFT N° 191] Nómina de Inscriptos - Algebra y lógica (2 inscriptos)</div><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Adjunto:</strong> <code data-astro-cid-rfjr2gyk>Nomina_Inscriptos_SOFT-203.csv</code> (Compatible Excel)</div></div><div class="email-body-frame" data-astro-cid-rfjr2gyk><div class="email-banner" data-astro-cid-rfjr2gyk><span data-astro-cid-rfjr2gyk>ISFT N° 191 - BAHÍA BLANCA - SECRETARÍA ACADÉMICA</span><h3 data-astro-cid-rfjr2gyk>Nómina de Inscriptos a Mesa Examinadora</h3></div><div class="email-content" data-astro-cid-rfjr2gyk><p data-astro-cid-rfjr2gyk>Estimado/a <strong data-astro-cid-rfjr2gyk>Docente Algebra y lógica</strong>,</p><p data-astro-cid-rfjr2gyk>Se remite el listado actualizado de estudiantes inscriptos hasta el <strong data-astro-cid-rfjr2gyk>27/10/2026 14:50 (GMT-3)</strong> para la mesa examinadora de:</p><div class="email-summary-box" data-astro-cid-rfjr2gyk><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Carrera:</strong> Tecnicatura Superior en Desarrollo de Software (SOFT)</div><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Asignatura:</strong> Algebra y lógica [SOFT-203]</div><div data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Total de inscriptos registrados:</strong> 2 estudiantes</div></div><table class="email-table" data-astro-cid-rfjr2gyk><thead data-astro-cid-rfjr2gyk><tr data-astro-cid-rfjr2gyk><th data-astro-cid-rfjr2gyk>#</th><th data-astro-cid-rfjr2gyk>DNI</th><th data-astro-cid-rfjr2gyk>Apellido y Nombre</th><th data-astro-cid-rfjr2gyk>Condición</th><th data-astro-cid-rfjr2gyk>Cursada</th><th data-astro-cid-rfjr2gyk>Correo</th><th data-astro-cid-rfjr2gyk>Comprobante</th></tr></thead><tbody data-astro-cid-rfjr2gyk><tr data-astro-cid-rfjr2gyk><td data-astro-cid-rfjr2gyk>1</td><td class="mono" data-astro-cid-rfjr2gyk>34945012</td><td data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Jaime Ariel</strong></td><td data-astro-cid-rfjr2gyk>Regular</td><td data-astro-cid-rfjr2gyk>2026</td><td data-astro-cid-rfjr2gyk>arij.dev@gmail.com</td><td class="mono" data-astro-cid-rfjr2gyk>ISFT-2026-TEST01</td></tr><tr data-astro-cid-rfjr2gyk><td data-astro-cid-rfjr2gyk>2</td><td class="mono" data-astro-cid-rfjr2gyk>42819402</td><td data-astro-cid-rfjr2gyk><strong data-astro-cid-rfjr2gyk>Pérez Juan Ignacio</strong></td><td data-astro-cid-rfjr2gyk>Regular</td><td data-astro-cid-rfjr2gyk>2026</td><td data-astro-cid-rfjr2gyk>alumno.9402@isft191.edu.ar</td><td class="mono" data-astro-cid-rfjr2gyk>ISFT-2026-8B2F1A</td></tr></tbody></table></div></div></div></section></div></main></body></html>

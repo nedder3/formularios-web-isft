@@ -2,314 +2,190 @@
 import Layout from '../../layouts/Layout.astro';
 ---
 
-<Layout title="2. Sistema de Diseño - ISFT N° 191" embed={true}>
-  <div class="figma-page-sheet">
-    <!-- CABECERA EDITORIAL DE LÁMINA 02 -->
-    <header class="sheet-hero">
-      <div class="sheet-hero-top">
-        <span class="sheet-badge">PÁGINA 02 DE 03 - BRANDING, TOKENS, UI KIT & WIREFRAMES</span>
-        <span class="sheet-meta">ISFT N° 191 - BAHÍA BLANCA - DESIGN SYSTEM v1.2</span>
-      </div>
-      <h1>Sistema de Diseño y Branding Kit</h1>
-      <p>
-        Especificación de tokens cromáticos con verificación WCAG 2.1 AAA/AA, escala tipográfica tabular, componentes atómicos del formulario y wireframes estructurales de grilla 65% / 35%.
-      </p>
+<Layout title="Archivo Figma / Página 2 - Sistema de Diseño (Branding)" embed={true}>
+  <div class="editorial-sheet">
+    <!-- CABECERA EDITORIAL IDÉNTICA A TU PLANTILLA DE FIGMA -->
+    <header class="editorial-header">
+      <span class="editorial-kicker">ARCHIVO FIGMA / PÁGINA 2</span>
+      <h1>Sistema de Diseño (Branding ISFT N° 191)</h1>
     </header>
 
-    <!-- 01. BRANDING KIT INSTITUCIONAL -->
-    <section class="sheet-section">
-      <div class="section-head">
-        <span class="section-kicker">01 - BRANDING KIT INSTITUCIONAL</span>
-        <h2>Emblema Oficial, Voz de Marca y Reglas de Composición</h2>
-      </div>
-
-      <div class="branding-grid">
-        <div class="brand-logo-showcase">
-          <div class="logo-box light">
-            <img src="/logo-isft191.png" alt="Escudo ISFT 191 sobre fondo claro" width="84" height="84" />
-            <span>Aplicación sobre Superficie Clara (#FFFFFF)</span>
-          </div>
-          <div class="logo-box dark">
-            <img src="/logo-isft191.png" alt="Escudo ISFT 191 sobre fondo oscuro" width="84" height="84" />
-            <span>Aplicación Institucional (#3438AA)</span>
+    <!-- 1. BRANDING KIT & EMBLEMA OFICIAL -->
+    <section class="editorial-section">
+      <h2>Identidad Institucional y Emblema Oficial</h2>
+      <div class="branding-banner-box">
+        <div class="branding-emblem-col">
+          <img
+            src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png"
+            alt="Escudo Oficial ISFT N° 191"
+            width="78"
+            height="78"
+          />
+          <div>
+            <strong>ISFT N° 191 - Bahía Blanca</strong>
+            <span>Instituto Superior de Formación Técnica N° 191</span>
           </div>
         </div>
-
-        <div class="brand-rules-card">
-          <h3>Directrices Editoriales y de Interfaz</h3>
-          <ul class="brand-rules-list">
-            <li>
-              <strong>Alineación con isft191.edu.ar:</strong> Conserva el azul profundo institucional (<code>#3438AA</code>) y el filete superior dorado ocre (<code>#C97026</code>) como firma visual.
-            </li>
-            <li>
-              <strong>Cero Emojis de Sistema Operativo:</strong> Toda la iconografía emplea trazos vectoriales SVG monocromáticos de <code>2px</code> para mantener sobriedad académica.
-            </li>
-            <li>
-              <strong>Separadores Normalizados:</strong> Uso exclusivo del guion medio con espacios (<code> - </code>), eliminando barras inclinadas (<code>//</code>) o viñetas inconsistentes.
-            </li>
-            <li>
-              <strong>Foco Exclusivo en Mesas Examinadoras:</strong> Sin menús externos ni distractores ajenos al trámite de inscripción.
-            </li>
-          </ul>
+        <div class="branding-rules-col">
+          <p>
+            <strong>Concepto Framer Academic Portal:</strong> Alineado cromáticamente con <code>isft191.edu.ar</code>. Utiliza contenedores de doble bisel (<em>Double-Bezel</em>), iconografía vectorial pura (cero emojis), separadores unificados con guion medio (<code> - </code>) y foco exclusivo en la autogestión de mesas examinadoras.
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- 02. PALETA DE COLORES Y TOKENS -->
-    <section class="sheet-section">
-      <div class="section-head">
-        <span class="section-kicker">02 - PALETA DE COLORES Y ACCESIBILIDAD WCAG 2.1</span>
-        <h2>Tokens Cromáticos Primarios, de Superficie y Semánticos</h2>
-      </div>
-
-      <div class="color-tokens-grid">
-        <div class="token-card">
-          <div class="token-swatch" style="background:#3438AA;color:#FFFFFF;">
-            <span>AAA 8.65:1</span>
-            <strong>#3438AA</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Brand Primary</strong>
-            <code>--brand-primary</code>
-            <p>Cabecera, botones principales, bordes de foco y acentos activos.</p>
+    <!-- 2. PALETA DE COLORES (5 TARJETAS VERTICALES COMO EN TU CAPTURA) -->
+    <section class="editorial-section">
+      <h2>Paleta de Colores</h2>
+      <div class="palette-5col">
+        <div class="swatch-vertical">
+          <div class="swatch-top" style="background: #3438AA;"></div>
+          <div class="swatch-body">
+            <strong>BRAND PRIMARY</strong>
+            <code>#3438AA</code>
+            <p>Azul institucional principal (AAA 8.65:1). Usado en cabecera, botones primarios, pasos activos y bordes de foco.</p>
           </div>
         </div>
 
-        <div class="token-card">
-          <div class="token-swatch" style="background:#252882;color:#FFFFFF;">
-            <span>AAA 11.4:1</span>
-            <strong>#252882</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Brand Primary Dark</strong>
-            <code>--brand-primary-dark</code>
-            <p>Estados hover y presión de botones primarios.</p>
+        <div class="swatch-vertical">
+          <div class="swatch-top" style="background: #252882;"></div>
+          <div class="swatch-body">
+            <strong>PRIMARY DARK</strong>
+            <code>#252882</code>
+            <p>Azul profundo (AAA 11.4:1). Estado hover de botones principales, acentos de contraste y textos destacados.</p>
           </div>
         </div>
 
-        <div class="token-card">
-          <div class="token-swatch" style="background:#EEF0FF;color:#3438AA;border:1px solid #C7D2FE;">
-            <span>Surface</span>
-            <strong>#EEF0FF</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Brand Primary Soft</strong>
-            <code>--brand-primary-soft</code>
-            <p>Fondos de píldoras seleccionadas, avatares y etiquetas de paso.</p>
+        <div class="swatch-vertical">
+          <div class="swatch-top" style="background: #C97026;"></div>
+          <div class="swatch-body">
+            <strong>ACCENT OCHRE</strong>
+            <code>#C97026</code>
+            <p>Dorado ocre institucional. Línea superior de cabecera, etiquetas de normativa académica y sellos de verificación.</p>
           </div>
         </div>
 
-        <div class="token-card">
-          <div class="token-swatch" style="background:#C97026;color:#FFFFFF;">
-            <span>AA 4.52:1</span>
-            <strong>#C97026</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Brand Accent Ocre</strong>
-            <code>--brand-accent</code>
-            <p>Borde superior institucional, indicadores de normativa y sellos.</p>
+        <div class="swatch-vertical">
+          <div class="swatch-top" style="background: #1B1F3B;"></div>
+          <div class="swatch-body">
+            <strong>DEEP NAVY TEXT</strong>
+            <code>#1B1F3B</code>
+            <p>Texto principal de lectura (AAA 14.8:1). Garantiza máxima legibilidad en etiquetas, selectores y comprobantes.</p>
           </div>
         </div>
 
-        <div class="token-card">
-          <div class="token-swatch" style="background:#F6F8FC;color:#1B1F3B;border:1px solid #DBE2EF;">
-            <span>Canvas</span>
-            <strong>#F6F8FC</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Background Canvas</strong>
-            <code>--bg-canvas</code>
-            <p>Fondo general de descanso visual para resaltar las tarjetas blancas.</p>
-          </div>
-        </div>
-
-        <div class="token-card">
-          <div class="token-swatch" style="background:#EEF2F9;color:#1B1F3B;border:1px solid #DDE3F0;">
-            <span>Bezel 6px</span>
-            <strong>#EEF2F9</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Framer Shell Bezel</strong>
-            <code>--framer-shell-bg</code>
-            <p>Marco perimetral exterior Double-Bezel de los contenedores.</p>
-          </div>
-        </div>
-
-        <div class="token-card">
-          <div class="token-swatch" style="background:#1B1F3B;color:#FFFFFF;">
-            <span>AAA 14.8:1</span>
-            <strong>#1B1F3B</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Text Main</strong>
-            <code>--text-main</code>
-            <p>Títulos, etiquetas de campos y datos ingresados por el alumno.</p>
-          </div>
-        </div>
-
-        <div class="token-card">
-          <div class="token-swatch" style="background:#15803D;color:#FFFFFF;">
-            <span>Semantic</span>
-            <strong>#15803D</strong>
-          </div>
-          <div class="token-meta">
-            <strong>Success / Verificado</strong>
-            <code>--success</code>
-            <p>Confirmación de inscripción registrada y pasos completados.</p>
+        <div class="swatch-vertical">
+          <div class="swatch-top" style="background: #EEF2F9; border-bottom: 1px solid #DBE2EF;"></div>
+          <div class="swatch-body">
+            <strong>FRAMER BEZEL</strong>
+            <code>#EEF2F9 / #F6F8FC</code>
+            <p>Superficie de fondo general y marco exterior de 6px (Double-Bezel) que enmarca las tarjetas blancas (#FFFFFF).</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 03. SISTEMA TIPOGRÁFICO -->
-    <section class="sheet-section">
-      <div class="section-head">
-        <span class="section-kicker">03 - TIPOGRAFÍA Y ESCALA MODULAR</span>
-        <h2>Familias Tipográficas y Reglas de Números Tabulares</h2>
-      </div>
+    <!-- 3. TIPOGRAFÍAS (CAJAS EDITORIALES COMO EN TU CAPTURA) -->
+    <section class="editorial-section">
+      <h2>Tipografías</h2>
 
-      <div class="type-grid">
-        <div class="type-card">
-          <span class="type-badge">DISPLAY & HEADINGS</span>
-          <div class="type-sample display-sample">Plus Jakarta Sans</div>
-          <div class="type-weights">Pesos: SemiBold (600) - Bold (700) - ExtraBold (800)</div>
-          <p>Diseñada para encabezados institucionales nítidos con tracking ligeramente cerrado (<code>-0.02em</code>).</p>
+      <div class="type-specimen-box">
+        <div class="specimen-kicker">TIPOGRAFÍA DE TÍTULOS E INSTITUCIONAL (SANS GEOMÉTRICA DE ALTO IMPACTO)</div>
+
+        <div class="specimen-item">
+          <span class="specimen-meta">Plus Jakarta Sans - H1 (ExtraBold 36px / Line-height 1.15)</span>
+          <div class="sample-h1">Inscripción a Mesas de Exámenes Finales</div>
         </div>
 
-        <div class="type-card">
-          <span class="type-badge">UI & FORM CONTROLS</span>
-          <div class="type-sample sans-sample">Inter Variable</div>
-          <div class="type-weights">Pesos: Regular (400) - Medium (500) - SemiBold (600)</div>
-          <p>Máxima legibilidad en selectores de las 211 materias, ayudas contextuales y mensajes de validación.</p>
+        <div class="specimen-item">
+          <span class="specimen-meta">Plus Jakarta Sans - H2 (Bold 24px / Line-height 1.25)</span>
+          <div class="sample-h2">Identificación Personal del Estudiante</div>
         </div>
 
-        <div class="type-card">
-          <span class="type-badge">TABULAR DATA & CRYPTO</span>
-          <div class="type-sample mono-sample">JetBrains Mono</div>
-          <div class="type-weights">Pesos: Medium (500) - SemiBold (600) - Bold (700)</div>
-          <p>Con <code>font-variant-numeric: tabular-nums</code> para DNI (<code>34945012</code>), códigos (<code>SOFT-203</code>) y hashes SHA-256.</p>
+        <div class="specimen-item">
+          <span class="specimen-meta">Plus Jakarta Sans - Subtítulo de Tarjeta (SemiBold 18px)</span>
+          <div class="sample-h3">Resumen de Inscripción y Padrón Curricular Oficial</div>
         </div>
       </div>
-    </section>
 
-    <!-- 04. UI KIT Y COMPONENTES ATÓMICOS -->
-    <section class="sheet-section">
-      <div class="section-head">
-        <span class="section-kicker">04 - DESIGN SYSTEM & UI KIT</span>
-        <h2>Componentes Interactivos y Estados de Validación</h2>
-      </div>
+      <div class="type-specimen-box">
+        <div class="specimen-kicker">TIPOGRAFÍA DE CUERPO, CONTROLES Y DATOS TABULARES (PRECISIÓN NUMÉRICA)</div>
 
-      <div class="uikit-grid">
-        <!-- Botones -->
-        <div class="uikit-box">
-          <h4>Jerarquía de Botones (Altura mínima 48px)</h4>
-          <div class="uikit-row">
-            <button type="button" class="demo-btn primary">Confirmar Inscripción a Final</button>
-            <button type="button" class="demo-btn secondary">Imprimir / Guardar PDF</button>
+        <div class="specimen-item">
+          <span class="specimen-meta">Inter - Etiquetas y Selectores de Formulario (SemiBold 15px)</span>
+          <div class="sample-label">Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</div>
+        </div>
+
+        <div class="specimen-item">
+          <span class="specimen-meta">Inter - Cuerpo e Instrucciones (Regular 14px)</span>
+          <div class="sample-body">
+            Registrá una solicitud por cada asignatura a rendir. Tus datos personales quedan recordados localmente para agilizar la carga si te anotás a más de un examen final.
           </div>
         </div>
 
-        <!-- Píldoras de Año -->
-        <div class="uikit-box">
-          <h4>Radio Pills Curriculares con Contador Dinámico</h4>
-          <div class="uikit-pills">
-            <div class="demo-pill">
-              <span class="dot"></span>
-              <span>1° Año (Primero)</span>
-              <span class="count">8</span>
-            </div>
-            <div class="demo-pill active">
-              <span class="dot active"></span>
-              <span>2° Año (Segundo)</span>
-              <span class="count active">8</span>
-            </div>
-            <div class="demo-pill">
-              <span class="dot"></span>
-              <span>3° Año (Tercero)</span>
-              <span class="count">6</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Estados de Input -->
-        <div class="uikit-box full">
-          <h4>Estados de Campos de Entrada (Normal / Focus Activo / Error Inline)</h4>
-          <div class="inputs-demo-grid">
-            <div class="demo-field">
-              <label>Estado Normal / Completado</label>
-              <div class="demo-input">Jaime Ariel</div>
-              <span class="demo-hint">Sin abreviaturas, tal como figura en el DNI</span>
-            </div>
-            <div class="demo-field">
-              <label>Estado Autocompletado Determinista (Paso 2)</label>
-              <div class="demo-input focus">Docente Algebra y lógica</div>
-              <span class="demo-hint">Vinculado automáticamente con Directorio_Docentes</span>
-            </div>
-            <div class="demo-field">
-              <label>Estado de Error Inline (Heurística H5)</label>
-              <div class="demo-input error">1234</div>
-              <span class="demo-error">Ingresá un DNI válido de 7 a 9 dígitos numéricos.</span>
-            </div>
-          </div>
+        <div class="specimen-item">
+          <span class="specimen-meta">JetBrains Mono - DNI, Códigos Curriculares y Comprobante SHA-256 (Bold 15px - tabular-nums)</span>
+          <div class="sample-mono">DNI 34945012 - SOFT-203 - ISFT-2026-TEST01 - 27/10/2026 14:47 (GMT-3)</div>
         </div>
       </div>
     </section>
 
-    <!-- 05. WIREFRAMES ESTRUCTURALES -->
-    <section class="sheet-section">
-      <div class="section-head">
-        <span class="section-kicker">05 - WIREFRAMES DE ARQUITECTURA DE INFORMACIÓN</span>
-        <h2>Distribución Espacial 65% Formulario / 35% Resumen Fijo</h2>
+    <!-- 4. COMPONENTES DEL SISTEMA (ESTADOS NORMAL / HOVER / ACTIVO + INPUTS) -->
+    <section class="editorial-section">
+      <h2>Componentes del Sistema</h2>
+
+      <div class="components-showcase-box">
+        <div class="specimen-kicker">VARIANTES DE BOTONES INTERACTIVOS Y PÍLDORAS CURRICULARES</div>
+
+        <div class="states-3col">
+          <div class="state-card">
+            <span class="state-label">01. ESTADO NORMAL</span>
+            <div class="btn-sim primary-normal">Confirmar Inscripción a Final</div>
+            <div class="btn-sim secondary-normal">Imprimir / Guardar PDF</div>
+          </div>
+
+          <div class="state-card">
+            <span class="state-label">02. ESTADO HOVER (PASAR MOUSE)</span>
+            <div class="btn-sim primary-hover">Confirmar Inscripción a Final</div>
+            <div class="btn-sim secondary-hover">Imprimir / Guardar PDF</div>
+          </div>
+
+          <div class="state-card">
+            <span class="state-label">03. ESTADO SELECCIONADO / ACTIVO</span>
+            <div class="pill-sim-active">
+              <span>● 2° Año (Segundo)</span>
+              <code>8 materias</code>
+            </div>
+            <div class="input-sim-auto">Docente Algebra y lógica</div>
+          </div>
+        </div>
       </div>
 
-      <div class="wireframes-3col">
-        <div class="wf-card">
-          <div class="wf-card-head">WIREFRAME 01 - PASO 1: LEGAJO PERSONAL</div>
-          <div class="wf-canvas">
-            <div class="wf-bar">Header Institucional ISFT N° 191</div>
-            <div class="wf-stepper">[1. Datos Personales] ---- [2. Materia] ---- [3. Comprobante]</div>
-            <div class="wf-split">
-              <div class="wf-col-left">
-                <div class="wf-block">Bloque A: Nombre Completo + DNI + Cohorte</div>
-                <div class="wf-block">Bloque B: Teléfono Móvil + Correo Electrónico</div>
-                <div class="wf-cta">[Continuar a Selección de Materia -&gt;]</div>
-              </div>
-              <div class="wf-col-right">
-                <div class="wf-block">Resumen Fijo (Sticky)<br/>1. Estudiante<br/>2. Mesa</div>
-              </div>
+      <div class="components-showcase-box">
+        <div class="specimen-kicker">WIREFRAMES ESTRUCTURALES (GRILLA 65% FORMULARIO / 35% RESUMEN FIJO)</div>
+
+        <div class="states-3col">
+          <div class="wf-mini-card">
+            <span class="state-label">PASO 1 - IDENTIFICACIÓN</span>
+            <div class="wf-mini-split">
+              <div class="wf-left">Formulario Personal (65%)<br/>Nombre, DNI, Cohorte, Mail</div>
+              <div class="wf-right">Resumen Fijo (35%)</div>
             </div>
           </div>
-        </div>
 
-        <div class="wf-card">
-          <div class="wf-card-head">WIREFRAME 02 - PASO 2: SELECCIÓN CURRICULAR</div>
-          <div class="wf-canvas">
-            <div class="wf-bar">Píldora de Legajo Activo Recordado [Modificar]</div>
-            <div class="wf-stepper">[✓ Paso 1] ==== [2. Asignatura] ---- [3. Comprobante]</div>
-            <div class="wf-split">
-              <div class="wf-col-left">
-                <div class="wf-block">Selector de Carrera (8 Planes) + Píldoras 1°/2°/3° Año</div>
-                <div class="wf-block">Buscador + Asignatura + Condición + Docente Auto</div>
-                <div class="wf-cta">[Confirmar Inscripción a Final]</div>
-              </div>
-              <div class="wf-col-right">
-                <div class="wf-block">Resumen Fijo Actualizado en Vivo</div>
-              </div>
+          <div class="wf-mini-card">
+            <span class="state-label">PASO 2 - CASCADA DE MATERIA</span>
+            <div class="wf-mini-split">
+              <div class="wf-left">Carrera - Año - Materia (65%)<br/>Autocompletado Docente</div>
+              <div class="wf-right">Resumen Fijo (35%)</div>
             </div>
           </div>
-        </div>
 
-        <div class="wf-card">
-          <div class="wf-card-head">WIREFRAME 03 - PASO 3: COMPROBANTE OFICIAL</div>
-          <div class="wf-canvas">
-            <div class="wf-bar">Banner de Confirmación Oficial</div>
-            <div class="wf-stepper">[✓ Paso 1] ==== [✓ Paso 2] ==== [3. Comprobante]</div>
-            <div class="wf-ticket-wire">
-              <strong>CONSTANCIA DE INSCRIPCIÓN - SHA-256</strong>
-              <span>Código ISFT-2026-XXXXXX | Fecha Hora GMT-3</span>
-              <span>Grilla 2x4: Alumno, DNI, Carrera, Materia, Condición, Cátedra</span>
+          <div class="wf-mini-card">
+            <span class="state-label">PASO 3 - COMPROBANTE SHA-256</span>
+            <div class="wf-mini-full">
+              Ticket Oficial ISFT N° 191 (Imprimible PDF)<br/>+ Impacto en Google Sheet y Mail Quincenal al Docente
             </div>
-            <div class="wf-cta">[+ Inscribirme a otra materia] [Imprimir / Guardar PDF]</div>
           </div>
         </div>
       </div>
@@ -318,471 +194,305 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <style>
-  .figma-page-sheet {
-    max-width: 1440px;
+  .editorial-sheet {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 3rem 2.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2.75rem;
-    background: #F6F8FC;
-  }
-
-  .sheet-hero {
-    background: #1B1F3B;
-    color: #FFFFFF;
-    padding: 2.5rem 3rem;
-    border-radius: 20px;
-    border-bottom: 5px solid #3438AA;
-  }
-
-  .sheet-hero-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-  }
-
-  .sheet-badge {
-    background: #3438AA;
-    padding: 0.35rem 0.75rem;
-    border-radius: 6px;
-    font-weight: 700;
-  }
-
-  .sheet-hero h1 {
-    font-family: var(--font-display);
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 0.65rem;
-  }
-
-  .sheet-hero p {
-    font-size: 1.05rem;
-    line-height: 1.6;
-    max-width: 920px;
-    color: #CBD5E1;
-  }
-
-  .sheet-section {
+    padding: 4rem 3.5rem;
     background: #FFFFFF;
-    border: 1px solid #DBE2EF;
-    border-radius: 20px;
-    padding: 2.25rem;
+    color: #1B1F3B;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 3.25rem;
   }
 
-  .section-head {
+  .editorial-header {
     border-bottom: 1px solid #E2E8F0;
-    padding-bottom: 0.9rem;
+    padding-bottom: 1.5rem;
   }
 
-  .section-kicker {
+  .editorial-kicker {
     display: block;
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 700;
-    color: #C97026;
-    letter-spacing: 0.06em;
-    margin-bottom: 0.25rem;
-  }
-
-  .section-head h2 {
-    font-family: var(--font-display);
-    font-size: 1.45rem;
-    color: #1B1F3B;
-    font-weight: 800;
-  }
-
-  .branding-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: 1.5rem;
-  }
-
-  .brand-logo-showcase {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-
-  .logo-box {
-    border-radius: 16px;
-    padding: 2rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-
-  .logo-box.light {
-    background: #F8FAFC;
-    border: 1px solid #DBE2EF;
-    color: #1B1F3B;
-  }
-
-  .logo-box.dark {
-    background: #3438AA;
-    color: #FFFFFF;
-  }
-
-  .brand-rules-card {
-    background: #F8FAFC;
-    border: 1px solid #DBE2EF;
-    border-radius: 16px;
-    padding: 1.5rem 1.75rem;
-  }
-
-  .brand-rules-card h3 {
-    font-size: 1.1rem;
-    color: #1B1F3B;
-    margin-bottom: 0.85rem;
-  }
-
-  .brand-rules-list {
-    padding-left: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.65rem;
-    font-size: 0.88rem;
-    color: #4A516D;
-    line-height: 1.5;
-  }
-
-  .color-tokens-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.15rem;
-  }
-
-  .token-card {
-    border: 1px solid #DBE2EF;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #FFFFFF;
-  }
-
-  .token-swatch {
-    height: 92px;
-    padding: 0.85rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-family: var(--font-mono);
-  }
-
-  .token-swatch span {
-    font-size: 0.7rem;
-    opacity: 0.9;
-  }
-
-  .token-swatch strong {
-    font-size: 1.05rem;
-  }
-
-  .token-meta {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .token-meta strong {
-    font-size: 0.92rem;
-    color: #1B1F3B;
-  }
-
-  .token-meta code {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: #3438AA;
-  }
-
-  .token-meta p {
-    font-size: 0.78rem;
+    letter-spacing: 0.12em;
     color: #646D8C;
-    margin-top: 0.2rem;
-    line-height: 1.4;
+    margin-bottom: 0.5rem;
   }
 
-  .type-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-  }
-
-  .type-card {
-    background: #F8FAFC;
-    border: 1px solid #DBE2EF;
-    border-radius: 16px;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .type-badge {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #3438AA;
-  }
-
-  .type-sample {
-    font-size: 1.85rem;
-    color: #1B1F3B;
-    font-weight: 800;
-  }
-
-  .display-sample {
+  .editorial-header h1 {
     font-family: var(--font-display);
+    font-size: 2.35rem;
+    font-weight: 800;
+    color: #1B1F3B;
+    letter-spacing: -0.02em;
   }
 
-  .sans-sample {
-    font-family: var(--font-sans);
-  }
-
-  .mono-sample {
-    font-family: var(--font-mono);
-  }
-
-  .type-weights {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #C97026;
-  }
-
-  .type-card p {
-    font-size: 0.84rem;
-    color: #4A516D;
-    line-height: 1.5;
-  }
-
-  .uikit-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-
-  .uikit-box {
-    background: #F8FAFC;
-    border: 1px solid #DBE2EF;
-    border-radius: 16px;
-    padding: 1.4rem;
+  .editorial-section {
     display: flex;
     flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .editorial-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1B1F3B;
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 0.65rem;
+  }
+
+  .branding-banner-box {
+    border: 1px solid #E2E8F0;
+    border-left: 4px solid #3438AA;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 1.5rem;
+    align-items: center;
+    background: #F8FAFC;
+  }
+
+  .branding-emblem-col {
+    display: flex;
+    align-items: center;
     gap: 1rem;
   }
 
-  .uikit-box.full {
-    grid-column: 1 / -1;
-  }
-
-  .uikit-box h4 {
-    font-size: 0.92rem;
-    color: #1B1F3B;
-    font-weight: 800;
-  }
-
-  .uikit-row {
-    display: flex;
-    gap: 0.85rem;
-    flex-wrap: wrap;
-  }
-
-  .demo-btn {
-    padding: 0.75rem 1.35rem;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.88rem;
-    border: 1px solid transparent;
-  }
-
-  .demo-btn.primary {
-    background: #3438AA;
-    color: #FFFFFF;
-  }
-
-  .demo-btn.secondary {
-    background: #FFFFFF;
-    color: #1B1F3B;
-    border-color: #CBD5E1;
-  }
-
-  .uikit-pills {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.65rem;
-  }
-
-  .demo-pill {
-    background: #FFFFFF;
-    border: 1px solid #DBE2EF;
-    border-radius: 10px;
-    padding: 0.7rem 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: #1B1F3B;
-  }
-
-  .demo-pill.active {
-    background: #EEF0FF;
-    border-color: #3438AA;
+  .branding-emblem-col strong {
+    display: block;
+    font-size: 1.05rem;
     color: #3438AA;
   }
 
-  .demo-pill .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #94A3B8;
+  .branding-emblem-col span {
+    font-size: 0.82rem;
+    color: #646D8C;
   }
 
-  .demo-pill .dot.active {
-    border-color: #3438AA;
-    background: #3438AA;
+  .branding-rules-col p {
+    font-size: 0.88rem;
+    color: #4A516D;
+    line-height: 1.6;
   }
 
-  .demo-pill .count {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    background: #F1F5F9;
-    padding: 0.15rem 0.45rem;
-    border-radius: 6px;
-  }
-
-  .demo-pill .count.active {
-    background: #3438AA;
-    color: #FFFFFF;
-  }
-
-  .inputs-demo-grid {
+  .palette-5col {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1.1rem;
   }
 
-  .demo-field {
+  .swatch-vertical {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #FFFFFF;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
   }
 
-  .demo-field label {
+  .swatch-top {
+    height: 115px;
+    width: 100%;
+  }
+
+  .swatch-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .swatch-body strong {
     font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #1B1F3B;
+  }
+
+  .swatch-body code {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: #646D8C;
+  }
+
+  .swatch-body p {
+    font-size: 0.76rem;
+    color: #4A516D;
+    line-height: 1.45;
+    margin-top: 0.25rem;
+  }
+
+  .type-specimen-box,
+  .components-showcase-box {
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .specimen-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #646D8C;
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 0.65rem;
+  }
+
+  .specimen-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .specimen-meta {
+    font-size: 0.75rem;
+    color: #646D8C;
+  }
+
+  .sample-h1 {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1B1F3B;
+    letter-spacing: -0.02em;
+  }
+
+  .sample-h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
     font-weight: 700;
     color: #1B1F3B;
   }
 
-  .demo-input {
-    background: #FFFFFF;
-    border: 1px solid #CBD5E1;
-    border-radius: 10px;
-    padding: 0.7rem 0.9rem;
-    font-size: 0.88rem;
+  .sample-h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #3438AA;
+  }
+
+  .sample-label {
+    font-family: var(--font-sans);
+    font-size: 0.96rem;
+    font-weight: 600;
     color: #1B1F3B;
   }
 
-  .demo-input.focus {
-    border-color: #3438AA;
-    box-shadow: 0 0 0 3px rgba(52, 56, 170, 0.14);
-    font-weight: 600;
+  .sample-body {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: #4A516D;
+    line-height: 1.55;
   }
 
-  .demo-input.error {
-    border-color: #DC2626;
-    background: #FEF2F2;
+  .sample-mono {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1B1F3B;
   }
 
-  .demo-hint {
-    font-size: 0.74rem;
-    color: #646D8C;
-  }
-
-  .demo-error {
-    font-size: 0.74rem;
-    color: #DC2626;
-    font-weight: 600;
-  }
-
-  .wireframes-3col {
+  .states-3col {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.25rem;
   }
 
-  .wf-card {
-    border: 1px solid #CBD5E1;
-    border-radius: 14px;
-    overflow: hidden;
+  .state-card,
+  .wf-mini-card {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 1.25rem;
     background: #F8FAFC;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
-  .wf-card-head {
-    background: #1B1F3B;
-    color: #FFFFFF;
+  .state-label {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    padding: 0.65rem 1rem;
-  }
-
-  .wf-canvas {
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .wf-bar,
-  .wf-stepper,
-  .wf-block,
-  .wf-cta,
-  .wf-ticket-wire {
-    background: #FFFFFF;
-    border: 1px dashed #94A3B8;
-    border-radius: 8px;
-    padding: 0.6rem 0.75rem;
-    font-size: 0.75rem;
     color: #4A516D;
+    letter-spacing: 0.05em;
   }
 
-  .wf-split {
-    display: grid;
-    grid-template-columns: 1.75fr 1fr;
-    gap: 0.55rem;
-  }
-
-  .wf-col-left {
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  .wf-cta {
-    background: #EEF0FF;
-    border-style: solid;
-    border-color: #3438AA;
-    color: #3438AA;
+  .btn-sim {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.84rem;
     font-weight: 700;
     text-align: center;
   }
 
-  .wf-ticket-wire {
+  .primary-normal {
+    background: #3438AA;
+    color: #FFFFFF;
+  }
+
+  .secondary-normal {
+    background: #FFFFFF;
+    color: #1B1F3B;
+    border: 1px solid #CBD5E1;
+  }
+
+  .primary-hover {
+    background: #252882;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(37, 40, 130, 0.25);
+  }
+
+  .secondary-hover {
+    background: #EEF0FF;
+    color: #3438AA;
+    border: 1px solid #3438AA;
+  }
+
+  .pill-sim-active {
+    background: #EEF0FF;
+    border: 1.5px solid #3438AA;
+    color: #3438AA;
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
     display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 0.9rem;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .input-sim-auto {
+    background: #FFFFFF;
+    border: 1.5px solid #3438AA;
+    color: #1B1F3B;
+    padding: 0.65rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .wf-mini-split {
+    display: grid;
+    grid-template-columns: 1.75fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .wf-left,
+  .wf-right,
+  .wf-mini-full {
+    background: #FFFFFF;
+    border: 1px dashed #94A3B8;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.76rem;
+    color: #4A516D;
+    line-height: 1.4;
   }
 </style>

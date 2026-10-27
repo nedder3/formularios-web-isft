@@ -1,0 +1,538 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>1. Investigación y Concepto - ISFT N° 191 – ISFT N° 191 Bahía Blanca</title><link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/layouts/Layout.astro?astro&amp;type=style&amp;index=0&amp;lang.css">:root {
+        /* Paleta Oficial ISFT N° 191 */
+        --brand-primary: #3438aa;
+        --brand-primary-dark: #24277a;
+        --brand-primary-soft: rgba(52, 56, 170, 0.06);
+        --brand-action: #3438aa;
+        --brand-accent: #c97026;
+        --brand-accent-light: #fdf5ed;
+        --brand-charcoal: #2d2d2d;
+
+        /* Tokens Framer Double-Bezel */
+        --surface-bg: #f8fafc;
+        --surface-card: #ffffff;
+        --framer-shell-bg: rgba(15, 23, 42, 0.025);
+        --framer-shell-border: rgba(15, 23, 42, 0.07);
+        --bento-border: rgba(15, 23, 42, 0.08);
+        --glass-bg: rgba(255, 255, 255, 0.92);
+        --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04),
+          0 10px 28px -6px rgba(15, 23, 42, 0.05);
+
+        /* Tipografía y Semántica */
+        --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --border-color: #cbd5e1;
+        --feedback-success: #15803d;
+        --feedback-success-bg: #f0fdf4;
+        --feedback-error: #dc2626;
+        --feedback-error-bg: #fef2f2;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--surface-bg);
+        color: var(--text-main);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      body.is-embed {
+        background: transparent;
+      }
+
+      .inst-header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 4px solid var(--brand-primary);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .inst-header-inner {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 0.9rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+      }
+
+      .inst-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.95rem;
+      }
+
+      .inst-logo-img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #ffffff;
+        padding: 2px;
+        border: 1px solid rgba(52, 56, 170, 0.15);
+        box-shadow: 0 2px 8px rgba(52, 56, 170, 0.08);
+        flex-shrink: 0;
+      }
+
+      .inst-title-kicker {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--brand-accent);
+      }
+
+      .inst-title h1 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--brand-primary);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .inst-title p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .main-container {
+        max-width: 1120px;
+        margin: 1.5rem auto 3.5rem;
+        padding: 0 1.5rem;
+      }
+
+      .inst-footer {
+        max-width: 1120px;
+        margin: 2.5rem auto 2rem;
+        padding: 1.25rem 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 768px) {
+        .main-container,
+        .inst-header-inner,
+        .inst-footer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          background: #ffffff !important;
+        }
+        .main-container {
+          margin: 0;
+          max-width: 100%;
+          padding: 0;
+        }
+      }</style><style data-vite-dev-id="C:/Users/arijd/Desktop/formularios-web-isft/src/pages/figma/investigacion.astro?astro&amp;type=style&amp;index=0&amp;lang.css">.figma-page-sheet[data-astro-cid-c3qs6dqf] {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+  background: #f6f8fc;
+}
+
+.sheet-hero[data-astro-cid-c3qs6dqf] {
+  background: #3438aa;
+  color: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  border-bottom: 5px solid #c97026;
+}
+
+.sheet-hero-top[data-astro-cid-c3qs6dqf] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+}
+
+.sheet-badge[data-astro-cid-c3qs6dqf] {
+  background: #ffffff24;
+  padding: .35rem .75rem;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.sheet-meta[data-astro-cid-c3qs6dqf] {
+  opacity: .85;
+}
+
+.sheet-hero[data-astro-cid-c3qs6dqf] h1[data-astro-cid-c3qs6dqf] {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: .65rem;
+}
+
+.sheet-hero[data-astro-cid-c3qs6dqf] p[data-astro-cid-c3qs6dqf] {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 920px;
+  color: #e2e8f0;
+}
+
+.sheet-section[data-astro-cid-c3qs6dqf] {
+  background: #fff;
+  border: 1px solid #dbe2ef;
+  border-radius: 20px;
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-head[data-astro-cid-c3qs6dqf] {
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: .9rem;
+}
+
+.section-kicker[data-astro-cid-c3qs6dqf] {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  font-weight: 700;
+  color: #c97026;
+  letter-spacing: .06em;
+  margin-bottom: .25rem;
+}
+
+.section-head[data-astro-cid-c3qs6dqf] h2[data-astro-cid-c3qs6dqf] {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  color: #1b1f3b;
+  font-weight: 800;
+}
+
+.moodboard-grid[data-astro-cid-c3qs6dqf] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.mood-card[data-astro-cid-c3qs6dqf] {
+  background: #f8fafc;
+  border: 1px solid #dbe2ef;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.mood-brand-inner[data-astro-cid-c3qs6dqf] {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+
+.mood-tag[data-astro-cid-c3qs6dqf] {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 700;
+  color: #3438aa;
+  background: #eef0ff;
+  padding: .2rem .55rem;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.mood-card[data-astro-cid-c3qs6dqf] h3[data-astro-cid-c3qs6dqf] {
+  font-size: 1.1rem;
+  color: #1b1f3b;
+  font-weight: 800;
+  margin-top: .25rem;
+}
+
+.mood-card[data-astro-cid-c3qs6dqf] p[data-astro-cid-c3qs6dqf] {
+  font-size: .88rem;
+  color: #4a516d;
+  line-height: 1.55;
+}
+
+.bezel-demo[data-astro-cid-c3qs6dqf] {
+  background: #eef2f9;
+  border: 1px solid #dde3f0;
+  padding: 6px;
+  border-radius: 14px;
+  margin-top: auto;
+}
+
+.bezel-demo-inner[data-astro-cid-c3qs6dqf] {
+  background: #fff;
+  border: 1px solid #dbe2ef;
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #1b1f3b;
+}
+
+.swiss-demo-strip[data-astro-cid-c3qs6dqf] {
+  margin-top: auto;
+  background: #1b1f3b;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  padding: .75rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.comparison-grid[data-astro-cid-c3qs6dqf] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.comp-card[data-astro-cid-c3qs6dqf] {
+  border-radius: 16px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+}
+
+.comp-before[data-astro-cid-c3qs6dqf] {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.comp-after[data-astro-cid-c3qs6dqf] {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.comp-pill[data-astro-cid-c3qs6dqf] {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.comp-before[data-astro-cid-c3qs6dqf] .comp-pill[data-astro-cid-c3qs6dqf] {
+  color: #dc2626;
+}
+
+.comp-after[data-astro-cid-c3qs6dqf] .comp-pill[data-astro-cid-c3qs6dqf] {
+  color: #15803d;
+}
+
+.comp-card[data-astro-cid-c3qs6dqf] h3[data-astro-cid-c3qs6dqf] {
+  font-size: 1.15rem;
+  color: #1b1f3b;
+  font-weight: 800;
+}
+
+.comp-card[data-astro-cid-c3qs6dqf] ul[data-astro-cid-c3qs6dqf] {
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  font-size: .9rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.personas-grid[data-astro-cid-c3qs6dqf] {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.persona-box[data-astro-cid-c3qs6dqf] {
+  border: 1px solid #dbe2ef;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.persona-top[data-astro-cid-c3qs6dqf] {
+  background: #fff;
+  padding: 1.25rem 1.4rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.persona-avatar[data-astro-cid-c3qs6dqf] {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #3438aa;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.persona-avatar[data-astro-cid-c3qs6dqf].accent {
+  background: #c97026;
+}
+
+.persona-avatar[data-astro-cid-c3qs6dqf].dark {
+  background: #1b1f3b;
+}
+
+.persona-role[data-astro-cid-c3qs6dqf] {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  font-weight: 700;
+  color: #646d8c;
+}
+
+.persona-top[data-astro-cid-c3qs6dqf] h3[data-astro-cid-c3qs6dqf] {
+  font-size: 1.05rem;
+  color: #1b1f3b;
+  font-weight: 800;
+  margin: .1rem 0;
+}
+
+.persona-top[data-astro-cid-c3qs6dqf] p[data-astro-cid-c3qs6dqf] {
+  font-size: .78rem;
+  color: #646d8c;
+}
+
+.persona-body[data-astro-cid-c3qs6dqf] {
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.persona-block[data-astro-cid-c3qs6dqf] {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: .85rem 1rem;
+}
+
+.persona-block[data-astro-cid-c3qs6dqf].highlight {
+  border-left: 4px solid #3438aa;
+  background: #eef0ff;
+}
+
+.persona-block[data-astro-cid-c3qs6dqf] strong[data-astro-cid-c3qs6dqf] {
+  display: block;
+  font-size: .78rem;
+  color: #1b1f3b;
+  margin-bottom: .25rem;
+}
+
+.persona-block[data-astro-cid-c3qs6dqf] p[data-astro-cid-c3qs6dqf] {
+  font-size: .83rem;
+  color: #4a516d;
+  line-height: 1.45;
+}
+
+.infographic-frame[data-astro-cid-c3qs6dqf] {
+  border: 1px solid #dbe2ef;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+  padding: .75rem;
+}
+
+.infographic-frame[data-astro-cid-c3qs6dqf] img[data-astro-cid-c3qs6dqf] {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+.laws-grid[data-astro-cid-c3qs6dqf] {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.1rem;
+}
+
+.law-card[data-astro-cid-c3qs6dqf] {
+  background: #f8fafc;
+  border: 1px solid #dbe2ef;
+  border-top: 3px solid #3438aa;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+.law-code[data-astro-cid-c3qs6dqf] {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 700;
+  color: #c97026;
+}
+
+.law-card[data-astro-cid-c3qs6dqf] h4[data-astro-cid-c3qs6dqf] {
+  font-size: .95rem;
+  color: #1b1f3b;
+  font-weight: 800;
+}
+
+.law-card[data-astro-cid-c3qs6dqf] p[data-astro-cid-c3qs6dqf] {
+  font-size: .83rem;
+  color: #4a516d;
+  line-height: 1.5;
+}
+</style><script type="module" src="/@vite/client"></script><script type="module" src="/src/layouts/Layout.astro?astro&type=style&index=0&lang.css"></script><script type="module" src="/src/pages/figma/investigacion.astro?astro&type=style&index=0&lang.css"></script></head><body class="is-embed"><main class="main-container"><div class="figma-page-sheet" data-astro-cid-c3qs6dqf><!-- CABECERA EDITORIAL DE LÁMINA 01 --><header class="sheet-hero" data-astro-cid-c3qs6dqf><div class="sheet-hero-top" data-astro-cid-c3qs6dqf><span class="sheet-badge" data-astro-cid-c3qs6dqf>PÁGINA 01 DE 03 - UX RESEARCH & ARCHITECTURE</span><span class="sheet-meta" data-astro-cid-c3qs6dqf>ISFT N° 191 - BAHÍA BLANCA - SISTEMA DE EXÁMENES FINALES</span></div><h1 data-astro-cid-c3qs6dqf>Investigación y Concepto</h1><p data-astro-cid-c3qs6dqf>Relevamiento de fricciones operativas, definición de arquetipos institucionales (User Personas), leyes de experiencia de usuario y circuito integral automatizado de inscripción a mesas examinadoras.</p></header><!-- SECCIÓN 1: MOODBOARD E IDENTIDAD CONCEPTUAL --><section class="sheet-section" data-astro-cid-c3qs6dqf><div class="section-head" data-astro-cid-c3qs6dqf><span class="section-kicker" data-astro-cid-c3qs6dqf>01 - DIRECCIÓN VISUAL Y CONCEPTO</span><h2 data-astro-cid-c3qs6dqf>Moodboard Conceptual: Framer Academic Portal</h2></div><div class="moodboard-grid" data-astro-cid-c3qs6dqf><div class="mood-card mood-brand" data-astro-cid-c3qs6dqf><div class="mood-brand-inner" data-astro-cid-c3qs6dqf><img src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/logo-isft191.png" alt="Escudo Oficial ISFT N° 191" width="76" height="76" data-astro-cid-c3qs6dqf><div data-astro-cid-c3qs6dqf><span class="mood-tag" data-astro-cid-c3qs6dqf>IDENTIDAD OFICIAL</span><h3 data-astro-cid-c3qs6dqf>ISFT N° 191 - Bahía Blanca</h3><p data-astro-cid-c3qs6dqf>Alineación cromática e institucional con el portal educativo oficial (Azul #3438AA y Dorado Ocre #C97026).</p></div></div></div><div class="mood-card mood-bezel" data-astro-cid-c3qs6dqf><span class="mood-tag" data-astro-cid-c3qs6dqf>ESTÉTICA ESTRUCTURAL</span><h3 data-astro-cid-c3qs6dqf>Marcos Double-Bezel (Framer)</h3><p data-astro-cid-c3qs6dqf>Contenedor perimetral técnico (#EEF2F9, padding 6px) que enmarca tarjetas blancas de alto contraste para reducir la fatiga visual.</p><div class="bezel-demo" data-astro-cid-c3qs6dqf><div class="bezel-demo-inner" data-astro-cid-c3qs6dqf><span data-astro-cid-c3qs6dqf>Superficie Interior #FFFFFF</span><code data-astro-cid-c3qs6dqf>border-radius: 15px</code></div></div></div><div class="mood-card mood-swiss" data-astro-cid-c3qs6dqf><span class="mood-tag" data-astro-cid-c3qs6dqf>PRECISIÓN EDITORIAL</span><h3 data-astro-cid-c3qs6dqf>Swiss Editorial Ticket & Tabular Data</h3><p data-astro-cid-c3qs6dqf>Comprobante oficial inspirado en pases de seguridad verificables con tipografía monoespaciada tabular para DNI y hashes SHA-256.</p><div class="swiss-demo-strip" data-astro-cid-c3qs6dqf><span data-astro-cid-c3qs6dqf>ISFT-2026-9F4A2C</span><span data-astro-cid-c3qs6dqf>27/10/2026 - GMT-3</span></div></div></div></section><!-- SECCIÓN 2: DIAGNÓSTICO DEL PROBLEMA VS SOLUCIÓN --><section class="sheet-section" data-astro-cid-c3qs6dqf><div class="section-head" data-astro-cid-c3qs6dqf><span class="section-kicker" data-astro-cid-c3qs6dqf>02 - DIAGNÓSTICO Y PROPUESTA DE VALOR</span><h2 data-astro-cid-c3qs6dqf>Problemática Detectada vs. Solución Implementada</h2></div><div class="comparison-grid" data-astro-cid-c3qs6dqf><div class="comp-card comp-before" data-astro-cid-c3qs6dqf><span class="comp-pill" data-astro-cid-c3qs6dqf>ESTADO ANTERIOR (PROBLEMA)</span><h3 data-astro-cid-c3qs6dqf>Formularios Dispersos y Carga Manual</h3><ul data-astro-cid-c3qs6dqf><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Fragmentación:</strong> Múltiples formularios estáticos separados por carrera y año difíciles de mantener sincronizados.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Errores de tipeo:</strong> Alumnos escribiendo nombres de materias o docentes a mano con variaciones ortográficas.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Duplicación de filas:</strong> Estudiantes que enviaban dos veces el formulario ante la duda de si había impactado.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Cuello de botella administrativo:</strong> Armado manual de listas de inscriptos para enviar a cada profesor antes del examen.</li></ul></div><div class="comp-card comp-after" data-astro-cid-c3qs6dqf><span class="comp-pill" data-astro-cid-c3qs6dqf>NUEVO SISTEMA UNIFICADO (SOLUCIÓN)</span><h3 data-astro-cid-c3qs6dqf>Portal Reactivo Único + Despacho Automatizado</h3><ul data-astro-cid-c3qs6dqf><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Padrón Único O(1):</strong> Las 8 carreras y 211 materias unificadas en una cascada guiada sin recargas de página.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Autocompletado Determinista:</strong> Al elegir materia se asigna automáticamente <code data-astro-cid-c3qs6dqf>Docente + Nombre de Materia</code> para cruce exacto.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Idempotencia por (DNI + Materia):</strong> Si el alumno reenvía la misma materia, actualiza su registro sin duplicar filas.</li><li data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Envío Quincenal al Docente:</strong> Cada 15 días el profesor recibe en su correo únicamente el Excel de inscriptos de su materia.</li></ul></div></div></section><!-- SECCIÓN 3: PÚBLICO OBJETIVO Y USER PERSONAS --><section class="sheet-section" data-astro-cid-c3qs6dqf><div class="section-head" data-astro-cid-c3qs6dqf><span class="section-kicker" data-astro-cid-c3qs6dqf>03 - PÚBLICO OBJETIVO Y ARQUETIPOS</span><h2 data-astro-cid-c3qs6dqf>User Personas del Ecosistema ISFT N° 191</h2></div><div class="personas-grid" data-astro-cid-c3qs6dqf><article class="persona-box" data-astro-cid-c3qs6dqf><div class="persona-top" data-astro-cid-c3qs6dqf><div class="persona-avatar" data-astro-cid-c3qs6dqf>E1</div><div data-astro-cid-c3qs6dqf><span class="persona-role" data-astro-cid-c3qs6dqf>ARQUETIPO PRIMARIO - FRONTEND</span><h3 data-astro-cid-c3qs6dqf>Estudiante de Tecnicatura</h3><p data-astro-cid-c3qs6dqf>19 a 38 años - Rinde entre 2 y 4 finales por llamado (Móvil / Desktop)</p></div></div><div class="persona-body" data-astro-cid-c3qs6dqf><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Objetivos y Necesidades</strong><p data-astro-cid-c3qs6dqf>Anotarse rápido a varias materias sin volver a tipear su DNI, teléfono y correo en cada inscripción, y guardar un comprobante oficial válido.</p></div><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Puntos de Dolor (Pain Points)</strong><p data-astro-cid-c3qs6dqf>Duda de si eligió la resolución correcta de su plan de estudios o si el formulario realmente registró su solicitud.</p></div><div class="persona-block highlight" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Respuesta del Diseño</strong><p data-astro-cid-c3qs6dqf>Autoguardado local del legajo (Paso 1), resumen lateral fijo en tiempo real, botón "Inscribirme a otra asignatura" y ticket PDF con sello SHA-256.</p></div></div></article><article class="persona-box" data-astro-cid-c3qs6dqf><div class="persona-top" data-astro-cid-c3qs6dqf><div class="persona-avatar accent" data-astro-cid-c3qs6dqf>D2</div><div data-astro-cid-c3qs6dqf><span class="persona-role" data-astro-cid-c3qs6dqf>ARQUETIPO RECEPTOR - CORREO AUTOMATIZADO</span><h3 data-astro-cid-c3qs6dqf>Docente Titular de Cátedra</h3><p data-astro-cid-c3qs6dqf>Profesor/a de una o más asignaturas - Agnóstico a sistemas internos</p></div></div><div class="persona-body" data-astro-cid-c3qs6dqf><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Objetivos y Necesidades</strong><p data-astro-cid-c3qs6dqf>Conocer con anticipación cuántos alumnos regulares y libres se anotaron a su mesa sin tener que entrar a plataformas complejas.</p></div><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Puntos de Dolor (Pain Points)</strong><p data-astro-cid-c3qs6dqf>Recibir planillas gigantes con todas las materias mezcladas o enterarse sobre la hora de la cantidad de examinados.</p></div><div class="persona-block highlight" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Respuesta del Diseño</strong><p data-astro-cid-c3qs6dqf>Cruce automático con <code data-astro-cid-c3qs6dqf>Directorio_Docentes</code>: recibe cada 15 días en su correo un mail institucional con tabla resumen y el Excel adjunto sólo de su cátedra.</p></div></div></article><article class="persona-box" data-astro-cid-c3qs6dqf><div class="persona-top" data-astro-cid-c3qs6dqf><div class="persona-avatar dark" data-astro-cid-c3qs6dqf>S3</div><div data-astro-cid-c3qs6dqf><span class="persona-role" data-astro-cid-c3qs6dqf>ARQUETIPO GESTIÓN - BACKOFFICE</span><h3 data-astro-cid-c3qs6dqf>Secretaría Académica y Directivos</h3><p data-astro-cid-c3qs6dqf>Equipo de conducción y administración académica del instituto</p></div></div><div class="persona-body" data-astro-cid-c3qs6dqf><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Objetivos y Necesidades</strong><p data-astro-cid-c3qs6dqf>Tener trazabilidad total con fecha y hora oficial de Buenos Aires (GMT-3), cero registros duplicados y privacidad del padrón estudiantil.</p></div><div class="persona-block" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Puntos de Dolor (Pain Points)</strong><p data-astro-cid-c3qs6dqf>Depurar manualmente duplicados en Excel y reenviar correos materia por materia a más de 200 cátedras.</p></div><div class="persona-block highlight" data-astro-cid-c3qs6dqf><strong data-astro-cid-c3qs6dqf>Respuesta del Diseño</strong><p data-astro-cid-c3qs6dqf>Planilla maestra con menú propio <code data-astro-cid-c3qs6dqf>ISFT 191 - Secretaría</code> para disparar envíos en 1 clic o dejar activo el cron automático cada 15 días.</p></div></div></article></div></section><!-- SECCIÓN 4: INFOGRAFÍA EJECUTIVA NO TÉCNICA --><section class="sheet-section" data-astro-cid-c3qs6dqf><div class="section-head" data-astro-cid-c3qs6dqf><span class="section-kicker" data-astro-cid-c3qs6dqf>04 - ARQUITECTURA EXPLICADA PARA DIRECTIVOS Y DOCENTES</span><h2 data-astro-cid-c3qs6dqf>Circuito Operativo de Punta a Punta (Web + Excel + Mail Docente)</h2></div><div class="infographic-frame" data-astro-cid-c3qs6dqf><img src="https://raw.githubusercontent.com/nedder3/formularios-web-isft/main/public/docs/circuito-ejecutivo-isft191.jpg" alt="Circuito de Inscripción a Exámenes Finales ISFT N° 191" data-astro-cid-c3qs6dqf></div></section><!-- SECCIÓN 5: LEYES DE UX Y HEURÍSTICAS DE NIELSEN --><section class="sheet-section" data-astro-cid-c3qs6dqf><div class="section-head" data-astro-cid-c3qs6dqf><span class="section-kicker" data-astro-cid-c3qs6dqf>05 - FUNDAMENTACIÓN HEURÍSTICA</span><h2 data-astro-cid-c3qs6dqf>Leyes de UX y Heurísticas de Usabilidad Aplicadas</h2></div><div class="laws-grid" data-astro-cid-c3qs6dqf><div class="law-card" data-astro-cid-c3qs6dqf><span class="law-code" data-astro-cid-c3qs6dqf>LEY DE HICK-HYMAN</span><h4 data-astro-cid-c3qs6dqf>Reducción de Carga Cognitiva en 211 Materias</h4><p data-astro-cid-c3qs6dqf>En lugar de un desplegable interminable, la cascada progresiva (Carrera - Año - Materia) reduce la decisión a un promedio de 8 materias por año, complementada con filtro de búsqueda instantáneo.</p></div><div class="law-card" data-astro-cid-c3qs6dqf><span class="law-code" data-astro-cid-c3qs6dqf>LEY DE PROXIMIDAD (GESTALT)</span><h4 data-astro-cid-c3qs6dqf>Agrupación Semántica en Sub-bloques</h4><p data-astro-cid-c3qs6dqf>Los campos se dividen en unidades lógicas cerradas: Titularidad y Cohorte, Contacto Académico, Padrón Curricular y Condición de Examen.</p></div><div class="law-card" data-astro-cid-c3qs6dqf><span class="law-code" data-astro-cid-c3qs6dqf>HEURÍSTICA H1 & H5 (NIELSEN)</span><h4 data-astro-cid-c3qs6dqf>Visibilidad del Estado y Prevención de Errores</h4><p data-astro-cid-c3qs6dqf>La tarjeta derecha de Resumen de Inscripción refleja cada cambio en vivo, mientras la validación inline sanitiza puntos del DNI y verifica formatos antes de avanzar.</p></div><div class="law-card" data-astro-cid-c3qs6dqf><span class="law-code" data-astro-cid-c3qs6dqf>REGLA DEL PICO-FINAL (PEAK-END RULE)</span><h4 data-astro-cid-c3qs6dqf>Cierre con Comprobante Oficial y Sesión Acumulativa</h4><p data-astro-cid-c3qs6dqf>Al finalizar, el estudiante recibe un comprobante institucional listo para imprimir en PDF junto al listado de todas las materias que inscribió en esa sesión.</p></div></div></section></div></main></body></html>
