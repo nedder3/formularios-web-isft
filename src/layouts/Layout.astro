@@ -5,6 +5,13 @@ interface Props {
 }
 
 const { title, embed = false } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('es-AR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date());
 ---
 
 <!doctype html>
@@ -12,33 +19,36 @@ const { title, embed = false } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} | ISFT N° 191 Bahía Blanca</title>
+    <title>{title} – Instituto Superior de Formación Técnica N° 191</title>
+    <link rel="icon" type="image/png" href="/logo-isft191.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <style is:global>
       :root {
-        /* Identidad Institucional ISFT N° 191 */
+        /* Paleta Oficial ISFT N° 191 (Extraída de isft191.edu.ar y su Escudo Oficial) */
         --brand-primary: #3438aa;
-        --brand-primary-dark: #23267a;
-        --brand-primary-soft: rgba(52, 56, 170, 0.07);
-        --brand-action: #2563eb;
-        --brand-accent: #d97706;
-        --brand-accent-light: #fef3c7;
+        --brand-primary-dark: #24277a;
+        --brand-primary-soft: rgba(52, 56, 170, 0.06);
+        --brand-action: #3438aa;
+        --brand-accent: #c97026;
+        --brand-accent-light: #fdf5ed;
+        --brand-charcoal: #2d2d2d;
 
-        /* Superficies Arquitectónicas Bento + Subtle Glass */
-        --surface-bg: #f1f5f9;
+        /* Tokens Framer Academic Portal */
+        --surface-bg: #f8fafc;
         --surface-card: #ffffff;
-        --bento-cell-bg: #ffffff;
-        --bento-border: rgba(15, 23, 42, 0.09);
-        --glass-bg: rgba(255, 255, 255, 0.88);
-        --glass-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
-          0 12px 32px -8px rgba(15, 23, 42, 0.06);
+        --framer-shell-bg: rgba(15, 23, 42, 0.025);
+        --framer-shell-border: rgba(15, 23, 42, 0.07);
+        --bento-border: rgba(15, 23, 42, 0.08);
+        --glass-bg: rgba(255, 255, 255, 0.92);
+        --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.04),
+          0 10px 28px -6px rgba(15, 23, 42, 0.05);
 
-        /* Tipografía de Interfaz y Monoespaciada Tabular */
+        /* Tipografía y Semántica */
         --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
           sans-serif;
         --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -49,9 +59,9 @@ const { title, embed = false } = Astro.props;
         --feedback-success-bg: #f0fdf4;
         --feedback-error: #dc2626;
         --feedback-error-bg: #fef2f2;
-        --radius-sm: 8px;
-        --radius-md: 12px;
-        --radius-lg: 16px;
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
       }
 
       * {
@@ -63,9 +73,11 @@ const { title, embed = false } = Astro.props;
       body {
         font-family: var(--font-sans);
         background-color: var(--surface-bg);
-        background-image: radial-gradient(rgba(52, 56, 170, 0.07) 1px, transparent 1px),
-          radial-gradient(at 0% 0%, rgba(52, 56, 170, 0.06) 0px, transparent 45%);
-        background-size: 24px 24px, 100% 100%;
+        background-image: radial-gradient(
+          at 50% 0%,
+          rgba(52, 56, 170, 0.05) 0px,
+          transparent 55%
+        );
         color: var(--text-main);
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
@@ -75,139 +87,328 @@ const { title, embed = false } = Astro.props;
         background: transparent;
       }
 
+      /* Cabecera Institucional Rediseñada (Propuesta Portal ISFT N° 191) */
       .inst-header {
         background: var(--glass-bg);
-        backdrop-filter: blur(14px) saturate(160%);
-        -webkit-backdrop-filter: blur(14px) saturate(160%);
-        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 4px solid var(--brand-primary);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
         position: sticky;
         top: 0;
-        z-index: 30;
+        z-index: 40;
       }
 
       .inst-topbar {
-        background: var(--brand-primary);
-        color: rgba(255, 255, 255, 0.92);
-        font-size: 0.74rem;
-        font-family: var(--font-mono);
-        letter-spacing: 0.02em;
-        padding: 0.38rem 1.25rem;
-        border-bottom: 2px solid var(--brand-accent);
+        background: var(--brand-charcoal);
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 0.76rem;
+        padding: 0.42rem 1.5rem;
       }
 
       .inst-topbar-inner {
-        max-width: 960px;
+        max-width: 1140px;
         margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.75rem;
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+      }
+
+      .topbar-date {
+        text-transform: capitalize;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .topbar-badge {
+        background: var(--brand-primary);
+        color: #ffffff;
+        padding: 0.15rem 0.6rem;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.71rem;
+        letter-spacing: 0.02em;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .topbar-socials {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .topbar-socials a {
+        color: rgba(255, 255, 255, 0.78);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        transition: color 0.15s, background-color 0.15s;
+      }
+
+      .topbar-socials a:hover {
+        color: #ffffff;
+        background: var(--brand-primary);
       }
 
       .inst-header-inner {
-        max-width: 960px;
+        max-width: 1140px;
         margin: 0 auto;
-        padding: 0.95rem 1.25rem;
+        padding: 0.85rem 1.5rem;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 1rem;
+        gap: 1.25rem;
         flex-wrap: wrap;
       }
 
       .inst-brand {
         display: flex;
         align-items: center;
-        gap: 0.95rem;
+        gap: 0.9rem;
+        text-decoration: none;
+        color: inherit;
       }
 
-      .inst-badge {
-        width: 46px;
-        height: 46px;
+      .inst-logo-img {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
         border-radius: 10px;
-        background: var(--brand-primary);
-        color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-family: var(--font-mono);
-        font-weight: 700;
-        border: 1.5px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 4px 12px rgba(52, 56, 170, 0.22);
+        background: #ffffff;
+        padding: 2px;
+        border: 1px solid rgba(52, 56, 170, 0.15);
+        box-shadow: 0 2px 8px rgba(52, 56, 170, 0.08);
         flex-shrink: 0;
       }
 
-      .inst-badge span:first-child {
-        font-size: 0.6rem;
-        letter-spacing: 0.08em;
-        color: #fde68a;
-      }
-
-      .inst-badge span:last-child {
-        font-size: 1.02rem;
-        line-height: 1.05;
+      .inst-title-kicker {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--brand-accent);
       }
 
       .inst-title h1 {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: var(--text-main);
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: var(--brand-primary);
         letter-spacing: -0.02em;
+        line-height: 1.2;
       }
 
       .inst-title p {
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .inst-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        flex-wrap: wrap;
+      }
+
+      .inst-nav-link {
+        color: var(--brand-charcoal);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.45rem 0.75rem;
+        border-radius: 8px;
+        letter-spacing: 0.01em;
+        transition: all 0.15s ease;
+      }
+
+      .inst-nav-link:hover {
+        color: var(--brand-primary);
+        background: var(--brand-primary-soft);
+      }
+
+      .inst-nav-link.active {
+        color: var(--brand-primary);
+        background: var(--brand-primary-soft);
+      }
+
+      .inst-nav-campus {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--brand-primary);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.48rem 0.9rem;
+        border-radius: 8px;
+        margin-left: 0.35rem;
+        box-shadow: 0 2px 8px rgba(52, 56, 170, 0.22);
+        transition: background-color 0.15s ease;
+      }
+
+      .inst-nav-campus:hover {
+        background: var(--brand-primary-dark);
+      }
+
+      /* Franja de Contexto de Página con el Subrayado Doble característico de isft191.edu.ar */
+      .page-context-bar {
+        max-width: 1140px;
+        margin: 1.5rem auto 0;
+        padding: 0 1.5rem;
+      }
+
+      .page-context-inner {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 1px solid rgba(52, 56, 170, 0.22);
+        position: relative;
+      }
+
+      /* Firma visual de isft191.edu.ar: barra inferior gruesa en #3438aa sobre línea fina */
+      .page-context-inner::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 88px;
+        height: 4px;
+        background: var(--brand-primary);
+        border-radius: 2px;
+      }
+
+      .breadcrumb-trail {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+      }
+
+      .breadcrumb-trail a {
+        color: var(--brand-primary);
+        text-decoration: none;
+      }
+
+      .breadcrumb-trail a:hover {
+        text-decoration: underline;
+      }
+
+      .page-context-title {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -0.025em;
       }
 
       .siu-pill {
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.45rem;
         background: #ffffff;
-        color: var(--brand-primary);
-        border: 1px solid rgba(52, 56, 170, 0.22);
-        padding: 0.3rem 0.7rem;
-        border-radius: 6px;
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
+        color: var(--text-main);
+        border: 1px solid var(--bento-border);
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
         font-weight: 700;
-        letter-spacing: 0.03em;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
       }
 
-      .siu-pill::before {
-        content: '';
-        width: 6px;
-        height: 6px;
+      .siu-pill-dot {
+        width: 7px;
+        height: 7px;
         border-radius: 999px;
         background: var(--brand-accent);
       }
 
       .main-container {
-        max-width: 960px;
-        margin: 1.6rem auto 3rem;
-        padding: 0 1.25rem;
+        max-width: 1140px;
+        margin: 1.35rem auto 3.5rem;
+        padding: 0 1.5rem;
       }
 
       .inst-footer {
-        max-width: 960px;
-        margin: 2rem auto;
-        padding: 1.25rem;
-        border-top: 1px solid var(--border-color);
+        background: #ffffff;
+        border-top: 3px solid var(--brand-primary);
+        margin-top: 3.5rem;
+        padding: 1.75rem 1.5rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+
+      .inst-footer-inner {
+        max-width: 1140px;
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        font-size: 0.78rem;
-        color: var(--text-muted);
+        gap: 1rem;
       }
 
-      .inst-footer-code {
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .footer-brand img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 1.15rem;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .footer-links a:hover {
+        color: var(--brand-primary);
+      }
+
+      @media (max-width: 900px) {
+        .inst-nav {
+          display: none;
+        }
+        .main-container,
+        .page-context-bar,
+        .inst-header-inner,
+        .inst-topbar {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -243,24 +444,123 @@ const { title, embed = false } = Astro.props;
         <header class="inst-header no-print">
           <div class="inst-topbar">
             <div class="inst-topbar-inner">
-              <span>ISFT N° 191 // BAHÍA BLANCA — PROVINCIA DE BUENOS AIRES</span>
-              <span>SECRETARÍA ACADÉMICA</span>
+              <div class="topbar-left">
+                <span class="topbar-badge">Portal Académico</span>
+                <span class="topbar-date">{formattedDate}</span>
+              </div>
+              <div class="topbar-right">
+                <div class="topbar-socials" aria-label="Redes sociales oficiales ISFT 191">
+                  <a
+                    href="https://www.facebook.com/isft191prece"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Facebook ISFT 191"
+                    aria-label="Facebook ISFT 191"
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.youtube.com/@isft191bahiablanca3"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="YouTube ISFT 191"
+                    aria-label="YouTube ISFT 191"
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33zM9.75 15.02l5.75-3.27-5.75-3.27v6.54z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/ISFT191"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Instagram ISFT 191"
+                    aria-label="Instagram ISFT 191"
+                  >
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
+
           <div class="inst-header-inner">
-            <div class="inst-brand">
-              <div class="inst-badge" aria-hidden="true">
-                <span>ISFT</span>
-                <span>191</span>
-              </div>
+            <a href="https://isft191.edu.ar/" class="inst-brand">
+              <img
+                src="/logo-isft191.png"
+                alt="Escudo ISFT N° 191 Bahía Blanca"
+                class="inst-logo-img"
+                width="52"
+                height="52"
+              />
               <div class="inst-title">
-                <h1>Inscripción a Mesas Examinadoras Finales</h1>
-                <p>Padrón curricular unificado de tecnicaturas superiores</p>
+                <span class="inst-title-kicker">Educación Superior Técnica • Bahía Blanca</span>
+                <h1>Instituto Superior de Formación Técnica N° 191</h1>
+                <p>Dirección General de Cultura y Educación • Provincia de Buenos Aires</p>
               </div>
-            </div>
-            <span class="siu-pill">HOMOLOGADO SIU GUARANÍ</span>
+            </a>
+
+            <nav class="inst-nav" aria-label="Navegación institucional">
+              <a href="https://isft191.edu.ar/secretaria/" class="inst-nav-link active">
+                Secretaría
+              </a>
+              <a href="https://isft191.edu.ar/profesores/" class="inst-nav-link">
+                Profesores
+              </a>
+              <a href="https://isft191.edu.ar/cai/" class="inst-nav-link">
+                CAI
+              </a>
+              <a href="https://isft191.edu.ar/carreras/" class="inst-nav-link">
+                Carreras
+              </a>
+              <a href="https://isft191.edu.ar/ingresantes/" class="inst-nav-link">
+                Ingresantes
+              </a>
+              <a
+                href="https://virtual.isft191.edu.ar/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inst-nav-campus"
+              >
+                <span>Campus Virtual</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+            </nav>
           </div>
         </header>
+      )
+    }
+
+    {
+      !embed && (
+        <div class="page-context-bar no-print">
+          <div class="page-context-inner">
+            <div>
+              <div class="breadcrumb-trail">
+                <a href="https://isft191.edu.ar/">Inicio</a>
+                <span aria-hidden="true">›</span>
+                <a href="https://isft191.edu.ar/secretaria/">Secretaría Académica</a>
+                <span aria-hidden="true">›</span>
+                <span>Mesas Examinadoras</span>
+              </div>
+              <h2 class="page-context-title">Inscripción a Exámenes Finales</h2>
+            </div>
+            <span class="siu-pill">
+              <span class="siu-pill-dot" aria-hidden="true" />
+              <span>Padrón Homologado SIU Guaraní</span>
+            </span>
+          </div>
+        </div>
       )
     }
 
@@ -271,10 +571,20 @@ const { title, embed = false } = Astro.props;
     {
       !embed && (
         <footer class="inst-footer no-print">
-          <p>
-            ISFT N° 191 Bahía Blanca • Los datos registrados revisten carácter de Declaración Jurada.
-          </p>
-          <span class="inst-footer-code">SSR ENGINE // 8 CARRERAS • 211 ASIGNATURAS</span>
+          <div class="inst-footer-inner">
+            <div class="footer-brand">
+              <img src="/logo-isft191.png" alt="" width="34" height="34" />
+              <div>
+                <strong>ISFT N° 191 Bahía Blanca</strong>
+                <p>Los datos registrados revisten carácter de Declaración Jurada académica.</p>
+              </div>
+            </div>
+            <div class="footer-links">
+              <a href="https://isft191.edu.ar/secretaria/">Secretaría</a>
+              <a href="https://isft191.edu.ar/carreras/">Planes de Estudio</a>
+              <a href="https://virtual.isft191.edu.ar/">Campus Virtual</a>
+            </div>
+          </div>
         </footer>
       )
     }
