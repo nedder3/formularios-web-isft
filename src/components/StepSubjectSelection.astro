@@ -13,65 +13,85 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
 ---
 
 <fieldset class="form-step" id="form-step-2" hidden>
-  <!-- Píldora de Legajo Activo (Goal-Gradient Effect + Heurística H1) -->
+  <!-- Barra de Contexto de Legajo Activo -->
   <div class="active-student-bar" id="active-student-summary">
     <div class="active-student-info">
-      <span class="student-avatar" aria-hidden="true">🎓</span>
+      <div class="student-avatar-svg" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
       <div>
-        <span class="active-student-label">INSCRIBIENDO A ESTUDIANTE</span>
-        <strong id="summary-student-name">—</strong>
-        <span class="active-student-meta" id="summary-student-meta">DNI — • Cohorte —</span>
+        <span class="active-student-label">DECLARACIÓN JURADA ACTIVA</span>
+        <div class="active-student-line">
+          <strong id="summary-student-name">—</strong>
+          <span class="active-student-meta" id="summary-student-meta">DNI — • Cohorte —</span>
+        </div>
       </div>
     </div>
     <button type="button" class="btn-edit-student" id="btn-summary-edit">
-      ✎ Editar legajo
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+      </svg>
+      <span>Modificar legajo</span>
     </button>
   </div>
 
   <div class="step-header">
-    <span class="bento-tag">SELECCIÓN CURRICULAR HOMOLOGADA</span>
+    <div class="step-header-top">
+      <span class="bento-tag">SECCIÓN 02 // PADRÓN CURRICULAR</span>
+      <span class="step-req-note">211 Asignaturas Oficiales</span>
+    </div>
     <legend class="step-title" id="heading-step-2" tabindex="-1">
-      Paso 2: Selección de Examen Final
+      Selección de Asignatura y Condición de Mesa
     </legend>
     <p class="step-subtitle">
-      Elegí tu carrera, el año del plan y la asignatura. Luego indicá la condición y cátedra.
+      Filtrá el diseño curricular por carrera y año para seleccionar la materia y declarar la cátedra.
     </p>
   </div>
 
-  <div class="bento-grid-step2">
-    <!-- Celda Bento 2A: Cascada Curricular (Carrera -> Año -> Materia) -->
-    <div class="bento-cell bento-cell-accent">
+  <div class="bento-grid-asymmetric">
+    <!-- Celda Bento 2A: Cascada Curricular (7 columnas) -->
+    <div class="bento-cell bento-span-7 bento-cell-accent">
       <div class="bento-cell-header">
-        <span class="bento-cell-icon" aria-hidden="true">📚</span>
+        <div class="bento-cell-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
         <div>
-          <h3>1. Filtro Curricular en Cascada</h3>
-          <p>Sincronizado con el diseño curricular oficial del ISFT N° 191</p>
+          <span class="cell-index">02.A</span>
+          <h3>Filtro Curricular en Cascada</h3>
         </div>
       </div>
 
-      <div class="form-grid">
-        <div class="field-group full-width">
+      <div class="form-stack">
+        <div class="field-group">
           <label for="carreraCode">
-            Carrera y Plan (Resolución) <span class="req" aria-hidden="true">*</span>
+            Carrera y Resolución Ministerial <span class="req" aria-hidden="true">*</span>
           </label>
           <select id="carreraCode" name="carreraCode" required>
-            <option value="">Seleccioná tu carrera...</option>
+            <option value="">Seleccionar tecnicatura y resolución...</option>
             {
               carreras.map((c) => (
                 <option
                   value={c.code}
                   selected={normalizedPreselected === c.code}
                 >
-                  {c.name} {c.resolution ? `(${c.resolution})` : ''}
+                  {c.name} {c.resolution ? `— [${c.resolution}]` : ''}
                 </option>
               ))
             }
           </select>
         </div>
 
-        <div class="field-group full-width">
+        <div class="field-group">
           <span class="field-label" id="label-anio-materia">
-            Año al que pertenece la materia <span class="req" aria-hidden="true">*</span>
+            Año del Plan de Estudios <span class="req" aria-hidden="true">*</span>
           </span>
           <div
             class="radio-pills"
@@ -82,47 +102,55 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
             <label class="pill-option">
               <input type="radio" name="anioMateria" value="1" required />
               <span class="pill-surface">
-                <span class="pill-title">1° Año (Primero)</span>
+                <span class="pill-dot" aria-hidden="true"></span>
+                <span class="pill-title">1° Año</span>
                 <span class="pill-badge" id="badge-count-1">
-                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[1]} mat.` : '—'}
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[1]}` : '—'}
                 </span>
               </span>
             </label>
             <label class="pill-option">
               <input type="radio" name="anioMateria" value="2" />
               <span class="pill-surface">
-                <span class="pill-title">2° Año (Segundo)</span>
+                <span class="pill-dot" aria-hidden="true"></span>
+                <span class="pill-title">2° Año</span>
                 <span class="pill-badge" id="badge-count-2">
-                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[2]} mat.` : '—'}
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[2]}` : '—'}
                 </span>
               </span>
             </label>
             <label class="pill-option">
               <input type="radio" name="anioMateria" value="3" />
               <span class="pill-surface">
-                <span class="pill-title">3° Año (Tercero)</span>
+                <span class="pill-dot" aria-hidden="true"></span>
+                <span class="pill-title">3° Año</span>
                 <span class="pill-badge" id="badge-count-3">
-                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[3]} mat.` : '—'}
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[3]}` : '—'}
                 </span>
               </span>
             </label>
           </div>
         </div>
 
-        <div class="field-group full-width">
+        <div class="field-group">
           <div class="materia-label-row">
             <label for="materiaCodigo">
-              Materia a rendir <span class="req" aria-hidden="true">*</span>
+              Asignatura a Rendir <span class="req" aria-hidden="true">*</span>
             </label>
-            <!-- Ley de Hick-Hyman: Buscador instantáneo para planes extensos -->
-            <input
-              type="search"
-              id="materiaSearch"
-              class="materia-search-input"
-              placeholder="🔍 Filtrar materia por nombre..."
-              aria-label="Filtrar materias por nombre"
-              disabled
-            />
+            <div class="search-wrapper">
+              <svg class="search-icon-svg" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="search"
+                id="materiaSearch"
+                class="materia-search-input"
+                placeholder="Filtrar asignatura..."
+                aria-label="Filtrar materias por nombre"
+                disabled
+              />
+            </div>
           </div>
           <select
             id="materiaCodigo"
@@ -140,20 +168,27 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
       </div>
     </div>
 
-    <!-- Celda Bento 2B: Condición de Cursada y Cátedra -->
-    <div class="bento-cell">
+    <!-- Celda Bento 2B: Condición y Cátedra (5 columnas) -->
+    <div class="bento-cell bento-span-5">
       <div class="bento-cell-header">
-        <span class="bento-cell-icon" aria-hidden="true">🏛️</span>
+        <div class="bento-cell-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+        </div>
         <div>
-          <h3>2. Condición de Cursada y Cátedra</h3>
-          <p>Modalidad del examen final, año de cursada y docente</p>
+          <span class="cell-index">02.B</span>
+          <h3>Condición y Cátedra</h3>
         </div>
       </div>
 
-      <div class="form-grid">
-        <div class="field-group full-width">
+      <div class="form-stack">
+        <div class="field-group">
           <span class="field-label" id="label-modalidad">
-            Modalidad de Examen <span class="req" aria-hidden="true">*</span>
+            Condición del Estudiante <span class="req" aria-hidden="true">*</span>
           </span>
           <div
             class="radio-pills"
@@ -163,15 +198,15 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
             <label class="pill-option">
               <input type="radio" name="modalidad" value="Regular" checked required />
               <span class="pill-surface">
+                <span class="pill-dot" aria-hidden="true"></span>
                 <span class="pill-title">Regular</span>
-                <span class="pill-sub">Cursada aprobada</span>
               </span>
             </label>
             <label class="pill-option">
               <input type="radio" name="modalidad" value="Libre" />
               <span class="pill-surface">
+                <span class="pill-dot" aria-hidden="true"></span>
                 <span class="pill-title">Libre</span>
-                <span class="pill-sub">Instancia escrita + oral</span>
               </span>
             </label>
           </div>
@@ -179,18 +214,18 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
 
         <div class="field-group">
           <label for="anioCursado">
-            Año de cursado <span class="req" aria-hidden="true">*</span>
+            Año de Cursada <span class="req" aria-hidden="true">*</span>
           </label>
           <select id="anioCursado" name="anioCursado" required>
-            <option value="">Seleccionar año...</option>
+            <option value="">Seleccionar ciclo lectivo...</option>
             {availableYears.map((yr) => <option value={yr}>{yr}</option>)}
           </select>
-          <span class="field-hint">Año en que cursaste la materia</span>
+          <span class="field-hint">Ciclo lectivo en que cursó la asignatura</span>
         </div>
 
         <div class="field-group">
           <label for="profesor">
-            Profesor de la cátedra <span class="req" aria-hidden="true">*</span>
+            Docente a Cargo de la Cátedra <span class="req" aria-hidden="true">*</span>
           </label>
           <input
             type="text"
@@ -201,7 +236,7 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
             required
           />
           <datalist id="recent-professors-list"></datalist>
-          <span class="field-hint">Docente con quien cursaste o titular</span>
+          <span class="field-hint">Apellido del profesor titular o de cursada</span>
         </div>
       </div>
     </div>
@@ -211,10 +246,17 @@ const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPrese
 
   <div class="step-actions">
     <button type="button" class="btn btn-secondary" id="btn-back-step-1">
-      ← Volver a Datos Personales
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      <span>Volver a Legajo</span>
     </button>
     <button type="submit" class="btn btn-primary" id="btn-submit">
-      Confirmar Inscripción a Final
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Confirmar Inscripción a Final</span>
     </button>
   </div>
 </fieldset>

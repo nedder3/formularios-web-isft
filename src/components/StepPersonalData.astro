@@ -8,24 +8,35 @@ const { availableYears } = Astro.props;
 
 <fieldset class="form-step" id="form-step-1">
   <div class="step-header">
-    <span class="bento-tag">LEGAJO ESTUDIANTIL</span>
+    <div class="step-header-top">
+      <span class="bento-tag">SECCIÓN 01 // LEGAJO ESTUDIANTIL</span>
+      <span class="step-req-note">Campos obligatorios (*)</span>
+    </div>
     <legend class="step-title" id="heading-step-1" tabindex="-1">
-      Paso 1: Identificación Personal
+      Identificación Personal del Estudiante
     </legend>
     <p class="step-subtitle">
-      Verificá que tus datos coincidan exactamente con tu legajo académico oficial.
+      Verificá que los datos ingresados coincidan con tu documento y legajo académico.
     </p>
   </div>
 
-  <!-- Estructura Bento Grid Modular (Ley de Proximidad / Gestalt) -->
-  <div class="bento-grid-step1">
+  <!-- Grilla Bento Asimétrica 2 Columnas (Identidad 7fr / Contacto 5fr en Desktop) -->
+  <div class="bento-grid-asymmetric">
     <!-- Celda Bento 1A: Identidad Académica -->
-    <div class="bento-cell">
+    <div class="bento-cell bento-span-7">
       <div class="bento-cell-header">
-        <span class="bento-cell-icon" aria-hidden="true">🪪</span>
+        <div class="bento-cell-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+            <circle cx="9" cy="10" r="2"></circle>
+            <line x1="15" y1="8" x2="17" y2="8"></line>
+            <line x1="15" y1="12" x2="17" y2="12"></line>
+            <line x1="7" y1="16" x2="17" y2="16"></line>
+          </svg>
+        </div>
         <div>
-          <h3>Datos de Identidad y Cohorte</h3>
-          <p>Registro oficial para actas de examen</p>
+          <span class="cell-index">01.A</span>
+          <h3>Titularidad y Cohorte</h3>
         </div>
       </div>
 
@@ -43,31 +54,32 @@ const { availableYears } = Astro.props;
             aria-describedby="hint-apellidoNombre err-apellidoNombre"
             required
           />
-          <span class="field-hint" id="hint-apellidoNombre">Tal como figura en tu DNI</span>
+          <span class="field-hint" id="hint-apellidoNombre">Sin abreviaturas, tal como figura en el DNI</span>
           <span class="field-inline-error" id="err-apellidoNombre" role="alert" hidden></span>
         </div>
 
         <div class="field-group">
           <label for="dni">
-            DNI (sin puntos) <span class="req" aria-hidden="true">*</span>
+            Número de DNI <span class="req" aria-hidden="true">*</span>
           </label>
           <input
             type="text"
             id="dni"
             name="dni"
+            class="tabular-input"
             inputmode="numeric"
             pattern="[0-9]{7,9}"
-            placeholder="Ej: 43596839"
+            placeholder="43596839"
             aria-describedby="hint-dni err-dni"
             required
           />
-          <span class="field-hint" id="hint-dni">Solo números (7 a 9 dígitos)</span>
+          <span class="field-hint" id="hint-dni">7 a 9 dígitos numéricos</span>
           <span class="field-inline-error" id="err-dni" role="alert" hidden></span>
         </div>
 
         <div class="field-group">
           <label for="cohorte">
-            Cohorte (Año de ingreso) <span class="req" aria-hidden="true">*</span>
+            Año de Ingreso (Cohorte) <span class="req" aria-hidden="true">*</span>
           </label>
           <select
             id="cohorte"
@@ -75,57 +87,63 @@ const { availableYears } = Astro.props;
             aria-describedby="hint-cohorte err-cohorte"
             required
           >
-            <option value="">Seleccionar año...</option>
+            <option value="">Seleccionar cohorte...</option>
             {availableYears.map((yr) => <option value={yr}>{yr}</option>)}
           </select>
-          <span class="field-hint" id="hint-cohorte">Año de ingreso a la carrera</span>
+          <span class="field-hint" id="hint-cohorte">Año de matriculación inicial</span>
           <span class="field-inline-error" id="err-cohorte" role="alert" hidden></span>
         </div>
       </div>
     </div>
 
     <!-- Celda Bento 1B: Canal de Contacto -->
-    <div class="bento-cell">
+    <div class="bento-cell bento-span-5">
       <div class="bento-cell-header">
-        <span class="bento-cell-icon" aria-hidden="true">📬</span>
+        <div class="bento-cell-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
         <div>
-          <h3>Canal de Contacto y Notificación</h3>
-          <p>Para avisos de mesa examinadora y respaldo</p>
+          <span class="cell-index">01.B</span>
+          <h3>Contacto Académico</h3>
         </div>
       </div>
 
-      <div class="form-grid">
+      <div class="form-stack">
         <div class="field-group">
           <label for="telefono">
-            Teléfono / WhatsApp <span class="req" aria-hidden="true">*</span>
+            Teléfono Móvil <span class="req" aria-hidden="true">*</span>
           </label>
           <input
             type="tel"
             id="telefono"
             name="telefono"
-            placeholder="Ej: 2914058716"
+            class="tabular-input"
+            placeholder="2914058716"
             autocomplete="tel"
             aria-describedby="hint-telefono err-telefono"
             required
           />
-          <span class="field-hint" id="hint-telefono">Con código de área, sin 0 ni 15</span>
+          <span class="field-hint" id="hint-telefono">Código de área + número (sin 0 ni 15)</span>
           <span class="field-inline-error" id="err-telefono" role="alert" hidden></span>
         </div>
 
         <div class="field-group">
           <label for="email">
-            Dirección de correo electrónico <span class="req" aria-hidden="true">*</span>
+            Correo Electrónico <span class="req" aria-hidden="true">*</span>
           </label>
           <input
             type="email"
             id="email"
             name="email"
-            placeholder="ejemplo@gmail.com"
+            placeholder="estudiante@dominio.com"
             autocomplete="email"
             aria-describedby="hint-email err-email"
             required
           />
-          <span class="field-hint" id="hint-email">Respaldo de comprobante académico</span>
+          <span class="field-hint" id="hint-email">Vinculado al comprobante de examen</span>
           <span class="field-inline-error" id="err-email" role="alert" hidden></span>
         </div>
       </div>
@@ -135,9 +153,18 @@ const { availableYears } = Astro.props;
   <div class="step-error" id="error-step-1" role="alert" hidden></div>
 
   <div class="step-actions">
-    <span class="step-Autosave-note">🔒 Guardado rápido local activo</span>
+    <div class="step-autosave-note">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span>Persistencia local activa en navegador</span>
+    </div>
     <button type="button" class="btn btn-primary" id="btn-to-step-2">
-      Siguiente: Elegir Materia →
+      <span>Continuar a Selección de Materia</span>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
     </button>
   </div>
 </fieldset>

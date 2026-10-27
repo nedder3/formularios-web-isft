@@ -3,28 +3,32 @@
 
 <section id="receipt-view" hidden aria-live="polite">
   <div class="receipt-banner">
-    <div class="receipt-check" aria-hidden="true">✓</div>
+    <div class="receipt-check" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
     <div>
-      <h2 id="heading-step-3" tabindex="-1">¡Inscripción Registrada con Éxito!</h2>
+      <h2 id="heading-step-3" tabindex="-1">Inscripción Registrada Oficialmente</h2>
       <p id="receipt-status-subtitle">
         Los datos fueron impactados en la planilla homogénea de tu carrera.
       </p>
     </div>
   </div>
 
-  <!-- Comprobante Estilo Swiss Editorial / Neo-Brutalist Precision Ticket -->
+  <!-- Comprobante Estilo Swiss Editorial / Precision Ticket -->
   <article class="swiss-ticket" aria-label="Comprobante oficial de inscripción">
     <div class="swiss-ticket-top">
       <div class="swiss-ticket-brand">
-        <span class="swiss-kicker">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191</span>
+        <span class="swiss-kicker">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191 — BAHÍA BLANCA</span>
         <strong>CONSTANCIA DE INSCRIPCIÓN A MESA EXAMINADORA</strong>
       </div>
-      <span class="swiss-stamp">SHA-256 VERIFICADO</span>
+      <span class="swiss-stamp">FIRMA SHA-256</span>
     </div>
 
     <div class="receipt-header">
       <div>
-        <span class="receipt-meta-label">CÓDIGO DE TRANSACCIÓN</span>
+        <span class="receipt-meta-label">IDENTIFICADOR DE TRANSACCIÓN</span>
         <strong class="receipt-code" id="rec-id">—</strong>
       </div>
       <div class="receipt-date-col">
@@ -59,48 +63,69 @@
         <dd id="rec-materia">—</dd>
       </div>
       <div class="receipt-cell">
-        <dt>Año de la Materia / Modalidad</dt>
+        <dt>Año del Plan / Condición</dt>
         <dd id="rec-anio-mod">—</dd>
       </div>
       <div class="receipt-cell">
-        <dt>Año de Cursado / Cátedra</dt>
+        <dt>Ciclo de Cursada / Cátedra</dt>
         <dd id="rec-cursado-prof">—</dd>
       </div>
     </dl>
 
     <div class="swiss-ticket-footer">
-      <span>Carácter de Declaración Jurada • ISFT N° 191 Bahía Blanca</span>
-      <span class="tabular-mono">FORMATO HOMOGÉNEO 10-COL</span>
+      <span>Carácter de Declaración Jurada • Secretaría Académica ISFT N° 191</span>
+      <span class="tabular-mono">ESQUEMA HOMOGÉNEO 10-COL // SIU GUARANÍ</span>
     </div>
   </article>
 
-  <!-- Regla del Pico-Final (Peak-End Rule): Resumen Acumulativo de Mesas en la Sesión -->
+  <!-- Historial Acumulativo de Mesas en la Sesión -->
   <div class="session-history-bento no-print" id="session-history-box" hidden>
     <div class="session-history-header">
-      <strong>📋 Mesas inscriptas en esta sesión</strong>
-      <span class="session-count-badge" id="session-count-badge">1 materia</span>
+      <div class="session-history-title">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 11l3 3L22 4"></path>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+        <strong>Mesas registradas en esta sesión</strong>
+      </div>
+      <span class="session-count-badge" id="session-count-badge">1 asignatura</span>
     </div>
     <ul class="session-history-list" id="session-history-list"></ul>
   </div>
 
   <div class="receipt-actions no-print">
     <button type="button" class="btn btn-primary" id="btn-another-subject">
-      + Inscribirme a otra materia
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Inscribirme a otra asignatura</span>
     </button>
     <button type="button" class="btn btn-secondary" id="btn-print">
-      🖨️ Imprimir / Guardar Comprobante PDF
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+      <span>Imprimir / Guardar PDF</span>
     </button>
   </div>
 
-  <!-- Panel Administrativo Discreto (Protección PII por defecto en vista de alumno) -->
   <details class="admin-export-drawer no-print">
-    <summary>🔐 Acceso Secretaría Académica / Verificación de Planilla Excel</summary>
+    <summary>
+      <span>Panel de Secretaría Académica — Exportación Consolidada</span>
+    </summary>
     <div class="admin-export-body">
       <p>
         Descarga de la planilla homogénea consolidada por carrera (10 columnas oficiales para SIU Guaraní).
       </p>
       <a id="btn-download-excel" href="#" class="btn btn-outline" download>
-        📊 Descargar Excel Homogéneo de la Carrera
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span>Descargar Planilla XLSX de la Carrera</span>
       </a>
     </div>
   </details>
