@@ -1,0 +1,220 @@
+---
+import type { ClientCarreraDto } from '../types/academic';
+
+interface Props {
+  carreras: ClientCarreraDto[];
+  preselectedCarrera: string;
+  availableYears: string[];
+}
+
+const { carreras, preselectedCarrera, availableYears } = Astro.props;
+const normalizedPreselected = preselectedCarrera.trim().toUpperCase();
+const activePreselectedCarrera = carreras.find((c) => c.code === normalizedPreselected);
+---
+
+<fieldset class="form-step" id="form-step-2" hidden>
+  <!-- Píldora de Legajo Activo (Goal-Gradient Effect + Heurística H1) -->
+  <div class="active-student-bar" id="active-student-summary">
+    <div class="active-student-info">
+      <span class="student-avatar" aria-hidden="true">🎓</span>
+      <div>
+        <span class="active-student-label">INSCRIBIENDO A ESTUDIANTE</span>
+        <strong id="summary-student-name">—</strong>
+        <span class="active-student-meta" id="summary-student-meta">DNI — • Cohorte —</span>
+      </div>
+    </div>
+    <button type="button" class="btn-edit-student" id="btn-summary-edit">
+      ✎ Editar legajo
+    </button>
+  </div>
+
+  <div class="step-header">
+    <span class="bento-tag">SELECCIÓN CURRICULAR HOMOLOGADA</span>
+    <legend class="step-title" id="heading-step-2" tabindex="-1">
+      Paso 2: Selección de Examen Final
+    </legend>
+    <p class="step-subtitle">
+      Elegí tu carrera, el año del plan y la asignatura. Luego indicá la condición y cátedra.
+    </p>
+  </div>
+
+  <div class="bento-grid-step2">
+    <!-- Celda Bento 2A: Cascada Curricular (Carrera -> Año -> Materia) -->
+    <div class="bento-cell bento-cell-accent">
+      <div class="bento-cell-header">
+        <span class="bento-cell-icon" aria-hidden="true">📚</span>
+        <div>
+          <h3>1. Filtro Curricular en Cascada</h3>
+          <p>Sincronizado con el diseño curricular oficial del ISFT N° 191</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group full-width">
+          <label for="carreraCode">
+            Carrera y Plan (Resolución) <span class="req" aria-hidden="true">*</span>
+          </label>
+          <select id="carreraCode" name="carreraCode" required>
+            <option value="">Seleccioná tu carrera...</option>
+            {
+              carreras.map((c) => (
+                <option
+                  value={c.code}
+                  selected={normalizedPreselected === c.code}
+                >
+                  {c.name} {c.resolution ? `(${c.resolution})` : ''}
+                </option>
+              ))
+            }
+          </select>
+        </div>
+
+        <div class="field-group full-width">
+          <span class="field-label" id="label-anio-materia">
+            Año al que pertenece la materia <span class="req" aria-hidden="true">*</span>
+          </span>
+          <div
+            class="radio-pills"
+            id="anio-pills"
+            role="radiogroup"
+            aria-labelledby="label-anio-materia"
+          >
+            <label class="pill-option">
+              <input type="radio" name="anioMateria" value="1" required />
+              <span class="pill-surface">
+                <span class="pill-title">1° Año (Primero)</span>
+                <span class="pill-badge" id="badge-count-1">
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[1]} mat.` : '—'}
+                </span>
+              </span>
+            </label>
+            <label class="pill-option">
+              <input type="radio" name="anioMateria" value="2" />
+              <span class="pill-surface">
+                <span class="pill-title">2° Año (Segundo)</span>
+                <span class="pill-badge" id="badge-count-2">
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[2]} mat.` : '—'}
+                </span>
+              </span>
+            </label>
+            <label class="pill-option">
+              <input type="radio" name="anioMateria" value="3" />
+              <span class="pill-surface">
+                <span class="pill-title">3° Año (Tercero)</span>
+                <span class="pill-badge" id="badge-count-3">
+                  {activePreselectedCarrera ? `${activePreselectedCarrera.countsByYear[3]} mat.` : '—'}
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field-group full-width">
+          <div class="materia-label-row">
+            <label for="materiaCodigo">
+              Materia a rendir <span class="req" aria-hidden="true">*</span>
+            </label>
+            <!-- Ley de Hick-Hyman: Buscador instantáneo para planes extensos -->
+            <input
+              type="search"
+              id="materiaSearch"
+              class="materia-search-input"
+              placeholder="🔍 Filtrar materia por nombre..."
+              aria-label="Filtrar materias por nombre"
+              disabled
+            />
+          </div>
+          <select
+            id="materiaCodigo"
+            name="materiaCodigo"
+            aria-describedby="materia-count-hint"
+            disabled
+            required
+          >
+            <option value="">Primero seleccioná Carrera y Año...</option>
+          </select>
+          <span class="field-hint" id="materia-count-hint" aria-live="polite">
+            Esperando selección de carrera y año...
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celda Bento 2B: Condición de Cursada y Cátedra -->
+    <div class="bento-cell">
+      <div class="bento-cell-header">
+        <span class="bento-cell-icon" aria-hidden="true">🏛️</span>
+        <div>
+          <h3>2. Condición de Cursada y Cátedra</h3>
+          <p>Modalidad del examen final, año de cursada y docente</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group full-width">
+          <span class="field-label" id="label-modalidad">
+            Modalidad de Examen <span class="req" aria-hidden="true">*</span>
+          </span>
+          <div
+            class="radio-pills"
+            role="radiogroup"
+            aria-labelledby="label-modalidad"
+          >
+            <label class="pill-option">
+              <input type="radio" name="modalidad" value="Regular" checked required />
+              <span class="pill-surface">
+                <span class="pill-title">Regular</span>
+                <span class="pill-sub">Cursada aprobada</span>
+              </span>
+            </label>
+            <label class="pill-option">
+              <input type="radio" name="modalidad" value="Libre" />
+              <span class="pill-surface">
+                <span class="pill-title">Libre</span>
+                <span class="pill-sub">Instancia escrita + oral</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="anioCursado">
+            Año de cursado <span class="req" aria-hidden="true">*</span>
+          </label>
+          <select id="anioCursado" name="anioCursado" required>
+            <option value="">Seleccionar año...</option>
+            {availableYears.map((yr) => <option value={yr}>{yr}</option>)}
+          </select>
+          <span class="field-hint">Año en que cursaste la materia</span>
+        </div>
+
+        <div class="field-group">
+          <label for="profesor">
+            Profesor de la cátedra <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text"
+            id="profesor"
+            name="profesor"
+            list="recent-professors-list"
+            placeholder="Apellido del docente (Ej: Crivelli)"
+            required
+          />
+          <datalist id="recent-professors-list"></datalist>
+          <span class="field-hint">Docente con quien cursaste o titular</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-error" id="error-step-2" role="alert" hidden></div>
+
+  <div class="step-actions">
+    <button type="button" class="btn btn-secondary" id="btn-back-step-1">
+      ← Volver a Datos Personales
+    </button>
+    <button type="submit" class="btn btn-primary" id="btn-submit">
+      Confirmar Inscripción a Final
+    </button>
+  </div>
+</fieldset>

@@ -1,0 +1,99 @@
+---
+---
+
+<section class="notice-bento no-print" aria-label="Instrucciones de inscripción">
+  <div class="notice-main">
+    <div class="notice-icon" aria-hidden="true">ℹ️</div>
+    <div class="notice-text">
+      <strong>Importante:</strong> Completá una inscripción <strong>UNA VEZ POR CADA MATERIA</strong> a rendir. Tus datos personales quedan recordados localmente para agilizar la carga si rendís más de un examen final.
+    </div>
+  </div>
+
+  <!-- Heurística H1 + H3: Visibilidad de datos recordados y control de limpieza en PCs compartidas -->
+  <div class="draft-status-pill" id="draft-restored-banner" hidden aria-live="polite">
+    <span class="draft-dot" aria-hidden="true"></span>
+    <span id="draft-restored-text">Datos recordados en este dispositivo</span>
+    <button type="button" class="btn-clear-draft" id="btn-clear-draft">
+      Cambiar alumno / Limpiar
+    </button>
+  </div>
+</section>
+
+<style>
+  .notice-bento {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .notice-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #fffbeb 0%, var(--brand-accent-light) 100%);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    border-left: 5px solid var(--brand-accent);
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
+    color: #78350f;
+    box-shadow: 0 2px 10px rgba(217, 119, 6, 0.06);
+  }
+
+  .notice-icon {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .draft-status-pill {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--bento-border);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.95rem;
+    font-size: 0.82rem;
+    color: var(--text-main);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .draft-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--feedback-success);
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+    display: inline-block;
+    margin-right: 0.35rem;
+  }
+
+  #draft-restored-text {
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .btn-clear-draft {
+    background: #ffffff;
+    color: var(--brand-primary);
+    border: 1px solid var(--bento-border);
+    border-radius: 999px;
+    padding: 0.28rem 0.75rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-clear-draft:hover {
+    background: var(--feedback-error-bg);
+    color: var(--feedback-error);
+    border-color: #fca5a5;
+  }
+</style>

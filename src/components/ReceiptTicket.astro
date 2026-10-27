@@ -1,0 +1,107 @@
+---
+---
+
+<section id="receipt-view" hidden aria-live="polite">
+  <div class="receipt-banner">
+    <div class="receipt-check" aria-hidden="true">✓</div>
+    <div>
+      <h2 id="heading-step-3" tabindex="-1">¡Inscripción Registrada con Éxito!</h2>
+      <p id="receipt-status-subtitle">
+        Los datos fueron impactados en la planilla homogénea de tu carrera.
+      </p>
+    </div>
+  </div>
+
+  <!-- Comprobante Estilo Swiss Editorial / Neo-Brutalist Precision Ticket -->
+  <article class="swiss-ticket" aria-label="Comprobante oficial de inscripción">
+    <div class="swiss-ticket-top">
+      <div class="swiss-ticket-brand">
+        <span class="swiss-kicker">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191</span>
+        <strong>CONSTANCIA DE INSCRIPCIÓN A MESA EXAMINADORA</strong>
+      </div>
+      <span class="swiss-stamp">SHA-256 VERIFICADO</span>
+    </div>
+
+    <div class="receipt-header">
+      <div>
+        <span class="receipt-meta-label">CÓDIGO DE TRANSACCIÓN</span>
+        <strong class="receipt-code" id="rec-id">—</strong>
+      </div>
+      <div class="receipt-date-col">
+        <span class="receipt-meta-label">SELLADO TEMPORAL</span>
+        <strong class="receipt-timestamp" id="rec-fecha">—</strong>
+      </div>
+    </div>
+
+    <dl class="receipt-grid">
+      <div class="receipt-cell">
+        <dt>Apellido y Nombre</dt>
+        <dd id="rec-nombre">—</dd>
+      </div>
+      <div class="receipt-cell">
+        <dt>Documento (DNI)</dt>
+        <dd class="tabular-mono" id="rec-dni">—</dd>
+      </div>
+      <div class="receipt-cell">
+        <dt>Correo Electrónico</dt>
+        <dd id="rec-email">—</dd>
+      </div>
+      <div class="receipt-cell">
+        <dt>Teléfono / Cohorte</dt>
+        <dd class="tabular-mono" id="rec-tel-cohorte">—</dd>
+      </div>
+      <div class="receipt-cell full-span">
+        <dt>Carrera y Resolución Ministerial</dt>
+        <dd id="rec-carrera">—</dd>
+      </div>
+      <div class="receipt-cell full-span highlight-materia">
+        <dt>Asignatura Inscripta</dt>
+        <dd id="rec-materia">—</dd>
+      </div>
+      <div class="receipt-cell">
+        <dt>Año de la Materia / Modalidad</dt>
+        <dd id="rec-anio-mod">—</dd>
+      </div>
+      <div class="receipt-cell">
+        <dt>Año de Cursado / Cátedra</dt>
+        <dd id="rec-cursado-prof">—</dd>
+      </div>
+    </dl>
+
+    <div class="swiss-ticket-footer">
+      <span>Carácter de Declaración Jurada • ISFT N° 191 Bahía Blanca</span>
+      <span class="tabular-mono">FORMATO HOMOGÉNEO 10-COL</span>
+    </div>
+  </article>
+
+  <!-- Regla del Pico-Final (Peak-End Rule): Resumen Acumulativo de Mesas en la Sesión -->
+  <div class="session-history-bento no-print" id="session-history-box" hidden>
+    <div class="session-history-header">
+      <strong>📋 Mesas inscriptas en esta sesión</strong>
+      <span class="session-count-badge" id="session-count-badge">1 materia</span>
+    </div>
+    <ul class="session-history-list" id="session-history-list"></ul>
+  </div>
+
+  <div class="receipt-actions no-print">
+    <button type="button" class="btn btn-primary" id="btn-another-subject">
+      + Inscribirme a otra materia
+    </button>
+    <button type="button" class="btn btn-secondary" id="btn-print">
+      🖨️ Imprimir / Guardar Comprobante PDF
+    </button>
+  </div>
+
+  <!-- Panel Administrativo Discreto (Protección PII por defecto en vista de alumno) -->
+  <details class="admin-export-drawer no-print">
+    <summary>🔐 Acceso Secretaría Académica / Verificación de Planilla Excel</summary>
+    <div class="admin-export-body">
+      <p>
+        Descarga de la planilla homogénea consolidada por carrera (10 columnas oficiales para SIU Guaraní).
+      </p>
+      <a id="btn-download-excel" href="#" class="btn btn-outline" download>
+        📊 Descargar Excel Homogéneo de la Carrera
+      </a>
+    </div>
+  </details>
+</section>

@@ -1,0 +1,189 @@
+---
+---
+
+<nav class="stepper-glass no-print" aria-label="Progreso del formulario de inscripción">
+  <ol class="stepper-list">
+    <li class="step active" id="step-indicator-1" aria-current="step">
+      <button
+        type="button"
+        class="step-btn"
+        id="step-nav-btn-1"
+        aria-label="Paso 1: Datos del Estudiante"
+      >
+        <span class="step-num" aria-hidden="true">1</span>
+        <span class="step-meta">
+          <span class="step-kicker">PASO 01</span>
+          <span class="step-label">Legajo Personal</span>
+        </span>
+      </button>
+    </li>
+
+    <li class="step-line" aria-hidden="true">
+      <div class="step-line-fill" id="step-line-fill-1"></div>
+    </li>
+
+    <li class="step" id="step-indicator-2">
+      <div class="step-btn" tabindex="-1">
+        <span class="step-num" aria-hidden="true">2</span>
+        <span class="step-meta">
+          <span class="step-kicker">PASO 02</span>
+          <span class="step-label">Carrera y Materia</span>
+        </span>
+      </div>
+    </li>
+
+    <li class="step-line" aria-hidden="true">
+      <div class="step-line-fill" id="step-line-fill-2"></div>
+    </li>
+
+    <li class="step" id="step-indicator-3">
+      <div class="step-btn" tabindex="-1">
+        <span class="step-num" aria-hidden="true">3</span>
+        <span class="step-meta">
+          <span class="step-kicker">PASO 03</span>
+          <span class="step-label">Comprobante Oficial</span>
+        </span>
+      </div>
+    </li>
+  </ol>
+</nav>
+
+<style>
+  .stepper-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid var(--bento-border);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1.15rem;
+    margin-bottom: 1.35rem;
+    box-shadow: var(--glass-shadow);
+  }
+
+  .stepper-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+  }
+
+  .step-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    color: var(--text-muted);
+    padding: 0.25rem 0.4rem;
+    border-radius: var(--radius-sm);
+    text-align: left;
+    cursor: default;
+  }
+
+  button.step-btn {
+    cursor: pointer;
+  }
+
+  button.step-btn:focus-visible {
+    outline: 2px solid var(--brand-action);
+    outline-offset: 2px;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #e2e8f0;
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .step-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  .step-kicker {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    font-family: var(--font-mono);
+  }
+
+  .step-label {
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+
+  .step.active .step-btn {
+    color: var(--brand-primary);
+  }
+
+  .step.active .step-kicker {
+    color: var(--brand-primary);
+  }
+
+  .step.active .step-num {
+    background: var(--brand-primary);
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(52, 56, 170, 0.15);
+  }
+
+  .step.done .step-btn {
+    color: var(--feedback-success);
+  }
+
+  .step.done .step-kicker {
+    color: var(--feedback-success);
+  }
+
+  .step.done .step-num {
+    background: var(--feedback-success);
+    color: #ffffff;
+  }
+
+  .step-line {
+    flex: 1;
+    height: 3px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0 0.35rem;
+  }
+
+  .step-line-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--feedback-success);
+    transition: width 0.25s ease;
+  }
+
+  .step-line-fill.filled {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .step-meta {
+      display: none;
+    }
+    .stepper-glass {
+      padding: 0.6rem 0.9rem;
+    }
+  }
+</style>

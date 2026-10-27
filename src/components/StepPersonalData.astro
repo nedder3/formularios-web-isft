@@ -1,0 +1,143 @@
+---
+interface Props {
+  availableYears: string[];
+}
+
+const { availableYears } = Astro.props;
+---
+
+<fieldset class="form-step" id="form-step-1">
+  <div class="step-header">
+    <span class="bento-tag">LEGAJO ESTUDIANTIL</span>
+    <legend class="step-title" id="heading-step-1" tabindex="-1">
+      Paso 1: Identificación Personal
+    </legend>
+    <p class="step-subtitle">
+      Verificá que tus datos coincidan exactamente con tu legajo académico oficial.
+    </p>
+  </div>
+
+  <!-- Estructura Bento Grid Modular (Ley de Proximidad / Gestalt) -->
+  <div class="bento-grid-step1">
+    <!-- Celda Bento 1A: Identidad Académica -->
+    <div class="bento-cell">
+      <div class="bento-cell-header">
+        <span class="bento-cell-icon" aria-hidden="true">🪪</span>
+        <div>
+          <h3>Datos de Identidad y Cohorte</h3>
+          <p>Registro oficial para actas de examen</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group full-width">
+          <label for="apellidoNombre">
+            Apellido y Nombre completo <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text"
+            id="apellidoNombre"
+            name="apellidoNombre"
+            placeholder="Ej: Pérez Juan Ignacio"
+            autocomplete="name"
+            aria-describedby="hint-apellidoNombre err-apellidoNombre"
+            required
+          />
+          <span class="field-hint" id="hint-apellidoNombre">Tal como figura en tu DNI</span>
+          <span class="field-inline-error" id="err-apellidoNombre" role="alert" hidden></span>
+        </div>
+
+        <div class="field-group">
+          <label for="dni">
+            DNI (sin puntos) <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="text"
+            id="dni"
+            name="dni"
+            inputmode="numeric"
+            pattern="[0-9]{7,9}"
+            placeholder="Ej: 43596839"
+            aria-describedby="hint-dni err-dni"
+            required
+          />
+          <span class="field-hint" id="hint-dni">Solo números (7 a 9 dígitos)</span>
+          <span class="field-inline-error" id="err-dni" role="alert" hidden></span>
+        </div>
+
+        <div class="field-group">
+          <label for="cohorte">
+            Cohorte (Año de ingreso) <span class="req" aria-hidden="true">*</span>
+          </label>
+          <select
+            id="cohorte"
+            name="cohorte"
+            aria-describedby="hint-cohorte err-cohorte"
+            required
+          >
+            <option value="">Seleccionar año...</option>
+            {availableYears.map((yr) => <option value={yr}>{yr}</option>)}
+          </select>
+          <span class="field-hint" id="hint-cohorte">Año de ingreso a la carrera</span>
+          <span class="field-inline-error" id="err-cohorte" role="alert" hidden></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Celda Bento 1B: Canal de Contacto -->
+    <div class="bento-cell">
+      <div class="bento-cell-header">
+        <span class="bento-cell-icon" aria-hidden="true">📬</span>
+        <div>
+          <h3>Canal de Contacto y Notificación</h3>
+          <p>Para avisos de mesa examinadora y respaldo</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="telefono">
+            Teléfono / WhatsApp <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="tel"
+            id="telefono"
+            name="telefono"
+            placeholder="Ej: 2914058716"
+            autocomplete="tel"
+            aria-describedby="hint-telefono err-telefono"
+            required
+          />
+          <span class="field-hint" id="hint-telefono">Con código de área, sin 0 ni 15</span>
+          <span class="field-inline-error" id="err-telefono" role="alert" hidden></span>
+        </div>
+
+        <div class="field-group">
+          <label for="email">
+            Dirección de correo electrónico <span class="req" aria-hidden="true">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="ejemplo@gmail.com"
+            autocomplete="email"
+            aria-describedby="hint-email err-email"
+            required
+          />
+          <span class="field-hint" id="hint-email">Respaldo de comprobante académico</span>
+          <span class="field-inline-error" id="err-email" role="alert" hidden></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-error" id="error-step-1" role="alert" hidden></div>
+
+  <div class="step-actions">
+    <span class="step-Autosave-note">🔒 Guardado rápido local activo</span>
+    <button type="button" class="btn btn-primary" id="btn-to-step-2">
+      Siguiente: Elegir Materia →
+    </button>
+  </div>
+</fieldset>
