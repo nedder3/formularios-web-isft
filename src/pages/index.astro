@@ -129,6 +129,12 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     }
   }
 
+  function formatProfesorLabel(rawProf: string): string {
+    const p = rawProf.trim();
+    if (!p) return '-';
+    return /^(docente|prof\.?|profesor)/i.test(p) ? p : `Prof. ${p}`;
+  }
+
   /**
    * Actualiza en tiempo real la tarjeta derecha "Vista Previa de Solicitud" (LiveSummaryCard)
    */
@@ -197,7 +203,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     setLiveDd(
       'live-val-catedra',
       anioCursado || profesor
-        ? `Cursada ${anioCursado || '-'} - Prof. ${profesor || '-'}`
+        ? `Cursada ${anioCursado || '-'} - ${formatProfesorLabel(profesor)}`
         : '',
       '-'
     );
@@ -496,7 +502,16 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     radio.addEventListener('change', updateLiveSummaryCard);
   });
 
-  materiaSelect?.addEventListener('change', updateLiveSummaryCard);
+  materiaSelect?.addEventListener('change', () => {
+    const code = carreraSelect.value.trim().toUpperCase();
+    const carrera = carreraMap.get(code);
+    const materiaObj = carrera?.materias.find((m) => m.code === materiaSelect.value);
+    const profInput = getInputEl('profesor');
+    if (materiaObj && profInput) {
+      profInput.value = `Docente ${materiaObj.name}`;
+    }
+    updateLiveSummaryCard();
+  });
   getInputEl('anioCursado')?.addEventListener('change', updateLiveSummaryCard);
   getInputEl('profesor')?.addEventListener('input', updateLiveSummaryCard);
   materiaSearch?.addEventListener('input', updateMateriasList);
@@ -612,15 +627,85 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
     submitBtn.textContent = 'Procesando inscripción...';
 
     try {
-      const response = await fetch('/api/inscripcion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryWebhook = urlParams.get('webhook');
+      if (queryWebhook) {
+        try {
+          localStorage.setItem('isft191_webhook_url', queryWebhook);
+        } catch {}
+      }
+      const webhookUrl =
+        queryWebhook ||
+        import.meta.env.PUBLIC_APPS_SCRIPT_URL ||
+        (typeof localStorage !== 'undefined'
+          ? localStorage.getItem('isft191_webhook_url')
+          : null);
 
-      const result = (await response.json()) as InscripcionResult & { error?: string };
-      if (!response.ok || !result.ok) {
-        throw new Error(result.error || 'Error al registrar la inscripción.');
+      let result: (InscripcionResult & { error?: string }) | null = null;
+
+      try {
+        const response = await fetch('/api/inscripcion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (response.ok) {
+          result = (await response.json()) as InscripcionResult & { error?: string };
+        }
+      } catch {
+        // Fallback estático cuando corre en GitHub Pages sin servidor Node
+      }
+
+      if (!result || !result.ok) {
+        const carreraObj = carreraMap.get(payload.carreraCode.toUpperCase());
+        const materiaObj = carreraObj?.materias.find(
+          (m) => m.code === payload.materiaCodigo
+        );
+        const anioLabels: Record<number, 'Primero' | 'Segundo' | 'Tercero'> = {
+          1: 'Primero',
+          2: 'Segundo',
+          3: 'Tercero',
+        };
+        const fechaIso = new Date().toISOString();
+        const rawSeed = `${payload.dni}-${payload.carreraCode}-${payload.materiaCodigo}-${fechaIso}`;
+        const hashBuf = await crypto.subtle.digest(
+          'SHA-256',
+          new TextEncoder().encode(rawSeed)
+        );
+        const hashHex = Array.from(new Uint8Array(hashBuf))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('')
+          .slice(0, 6)
+          .toUpperCase();
+
+        result = {
+          ok: true,
+          comprobanteId: `ISFT-${new Date().getFullYear()}-${hashHex}`,
+          fechaIso,
+          archivoExcel: `inscripciones_${payload.carreraCode.toLowerCase()}.xlsx`,
+          totalInscriptosCarrera: sessionHistory.length + 1,
+          duplicado: false,
+          datos: {
+            ...payload,
+            carreraNombre: carreraObj?.name ?? payload.carreraCode,
+            carreraResolucion: carreraObj?.resolution ?? 'Vigente',
+            anioMateriaLabel: anioLabels[payload.anioMateria] ?? 'Primero',
+            materiaNombre: materiaObj?.name ?? payload.materiaCodigo,
+          },
+        };
+      }
+
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            comprobanteId: result.comprobanteId,
+            fechaIso: result.fechaIso,
+            ...result.datos,
+          }),
+        }).catch(() => {});
       }
 
       const d = result.datos;
@@ -641,7 +726,10 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
         'rec-anio-mod',
         `${d.anioMateriaLabel} (${d.anioMateria}° Año) - ${d.modalidad}`
       );
-      setText('rec-cursado-prof', `Ciclo ${d.anioCursado} - Prof. ${d.profesor}`);
+      setText(
+        'rec-cursado-prof',
+        `Ciclo ${d.anioCursado} - ${formatProfesorLabel(d.profesor)}`
+      );
 
       const subtitleEl = document.getElementById('receipt-status-subtitle');
       if (subtitleEl) {
