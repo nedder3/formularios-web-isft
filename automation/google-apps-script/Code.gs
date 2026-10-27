@@ -2,8 +2,8 @@
  * ============================================================================
  * ISFT N° 191 - SISTEMA AUTOMATIZADO DE MESAS EXAMINADORAS (FASE 1 - PoC)
  * ============================================================================
- * Planilla vinculada en Google Drive:
- * ID: 1yufAbB4DEeZ5Z8HXAx7YZp2eb-NRUx37iUm1x_Hc15A
+ * Planilla vinculada en Google Drive (arij.dev@gmail.com):
+ * ID: 12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g
  *
  * Funcionalidades:
  * 1. doPost(e): Recibe las inscripciones desde el formulario web (GitHub Pages o Local),
@@ -18,7 +18,7 @@
  *    durante la presentación del PoC.
  */
 
-const SPREADSHEET_ID = '1yufAbB4DEeZ5Z8HXAx7YZp2eb-NRUx37iUm1x_Hc15A';
+const SPREADSHEET_ID = '12u9N-3c9aKF51JstFVpH7KREZHHwkhqceWRQq4Uha2g';
 const SHEET_INSCRIPCIONES = 'Inscripciones_Finales';
 const SHEET_DOCENTES = 'Directorio_Docentes';
 
