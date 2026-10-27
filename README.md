@@ -142,9 +142,13 @@ El archivo maestro generado por [`scripts/generate-poc-excel.mjs`](./scripts/gen
 
 ### 3.4 Mapeo a Figma: Investigación UX, User Personas, Branding Kit, Design System y Wireframes
 
-Todo el sistema de diseño fue documentado y empaquetado bajo [`design-system/`](./design-system/) con **3 vías directas de exportación a Figma**:
-- **Tablero Visual Interactivo (`/figma-board`):** [`src/pages/figma-board.astro`](./src/pages/figma-board.astro) expone en `http://localhost:4321/figma-board` los 7 Frames (*01 Investigación y Concepto*, *02 User Personas*, *03 Branding Kit*, *04 Paleta de Colores WCAG AAA*, *05 Tipografía*, *06 Design System* y *07 Wireframes 65%/35%*), listo para importar con el plugin **`html.to.design`**.
-- **Plugin Nativo de Figma (`design-system/figma-plugin-generator/`):** Importando [`manifest.json`](./design-system/figma-plugin-generator/manifest.json) en *Figma Desktop -> Plugins -> Development*, el script [`code.js`](./design-system/figma-plugin-generator/code.js) construye programáticamente los 7 Frames con Auto-Layout mediante la Plugin API oficial de Figma.
+- **Archivo Oficial en Figma (`Isft-formularios`):** [Abrir Proyecto en Figma (3 Páginas: Investigación, Sistema de Diseño y Prototipo)](https://www.figma.com/design/Lgk3S9LKqPBbeERqT7ZN7c/Isft-formularios?node-id=46-172)
+
+Todo el sistema de diseño fue documentado y empaquetado bajo [`design-system/`](./design-system/) con **3 láminas dedicadas para `html.to.design`** que corresponden 1:1 a las 3 páginas del archivo de Figma:
+- **Página 1 (`1. Investigación y Concepto` -> `/figma/investigacion`):** [`src/pages/figma/investigacion.astro`](./src/pages/figma/investigacion.astro) (Moodboard, Diagnóstico, 3 User Personas, Circuito Ejecutivo y Leyes de UX).
+- **Página 2 (`2. Sistema de Diseño` -> `/figma/sistema-diseno`):** [`src/pages/figma/sistema-diseno.astro`](./src/pages/figma/sistema-diseno.astro) (Branding Kit, Tokens WCAG AAA, Tipografía, UI Kit y Wireframes 65%/35%).
+- **Página 3 (`3. Prototipo` -> `/figma/prototipo`):** [`src/pages/figma/prototipo.astro`](./src/pages/figma/prototipo.astro) (Las 4 pantallas Hi-Fi desplegadas: Paso 1, Paso 2, Comprobante SHA-256 y Vista del Correo Quincenal al Docente).
+- **Plugin Nativo de Figma (`design-system/figma-plugin-generator/`):** Importando [`manifest.json`](./design-system/figma-plugin-generator/manifest.json) en *Figma Desktop -> Plugins -> Development*, el script [`code.js`](./design-system/figma-plugin-generator/code.js) construye programáticamente los Frames con Auto-Layout.
 - **Tokens W3C para Variables de Figma (`design-system/figma-tokens.json`):** [`figma-tokens.json`](./design-system/figma-tokens.json) exporta todos los tokens de color, tipografía y radios en formato estándar W3C Design Tokens.
 - **Especificación Completa:** Ver [`design-system/FIGMA_DESIGN_SYSTEM_SPEC.md`](./design-system/FIGMA_DESIGN_SYSTEM_SPEC.md).
 
