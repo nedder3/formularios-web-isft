@@ -1,15 +1,11 @@
 ---
 ---
 
-<aside class="live-summary-shell no-print" id="live-summary-aside" aria-label="Resumen en vivo de la inscripción">
+<aside class="live-summary-shell no-print" id="live-summary-aside" aria-label="Resumen de la inscripción">
   <div class="live-summary-card">
     <div class="live-summary-header">
-      <div class="live-summary-title-row">
-        <span class="live-pulse" id="live-status-dot" aria-hidden="true"></span>
-        <span class="live-kicker" id="live-status-text">Resumen en vivo</span>
-      </div>
-      <h3>Vista Previa de Solicitud</h3>
-      <p>Se actualiza automáticamente a medida que completás los campos.</p>
+      <h3>Resumen de Inscripción</h3>
+      <p>Verificá los datos declarados antes de confirmar la mesa.</p>
     </div>
 
     <!-- Bloque 1: Estudiante -->
@@ -60,13 +56,13 @@
       </dl>
     </div>
 
-    <!-- Garantía Institucional -->
     <div class="live-footer-note">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
       </svg>
       <span>
-        Impacto directo en el padrón oficial de Secretaría Académica con comprobante verificable.
+        Al confirmar se emitirá tu comprobante oficial descargable en PDF.
       </span>
     </div>
   </div>
@@ -79,7 +75,7 @@
     border-radius: var(--radius-lg);
     padding: 6px;
     position: sticky;
-    top: 6.2rem;
+    top: 5.5rem;
   }
 
   .live-summary-card {
@@ -90,46 +86,18 @@
     box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
-    gap: 1.15rem;
+    gap: 1.1rem;
   }
 
   .live-summary-header {
-    padding-bottom: 0.9rem;
+    padding-bottom: 0.85rem;
     border-bottom: 1px solid #f1f5f9;
-  }
-
-  .live-summary-title-row {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    background: var(--brand-primary-soft);
-    color: var(--brand-primary);
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-    margin-bottom: 0.45rem;
-  }
-
-  .live-pulse {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: var(--brand-primary);
-  }
-
-  .live-pulse.ready {
-    background: var(--feedback-success);
-  }
-
-  .live-kicker {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
   }
 
   .live-summary-header h3 {
     font-size: 1rem;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--brand-primary);
     letter-spacing: -0.015em;
   }
 
@@ -162,7 +130,7 @@
     font-size: 0.66rem;
     font-weight: 700;
     padding: 0.12rem 0.5rem;
-    border-radius: 999px;
+    border-radius: 6px;
     background: #e2e8f0;
     color: #475569;
   }

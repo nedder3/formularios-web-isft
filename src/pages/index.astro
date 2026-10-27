@@ -346,7 +346,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       }
 
       if (restoredAny && draftBanner && draftText) {
-        draftText.textContent = `Legajo activo: ${data.apellidoNombre || 'Estudiante'} (DNI ${data.dni || '—'})`;
+        draftText.textContent = `Datos recordados: ${data.apellidoNombre || 'Estudiante'} (DNI ${data.dni || '—'})`;
         draftBanner.hidden = false;
       }
     } catch {}
@@ -364,7 +364,7 @@ const availableYears = Array.from({ length: 12 }, (_, i) => String(currentYear -
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
       if (draftBanner && draftText && draft.apellidoNombre) {
-        draftText.textContent = `Legajo activo: ${draft.apellidoNombre} (DNI ${draft.dni})`;
+        draftText.textContent = `Datos recordados: ${draft.apellidoNombre} (DNI ${draft.dni})`;
         draftBanner.hidden = false;
       }
     } catch {}

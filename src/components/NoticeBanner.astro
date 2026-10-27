@@ -13,23 +13,21 @@
     <div class="notice-text">
       <span class="notice-kicker">Normativa de Mesas Examinadoras</span>
       <p>
-        Registrá una solicitud <strong>por cada asignatura</strong> a rendir. El sistema conserva localmente tu legajo durante la sesión para agilizar inscripciones múltiples.
+        Registrá una solicitud <strong>por cada asignatura</strong> a rendir. Tus datos personales quedan recordados para agilizar la carga si te anotás a más de un examen final.
       </p>
     </div>
   </div>
 
   <div class="draft-status-pill" id="draft-restored-banner" hidden aria-live="polite">
     <div class="draft-status-left">
-      <span class="draft-dot" aria-hidden="true"></span>
-      <span id="draft-restored-text">Legajo activo en este dispositivo</span>
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span id="draft-restored-text">Datos recordados</span>
     </div>
     <button type="button" class="btn-clear-draft" id="btn-clear-draft">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 6h18"></path>
-        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-      </svg>
-      <span>Cambiar alumno</span>
+      <span>Limpiar datos</span>
     </button>
   </div>
 </section>
@@ -101,16 +99,8 @@
   .draft-status-left {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-  }
-
-  .draft-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: var(--feedback-success);
-    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.16);
-    display: inline-block;
+    gap: 0.5rem;
+    color: var(--brand-primary);
   }
 
   #draft-restored-text {
