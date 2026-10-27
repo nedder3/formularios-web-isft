@@ -1,0 +1,148 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "meta": {
+    "project": "Sistema de Inscripción a Exámenes Finales - ISFT N° 191",
+    "institution": "Instituto Superior de Formación Técnica N° 191 - Bahía Blanca",
+    "aestheticStyle": "Framer Academic Portal (Double-Bezel + Swiss Editorial Ticket)",
+    "version": "1.2.0"
+  },
+  "color": {
+    "brand": {
+      "primary": {
+        "$value": "#3438AA",
+        "$type": "color",
+        "$description": "Azul Institucional Principal (isft191.edu.ar) - Contraste sobre blanco: 8.65:1 (AAA)"
+      },
+      "primaryDark": {
+        "$value": "#252882",
+        "$type": "color",
+        "$description": "Azul Institucional Hover / Activo - Contraste sobre blanco: 11.4:1 (AAA)"
+      },
+      "primarySoft": {
+        "$value": "#EEF0FF",
+        "$type": "color",
+        "$description": "Superficie suave de acento institucional para píldoras activas y cabeceras"
+      },
+      "accent": {
+        "$value": "#C97026",
+        "$type": "color",
+        "$description": "Dorado Ocre Institucional (Borde superior de acento, avisos y sellos)"
+      },
+      "accentLight": {
+        "$value": "#FDF3E7",
+        "$type": "color",
+        "$description": "Fondo cálido para etiquetas y alertas informativas"
+      }
+    },
+    "surface": {
+      "canvas": {
+        "$value": "#F6F8FC",
+        "$type": "color",
+        "$description": "Fondo general del portal académico"
+      },
+      "card": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "Superficie interior de tarjetas del formulario y resumen"
+      },
+      "framerShell": {
+        "$value": "#EEF2F9",
+        "$type": "color",
+        "$description": "Marco exterior Double-Bezel estilo Framer (padding 6px)"
+      },
+      "subtleBlock": {
+        "$value": "#FBFDFF",
+        "$type": "color",
+        "$description": "Sub-bloque interno de agrupación de campos"
+      }
+    },
+    "text": {
+      "main": {
+        "$value": "#1B1F3B",
+        "$type": "color",
+        "$description": "Texto primario de lectura - Contraste 14.8:1 (AAA)"
+      },
+      "secondary": {
+        "$value": "#4A516D",
+        "$type": "color",
+        "$description": "Subtítulos y etiquetas secundarias - Contraste 7.4:1 (AAA)"
+      },
+      "muted": {
+        "$value": "#646D8C",
+        "$type": "color",
+        "$description": "Ayudas contextuales e hints - Contraste 4.9:1 (AA)"
+      }
+    },
+    "semantic": {
+      "success": {
+        "$value": "#15803D",
+        "$type": "color",
+        "$description": "Confirmación de inscripción y pasos completados"
+      },
+      "successBg": {
+        "$value": "#DCFCE7",
+        "$type": "color"
+      },
+      "danger": {
+        "$value": "#DC2626",
+        "$type": "color",
+        "$description": "Errores de validación inline por campo"
+      },
+      "dangerBg": {
+        "$value": "#FEF2F2",
+        "$type": "color"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "#DBE2EF",
+        "$type": "color"
+      },
+      "framerShell": {
+        "$value": "#DDE3F0",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "display": {
+        "$value": "Plus Jakarta Sans",
+        "$type": "fontFamily",
+        "$description": "Encabezados institucionales, títulos de paso y resumen"
+      },
+      "sans": {
+        "$value": "Inter",
+        "$type": "fontFamily",
+        "$description": "Cuerpo de texto, labels de formulario, selectores e instrucciones"
+      },
+      "mono": {
+        "$value": "JetBrains Mono",
+        "$type": "fontFamily",
+        "$description": "DNI, códigos de materia, hashes SHA-256 y teléfonos (tabular-nums)"
+      }
+    },
+    "fontSize": {
+      "xs": { "$value": "11px", "$type": "dimension" },
+      "sm": { "$value": "13px", "$type": "dimension" },
+      "base": { "$value": "15px", "$type": "dimension" },
+      "lg": { "$value": "18px", "$type": "dimension" },
+      "xl": { "$value": "20px", "$type": "dimension" },
+      "2xl": { "$value": "24px", "$type": "dimension" }
+    }
+  },
+  "radius": {
+    "sm": { "$value": "10px", "$type": "dimension" },
+    "md": { "$value": "14px", "$type": "dimension" },
+    "lg": { "$value": "20px", "$type": "dimension" },
+    "pill": { "$value": "9999px", "$type": "dimension" }
+  },
+  "layout": {
+    "containerMaxWidth": { "$value": "1120px", "$type": "dimension" },
+    "gridSplit": {
+      "$value": "65% Form Column / 35% Sticky Live Summary Card",
+      "$type": "string"
+    },
+    "minTouchTarget": { "$value": "48px", "$type": "dimension" }
+  }
+}

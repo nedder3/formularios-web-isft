@@ -1,0 +1,7 @@
+{
+  "name": "ISFT 191 - Generador de Design System y Wireframes",
+  "id": "isft191-figma-design-system-generator",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}

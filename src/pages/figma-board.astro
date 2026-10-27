@@ -1,0 +1,409 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Figma Design System & UX Board - ISFT N° 191">
+  <section class="figma-canvas-wrapper">
+    <div class="figma-toolbar no-print">
+      <div>
+        <span class="board-kicker">ENTREGABLE UX/UI - APTO PARA HTML.TO.DESIGN & FIGMA PLUGIN</span>
+        <h2>Tablero Integral de Diseño: Investigación, Personas, Branding, Tokens y Wireframes</h2>
+      </div>
+      <a href="/" class="btn-back-portal">Volver al Formulario</a>
+    </div>
+
+    <!-- 01. INVESTIGACIÓN Y CONCEPTO -->
+    <article class="figma-artboard" id="board-01-research">
+      <header class="artboard-header">
+        <span class="artboard-num">FRAME 01 - INVESTIGACIÓN UX Y CONCEPTO</span>
+        <h3>Diagnóstico del Problema y Propuesta Arquitectónica</h3>
+      </header>
+      <div class="artboard-grid-3">
+        <div class="spec-card">
+          <h4>1. Problemática Detectada</h4>
+          <p>
+            Formularios separados por carrera y año generaban duplicación de registros, errores de tipeo en nombres de asignaturas y carga administrativa manual para armar las actas de cada docente.
+          </p>
+        </div>
+        <div class="spec-card">
+          <h4>2. Concepto: Framer Academic Portal</h4>
+          <p>
+            Unificación de los <strong>8 planes de estudio y 211 materias</strong> en un asistente progresivo de 2 pasos con marco de doble bisel (<em>Double-Bezel</em>) y tarjeta lateral fija de resumen (65% / 35%).
+          </p>
+        </div>
+        <div class="spec-card">
+          <h4>3. Leyes de UX Aplicadas</h4>
+          <p>
+            <strong>Ley de Hick-Hyman:</strong> Cascada Carrera - Año - Materia con buscador instantáneo.<br />
+            <strong>Heurística de Prevención:</strong> Validación inline en tiempo real y bloqueo de duplicados por DNI + Materia.
+          </p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02. USER PERSONAS -->
+    <article class="figma-artboard" id="board-02-personas">
+      <header class="artboard-header">
+        <span class="artboard-num">FRAME 02 - USER PERSONAS</span>
+        <h3>Arquetipos de Usuarios del ISFT N° 191</h3>
+      </header>
+      <div class="artboard-grid-3">
+        <div class="persona-card">
+          <div class="persona-tag">Arquetipo 1 - Estudiante</div>
+          <h4>Alumno Técnico (19 - 38 años)</h4>
+          <ul>
+            <li><strong>Contexto:</strong> Se inscribe a 2 o 4 materias por turno desde el celular o PC.</li>
+            <li><strong>Frustración previa:</strong> Tener que volver a tipear nombre, DNI y teléfono por cada materia y no tener constancia inmediata.</li>
+            <li><strong>Solución:</strong> Su legajo queda recordado localmente, suma varias materias en la misma sesión y descarga un comprobante PDF con código único.</li>
+          </ul>
+        </div>
+        <div class="persona-card">
+          <div class="persona-tag">Arquetipo 2 - Profesor</div>
+          <h4>Docente de Cátedra</h4>
+          <ul>
+            <li><strong>Contexto:</strong> Agnóstico a sistemas internos; necesita saber quiénes rinden su materia.</li>
+            <li><strong>Frustración previa:</strong> Depender de consultas manuales o planillas mezcladas con otras materias.</li>
+            <li><strong>Solución:</strong> Recibe automáticamente en su correo cada 15 días una tabla clara y un Excel adjunto exclusivamente con los inscriptos de su asignatura.</li>
+          </ul>
+        </div>
+        <div class="persona-card">
+          <div class="persona-tag">Arquetipo 3 - Gestión</div>
+          <h4>Secretaría Académica / Directivos</h4>
+          <ul>
+            <li><strong>Contexto:</strong> Supervisa la integridad del padrón de exámenes finales de las 8 tecnicaturas.</li>
+            <li><strong>Frustración previa:</strong> Alumnos anotados dos veces a la misma mesa o nombres de materias mal escritos.</li>
+            <li><strong>Solución:</strong> Planilla maestra normalizada, sin duplicados y con disparo automático o en 1 clic desde el menú institucional.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <!-- 03. BRANDING KIT & PALETA DE COLORES -->
+    <article class="figma-artboard" id="board-03-branding">
+      <header class="artboard-header">
+        <span class="artboard-num">FRAME 03 & 04 - BRANDING KIT Y PALETA DE COLORES</span>
+        <h3>Identidad Institucional ISFT N° 191 (WCAG 2.1 AA / AAA)</h3>
+      </header>
+      <div class="swatch-grid">
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#3438AA;color:#FFFFFF;">#3438AA</div>
+          <strong>Brand Primary</strong>
+          <span>Azul Institucional - Contraste 8.65:1 (AAA)</span>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#252882;color:#FFFFFF;">#252882</div>
+          <strong>Brand Primary Dark</strong>
+          <span>Estados Hover / Activo - 11.4:1 (AAA)</span>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#C97026;color:#FFFFFF;">#C97026</div>
+          <strong>Brand Accent Ocre</strong>
+          <span>Línea institucional superior y destaques</span>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#F6F8FC;color:#1B1F3B;border:1px solid #DBE2EF;">#F6F8FC</div>
+          <strong>Canvas Background</strong>
+          <span>Superficie de fondo general del portal</span>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#EEF2F9;color:#1B1F3B;border:1px solid #DDE3F0;">#EEF2F9</div>
+          <strong>Framer Shell Bezel</strong>
+          <span>Marco perimetral de 6px (Double-Bezel)</span>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background:#1B1F3B;color:#FFFFFF;">#1B1F3B</div>
+          <strong>Text Main</strong>
+          <span>Texto principal - Contraste 14.8:1 (AAA)</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 05. TIPOGRAFÍA -->
+    <article class="figma-artboard" id="board-05-typography">
+      <header class="artboard-header">
+        <span class="artboard-num">FRAME 05 - SISTEMA TIPOGRÁFICO</span>
+        <h3>Escala Tipográfica y Precisión Tabular</h3>
+      </header>
+      <div class="artboard-grid-3">
+        <div class="type-specimen">
+          <span class="type-role">DISPLAY / ENCABEZADOS</span>
+          <h4 style="font-family:var(--font-display);font-size:1.35rem;">Plus Jakarta Sans (700 / 800)</h4>
+          <p>Usada en cabecera institucional, títulos de paso del wizard y encabezados de resumen.</p>
+        </div>
+        <div class="type-specimen">
+          <span class="type-role">INTERFAZ Y LECTURA</span>
+          <h4 style="font-family:var(--font-sans);font-size:1.35rem;">Inter (400 / 500 / 600)</h4>
+          <p>Optimizada para legibilidad en formularios extensos, etiquetas, selectores y mensajes de validación.</p>
+        </div>
+        <div class="type-specimen">
+          <span class="type-role">DATOS Y CÓDIGOS (TABULAR-NUMS)</span>
+          <h4 style="font-family:var(--font-mono);font-size:1.25rem;">JetBrains Mono (600 / 700)</h4>
+          <p>Aplicada a DNI (<code>34945012</code>), códigos (<code>SOFT-203</code>) y comprobantes (<code>ISFT-2026-A1B2C3</code>).</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 06 & 07. WIREFRAMES Y DESIGN SYSTEM -->
+    <article class="figma-artboard" id="board-06-wireframes">
+      <header class="artboard-header">
+        <span class="artboard-num">FRAME 06 & 07 - WIREFRAMES Y ARQUITECTURA DE PANTALLA</span>
+        <h3>Estructura de Grilla 65% / 35% y Flujo de 3 Pasos</h3>
+      </header>
+      <div class="wireframe-grid">
+        <div class="wf-box">
+          <span class="wf-step">PASO 1 - IDENTIFICACIÓN</span>
+          <div class="wf-layout">
+            <div class="wf-main">
+              <strong>Columna Principal (65%)</strong>
+              <span>Bloque 1: Apellido y Nombre, DNI, Cohorte</span>
+              <span>Bloque 2: Teléfono Móvil, Correo Electrónico</span>
+              <span>Acción: Continuar a Selección de Materia</span>
+            </div>
+            <div class="wf-side">
+              <strong>Resumen Fijo (35%)</strong>
+              <span>1. Datos del Estudiante</span>
+              <span>2. Mesa Examinadora</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="wf-box">
+          <span class="wf-step">PASO 2 - CASCADA CURRICULAR</span>
+          <div class="wf-layout">
+            <div class="wf-main">
+              <strong>Columna Principal (65%)</strong>
+              <span>Barra Superior: Legajo Activo Recordado</span>
+              <span>Cascada: Tecnicatura - Píldoras 1°/2°/3° Año - Asignatura</span>
+              <span>Autocompletado: "Docente + Nombre de Materia"</span>
+            </div>
+            <div class="wf-side">
+              <strong>Resumen Fijo (35%)</strong>
+              <span>Actualización instantánea de carrera, materia y cátedra</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="wf-box">
+          <span class="wf-step">PASO 3 - COMPROBANTE OFICIAL</span>
+          <div class="wf-layout">
+            <div class="wf-main" style="grid-column: 1 / -1;">
+              <strong>Ticket Institucional Verificado SHA-256</strong>
+              <span>Escudo ISFT N° 191 + Código de Comprobante + Fecha GMT-3</span>
+              <span>Grilla de Datos Declarados + Historial de Mesas en la Sesión</span>
+              <span>Acciones: Inscribirme a otra asignatura | Imprimir / Guardar PDF</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+</Layout>
+
+<style>
+  .figma-canvas-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .figma-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--brand-primary);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--card-shadow);
+  }
+
+  .board-kicker {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--brand-accent);
+    letter-spacing: 0.06em;
+  }
+
+  .figma-toolbar h2 {
+    font-size: 1.15rem;
+    color: var(--brand-primary);
+    margin-top: 0.15rem;
+  }
+
+  .btn-back-portal {
+    background: var(--brand-primary);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+  }
+
+  .figma-artboard {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+  }
+
+  .artboard-header {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .artboard-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--brand-accent);
+    letter-spacing: 0.05em;
+  }
+
+  .artboard-header h3 {
+    font-size: 1.15rem;
+    color: var(--brand-primary);
+    margin-top: 0.2rem;
+  }
+
+  .artboard-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .spec-card,
+  .persona-card,
+  .type-specimen {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.1rem;
+  }
+
+  .spec-card h4,
+  .persona-card h4 {
+    color: var(--brand-primary);
+    font-size: 0.95rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .spec-card p,
+  .type-specimen p {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .persona-tag,
+  .type-role {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+  }
+
+  .persona-card ul {
+    padding-left: 1.1rem;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.9rem;
+  }
+
+  .swatch-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .swatch-color {
+    height: 64px;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.45rem 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .swatch-card strong {
+    font-size: 0.85rem;
+    color: var(--text-main);
+  }
+
+  .swatch-card span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .wireframe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .wf-box {
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .wf-step {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--brand-primary);
+    margin-bottom: 0.65rem;
+  }
+
+  .wf-layout {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .wf-main,
+  .wf-side {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+  }
+
+  .wf-main strong,
+  .wf-side strong {
+    color: var(--text-main);
+    font-size: 0.8rem;
+  }
+</style>
