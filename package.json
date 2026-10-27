@@ -4,10 +4,10 @@
   "description": "Sistema de Inscripción a Exámenes Finales - ISFT N° 191 (Astro SSR / SIU Guaraní Ready)",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "start": "node ./dist/server/entry.mjs",
-    "build": "astro build",
-    "preview": "astro preview"
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "repository": {
     "type": "git",
