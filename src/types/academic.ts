@@ -20,6 +20,23 @@ export interface AcademicScaffolding {
   carreras: Carrera[];
 }
 
+/**
+ * Lightweight DTO projected for the browser client (strips internal DB/Sheet IDs).
+ */
+export interface ClientMateriaDto {
+  code: string;
+  name: string;
+  year: 1 | 2 | 3;
+}
+
+export interface ClientCarreraDto {
+  code: string;
+  name: string;
+  resolution: string | null;
+  countsByYear: Record<1 | 2 | 3, number>;
+  materias: ClientMateriaDto[];
+}
+
 export type ModalidadExamen = 'Regular' | 'Libre';
 
 export type AnioMateriaLabel = 'Primero' | 'Segundo' | 'Tercero';
@@ -52,5 +69,10 @@ export interface InscripcionResult {
   comprobanteId: string;
   fechaIso: string;
   archivoCarrera: string;
+  duplicado?: boolean;
   datos: InscripcionFinalPayload;
+}
+
+export interface IInscripcionRepository {
+  registrar(payload: InscripcionFinalPayload): Promise<InscripcionResult>;
 }
