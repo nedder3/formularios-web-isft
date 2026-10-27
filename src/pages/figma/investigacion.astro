@@ -1,0 +1,592 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="1. Investigación y Concepto - ISFT N° 191" embed={true}>
+  <div class="figma-page-sheet">
+    <!-- CABECERA EDITORIAL DE LÁMINA 01 -->
+    <header class="sheet-hero">
+      <div class="sheet-hero-top">
+        <span class="sheet-badge">PÁGINA 01 DE 03 - UX RESEARCH & ARCHITECTURE</span>
+        <span class="sheet-meta">ISFT N° 191 - BAHÍA BLANCA - SISTEMA DE EXÁMENES FINALES</span>
+      </div>
+      <h1>Investigación y Concepto</h1>
+      <p>
+        Relevamiento de fricciones operativas, definición de arquetipos institucionales (User Personas), leyes de experiencia de usuario y circuito integral automatizado de inscripción a mesas examinadoras.
+      </p>
+    </header>
+
+    <!-- SECCIÓN 1: MOODBOARD E IDENTIDAD CONCEPTUAL -->
+    <section class="sheet-section">
+      <div class="section-head">
+        <span class="section-kicker">01 - DIRECCIÓN VISUAL Y CONCEPTO</span>
+        <h2>Moodboard Conceptual: Framer Academic Portal</h2>
+      </div>
+
+      <div class="moodboard-grid">
+        <div class="mood-card mood-brand">
+          <div class="mood-brand-inner">
+            <img src="/logo-isft191.png" alt="Escudo Oficial ISFT N° 191" width="76" height="76" />
+            <div>
+              <span class="mood-tag">IDENTIDAD OFICIAL</span>
+              <h3>ISFT N° 191 - Bahía Blanca</h3>
+              <p>Alineación cromática e institucional con el portal educativo oficial (Azul #3438AA y Dorado Ocre #C97026).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mood-card mood-bezel">
+          <span class="mood-tag">ESTÉTICA ESTRUCTURAL</span>
+          <h3>Marcos Double-Bezel (Framer)</h3>
+          <p>Contenedor perimetral técnico (#EEF2F9, padding 6px) que enmarca tarjetas blancas de alto contraste para reducir la fatiga visual.</p>
+          <div class="bezel-demo">
+            <div class="bezel-demo-inner">
+              <span>Superficie Interior #FFFFFF</span>
+              <code>border-radius: 15px</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="mood-card mood-swiss">
+          <span class="mood-tag">PRECISIÓN EDITORIAL</span>
+          <h3>Swiss Editorial Ticket & Tabular Data</h3>
+          <p>Comprobante oficial inspirado en pases de seguridad verificables con tipografía monoespaciada tabular para DNI y hashes SHA-256.</p>
+          <div class="swiss-demo-strip">
+            <span>ISFT-2026-9F4A2C</span>
+            <span>27/10/2026 - GMT-3</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: DIAGNÓSTICO DEL PROBLEMA VS SOLUCIÓN -->
+    <section class="sheet-section">
+      <div class="section-head">
+        <span class="section-kicker">02 - DIAGNÓSTICO Y PROPUESTA DE VALOR</span>
+        <h2>Problemática Detectada vs. Solución Implementada</h2>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comp-card comp-before">
+          <span class="comp-pill">ESTADO ANTERIOR (PROBLEMA)</span>
+          <h3>Formularios Dispersos y Carga Manual</h3>
+          <ul>
+            <li><strong>Fragmentación:</strong> Múltiples formularios estáticos separados por carrera y año difíciles de mantener sincronizados.</li>
+            <li><strong>Errores de tipeo:</strong> Alumnos escribiendo nombres de materias o docentes a mano con variaciones ortográficas.</li>
+            <li><strong>Duplicación de filas:</strong> Estudiantes que enviaban dos veces el formulario ante la duda de si había impactado.</li>
+            <li><strong>Cuello de botella administrativo:</strong> Armado manual de listas de inscriptos para enviar a cada profesor antes del examen.</li>
+          </ul>
+        </div>
+
+        <div class="comp-card comp-after">
+          <span class="comp-pill">NUEVO SISTEMA UNIFICADO (SOLUCIÓN)</span>
+          <h3>Portal Reactivo Único + Despacho Automatizado</h3>
+          <ul>
+            <li><strong>Padrón Único O(1):</strong> Las 8 carreras y 211 materias unificadas en una cascada guiada sin recargas de página.</li>
+            <li><strong>Autocompletado Determinista:</strong> Al elegir materia se asigna automáticamente <code>Docente + Nombre de Materia</code> para cruce exacto.</li>
+            <li><strong>Idempotencia por (DNI + Materia):</strong> Si el alumno reenvía la misma materia, actualiza su registro sin duplicar filas.</li>
+            <li><strong>Envío Quincenal al Docente:</strong> Cada 15 días el profesor recibe en su correo únicamente el Excel de inscriptos de su materia.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: PÚBLICO OBJETIVO Y USER PERSONAS -->
+    <section class="sheet-section">
+      <div class="section-head">
+        <span class="section-kicker">03 - PÚBLICO OBJETIVO Y ARQUETIPOS</span>
+        <h2>User Personas del Ecosistema ISFT N° 191</h2>
+      </div>
+
+      <div class="personas-grid">
+        <article class="persona-box">
+          <div class="persona-top">
+            <div class="persona-avatar">E1</div>
+            <div>
+              <span class="persona-role">ARQUETIPO PRIMARIO - FRONTEND</span>
+              <h3>Estudiante de Tecnicatura</h3>
+              <p>19 a 38 años - Rinde entre 2 y 4 finales por llamado (Móvil / Desktop)</p>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-block">
+              <strong>Objetivos y Necesidades</strong>
+              <p>Anotarse rápido a varias materias sin volver a tipear su DNI, teléfono y correo en cada inscripción, y guardar un comprobante oficial válido.</p>
+            </div>
+            <div class="persona-block">
+              <strong>Puntos de Dolor (Pain Points)</strong>
+              <p>Duda de si eligió la resolución correcta de su plan de estudios o si el formulario realmente registró su solicitud.</p>
+            </div>
+            <div class="persona-block highlight">
+              <strong>Respuesta del Diseño</strong>
+              <p>Autoguardado local del legajo (Paso 1), resumen lateral fijo en tiempo real, botón "Inscribirme a otra asignatura" y ticket PDF con sello SHA-256.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="persona-box">
+          <div class="persona-top">
+            <div class="persona-avatar accent">D2</div>
+            <div>
+              <span class="persona-role">ARQUETIPO RECEPTOR - CORREO AUTOMATIZADO</span>
+              <h3>Docente Titular de Cátedra</h3>
+              <p>Profesor/a de una o más asignaturas - Agnóstico a sistemas internos</p>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-block">
+              <strong>Objetivos y Necesidades</strong>
+              <p>Conocer con anticipación cuántos alumnos regulares y libres se anotaron a su mesa sin tener que entrar a plataformas complejas.</p>
+            </div>
+            <div class="persona-block">
+              <strong>Puntos de Dolor (Pain Points)</strong>
+              <p>Recibir planillas gigantes con todas las materias mezcladas o enterarse sobre la hora de la cantidad de examinados.</p>
+            </div>
+            <div class="persona-block highlight">
+              <strong>Respuesta del Diseño</strong>
+              <p>Cruce automático con <code>Directorio_Docentes</code>: recibe cada 15 días en su correo un mail institucional con tabla resumen y el Excel adjunto sólo de su cátedra.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="persona-box">
+          <div class="persona-top">
+            <div class="persona-avatar dark">S3</div>
+            <div>
+              <span class="persona-role">ARQUETIPO GESTIÓN - BACKOFFICE</span>
+              <h3>Secretaría Académica y Directivos</h3>
+              <p>Equipo de conducción y administración académica del instituto</p>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-block">
+              <strong>Objetivos y Necesidades</strong>
+              <p>Tener trazabilidad total con fecha y hora oficial de Buenos Aires (GMT-3), cero registros duplicados y privacidad del padrón estudiantil.</p>
+            </div>
+            <div class="persona-block">
+              <strong>Puntos de Dolor (Pain Points)</strong>
+              <p>Depurar manualmente duplicados en Excel y reenviar correos materia por materia a más de 200 cátedras.</p>
+            </div>
+            <div class="persona-block highlight">
+              <strong>Respuesta del Diseño</strong>
+              <p>Planilla maestra con menú propio <code>ISFT 191 - Secretaría</code> para disparar envíos en 1 clic o dejar activo el cron automático cada 15 días.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: INFOGRAFÍA EJECUTIVA NO TÉCNICA -->
+    <section class="sheet-section">
+      <div class="section-head">
+        <span class="section-kicker">04 - ARQUITECTURA EXPLICADA PARA DIRECTIVOS Y DOCENTES</span>
+        <h2>Circuito Operativo de Punta a Punta (Web + Excel + Mail Docente)</h2>
+      </div>
+      <div class="infographic-frame">
+        <img src="/docs/circuito-ejecutivo-isft191.jpg" alt="Circuito de Inscripción a Exámenes Finales ISFT N° 191" />
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: LEYES DE UX Y HEURÍSTICAS DE NIELSEN -->
+    <section class="sheet-section">
+      <div class="section-head">
+        <span class="section-kicker">05 - FUNDAMENTACIÓN HEURÍSTICA</span>
+        <h2>Leyes de UX y Heurísticas de Usabilidad Aplicadas</h2>
+      </div>
+
+      <div class="laws-grid">
+        <div class="law-card">
+          <span class="law-code">LEY DE HICK-HYMAN</span>
+          <h4>Reducción de Carga Cognitiva en 211 Materias</h4>
+          <p>En lugar de un desplegable interminable, la cascada progresiva (Carrera - Año - Materia) reduce la decisión a un promedio de 8 materias por año, complementada con filtro de búsqueda instantáneo.</p>
+        </div>
+        <div class="law-card">
+          <span class="law-code">LEY DE PROXIMIDAD (GESTALT)</span>
+          <h4>Agrupación Semántica en Sub-bloques</h4>
+          <p>Los campos se dividen en unidades lógicas cerradas: Titularidad y Cohorte, Contacto Académico, Padrón Curricular y Condición de Examen.</p>
+        </div>
+        <div class="law-card">
+          <span class="law-code">HEURÍSTICA H1 & H5 (NIELSEN)</span>
+          <h4>Visibilidad del Estado y Prevención de Errores</h4>
+          <p>La tarjeta derecha de Resumen de Inscripción refleja cada cambio en vivo, mientras la validación inline sanitiza puntos del DNI y verifica formatos antes de avanzar.</p>
+        </div>
+        <div class="law-card">
+          <span class="law-code">REGLA DEL PICO-FINAL (PEAK-END RULE)</span>
+          <h4>Cierre con Comprobante Oficial y Sesión Acumulativa</h4>
+          <p>Al finalizar, el estudiante recibe un comprobante institucional listo para imprimir en PDF junto al listado de todas las materias que inscribió en esa sesión.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .figma-page-sheet {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+    background: #F6F8FC;
+  }
+
+  .sheet-hero {
+    background: #3438AA;
+    color: #FFFFFF;
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
+    border-bottom: 5px solid #C97026;
+  }
+
+  .sheet-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .sheet-badge {
+    background: rgba(255, 255, 255, 0.14);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+
+  .sheet-meta {
+    opacity: 0.85;
+  }
+
+  .sheet-hero h1 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.65rem;
+  }
+
+  .sheet-hero p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 920px;
+    color: #E2E8F0;
+  }
+
+  .sheet-section {
+    background: #FFFFFF;
+    border: 1px solid #DBE2EF;
+    border-radius: 20px;
+    padding: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .section-head {
+    border-bottom: 1px solid #E2E8F0;
+    padding-bottom: 0.9rem;
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #C97026;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+  }
+
+  .section-head h2 {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    color: #1B1F3B;
+    font-weight: 800;
+  }
+
+  .moodboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .mood-card {
+    background: #F8FAFC;
+    border: 1px solid #DBE2EF;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mood-brand-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+
+  .mood-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #3438AA;
+    background: #EEF0FF;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    width: fit-content;
+  }
+
+  .mood-card h3 {
+    font-size: 1.1rem;
+    color: #1B1F3B;
+    font-weight: 800;
+    margin-top: 0.25rem;
+  }
+
+  .mood-card p {
+    font-size: 0.88rem;
+    color: #4A516D;
+    line-height: 1.55;
+  }
+
+  .bezel-demo {
+    background: #EEF2F9;
+    border: 1px solid #DDE3F0;
+    padding: 6px;
+    border-radius: 14px;
+    margin-top: auto;
+  }
+
+  .bezel-demo-inner {
+    background: #FFFFFF;
+    border: 1px solid #DBE2EF;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1B1F3B;
+  }
+
+  .swiss-demo-strip {
+    margin-top: auto;
+    background: #1B1F3B;
+    color: #FFFFFF;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .comp-card {
+    border-radius: 16px;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .comp-before {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+  }
+
+  .comp-after {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+  }
+
+  .comp-pill {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .comp-before .comp-pill {
+    color: #DC2626;
+  }
+
+  .comp-after .comp-pill {
+    color: #15803D;
+  }
+
+  .comp-card h3 {
+    font-size: 1.15rem;
+    color: #1B1F3B;
+    font-weight: 800;
+  }
+
+  .comp-card ul {
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+  }
+
+  .personas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .persona-box {
+    border: 1px solid #DBE2EF;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #F8FAFC;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .persona-top {
+    background: #FFFFFF;
+    padding: 1.25rem 1.4rem;
+    border-bottom: 1px solid #E2E8F0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .persona-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #3438AA;
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .persona-avatar.accent {
+    background: #C97026;
+  }
+
+  .persona-avatar.dark {
+    background: #1B1F3B;
+  }
+
+  .persona-role {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 700;
+    color: #646D8C;
+  }
+
+  .persona-top h3 {
+    font-size: 1.05rem;
+    color: #1B1F3B;
+    font-weight: 800;
+    margin: 0.1rem 0;
+  }
+
+  .persona-top p {
+    font-size: 0.78rem;
+    color: #646D8C;
+  }
+
+  .persona-body {
+    padding: 1.25rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .persona-block {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+  }
+
+  .persona-block.highlight {
+    border-left: 4px solid #3438AA;
+    background: #EEF0FF;
+  }
+
+  .persona-block strong {
+    display: block;
+    font-size: 0.78rem;
+    color: #1B1F3B;
+    margin-bottom: 0.25rem;
+  }
+
+  .persona-block p {
+    font-size: 0.83rem;
+    color: #4A516D;
+    line-height: 1.45;
+  }
+
+  .infographic-frame {
+    border: 1px solid #DBE2EF;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #F8FAFC;
+    padding: 0.75rem;
+  }
+
+  .infographic-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+  }
+
+  .laws-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.1rem;
+  }
+
+  .law-card {
+    background: #F8FAFC;
+    border: 1px solid #DBE2EF;
+    border-top: 3px solid #3438AA;
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .law-code {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #C97026;
+  }
+
+  .law-card h4 {
+    font-size: 0.95rem;
+    color: #1B1F3B;
+    font-weight: 800;
+  }
+
+  .law-card p {
+    font-size: 0.83rem;
+    color: #4A516D;
+    line-height: 1.5;
+  }
+</style>

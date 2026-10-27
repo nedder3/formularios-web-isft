@@ -1,0 +1,861 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="3. Prototipo de Alta Fidelidad - ISFT N° 191" embed={true}>
+  <div class="figma-page-sheet">
+    <!-- CABECERA EDITORIAL DE LÁMINA 03 -->
+    <header class="sheet-hero">
+      <div class="sheet-hero-top">
+        <span class="sheet-badge">PÁGINA 03 DE 03 - HIGH-FIDELITY SCREENS & EMAIL DISPATCH</span>
+        <span class="sheet-meta">ISFT N° 191 - BAHÍA BLANCA - PROTOTIPO END-TO-END</span>
+      </div>
+      <h1>Prototipo de Alta Fidelidad (3 Pasos + Correo Docente)</h1>
+      <p>
+        Vistas completas en alta fidelidad del flujo estudiantil (Paso 1, Paso 2 y Comprobante Oficial SHA-256) junto con la vista del correo electrónico automatizado que recibe el docente cada 15 días.
+      </p>
+    </header>
+
+    <!-- PANTALLA 01: PASO 1 (IDENTIFICACIÓN PERSONAL) -->
+    <section class="proto-screen-frame">
+      <div class="proto-screen-bar">
+        <span>PANTALLA 01 / 04 - PASO 1: IDENTIFICACIÓN PERSONAL DEL ESTUDIANTE</span>
+        <code>Viewport: 1440px - Layout 65% / 35%</code>
+      </div>
+
+      <div class="proto-inst-header">
+        <img src="/logo-isft191.png" alt="Escudo ISFT 191" width="46" height="46" />
+        <div>
+          <span class="kicker">ISFT N° 191 - Bahía Blanca</span>
+          <h2>Inscripción a Mesas de Exámenes Finales</h2>
+          <p>Formularios académicos unificados por carrera y resolución</p>
+        </div>
+      </div>
+
+      <div class="proto-workspace-grid">
+        <div class="proto-bezel-shell">
+          <div class="proto-card">
+            <div class="proto-card-head">
+              <div class="row-between">
+                <span class="pill-step">Paso 1 de 2 - Legajo Estudiantil</span>
+                <span class="req-note">Campos obligatorios (*)</span>
+              </div>
+              <h3>Identificación Personal del Estudiante</h3>
+              <p>Verificá que los datos ingresados coincidan con tu documento y legajo académico.</p>
+            </div>
+
+            <div class="proto-subblock">
+              <h4>Titularidad y Cohorte de Ingreso</h4>
+              <div class="proto-grid-2">
+                <div class="proto-field full">
+                  <label>Apellido y Nombre completo *</label>
+                  <div class="proto-input">Jaime Ariel</div>
+                  <span class="hint">Sin abreviaturas, tal como figura en el DNI</span>
+                </div>
+                <div class="proto-field">
+                  <label>Número de DNI *</label>
+                  <div class="proto-input mono">34945012</div>
+                  <span class="hint">7 a 9 dígitos numéricos, sin puntos</span>
+                </div>
+                <div class="proto-field">
+                  <label>Año de Ingreso (Cohorte) *</label>
+                  <div class="proto-input">2023</div>
+                  <span class="hint">Año de matriculación inicial en la carrera</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proto-subblock">
+              <h4>Datos de Contacto y Notificación</h4>
+              <div class="proto-grid-2">
+                <div class="proto-field">
+                  <label>Teléfono Móvil *</label>
+                  <div class="proto-input mono">2914400469</div>
+                </div>
+                <div class="proto-field">
+                  <label>Correo Electrónico *</label>
+                  <div class="proto-input">arij.dev@gmail.com</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="proto-actions">
+              <span class="autosave-note">Recordado localmente para agilizar próximas materias</span>
+              <span class="proto-btn-primary">Continuar a Selección de Materia -&gt;</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="proto-bezel-shell">
+          <div class="proto-summary-card">
+            <h4>Resumen de Inscripción</h4>
+            <p>Verificá los datos declarados antes de confirmar la mesa.</p>
+            <div class="proto-sum-block">
+              <div class="sum-head">
+                <span>1. Datos del Estudiante</span>
+                <span class="badge-done">Completo</span>
+              </div>
+              <div class="sum-row"><span>Estudiante</span><strong>Jaime Ariel</strong></div>
+              <div class="sum-row"><span>DNI / Cohorte</span><strong class="mono">DNI 34945012 - Ingreso 2023</strong></div>
+              <div class="sum-row"><span>Contacto</span><strong>arij.dev@gmail.com (2914400469)</strong></div>
+            </div>
+            <div class="proto-sum-block">
+              <div class="sum-head">
+                <span>2. Mesa Examinadora</span>
+                <span class="badge-pending">Pendiente</span>
+              </div>
+              <div class="sum-row"><span>Tecnicatura</span><strong class="muted">Sin seleccionar</strong></div>
+              <div class="sum-row"><span>Asignatura</span><strong class="muted">Sin seleccionar</strong></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PANTALLA 02: PASO 2 (SELECCIÓN CURRICULAR Y AUTOCOMPLETADO DOCENTE) -->
+    <section class="proto-screen-frame">
+      <div class="proto-screen-bar">
+        <span>PANTALLA 02 / 04 - PASO 2: SELECCIÓN CURRICULAR Y CÁTEDRA AUTOMÁTICA</span>
+        <code>Autocompletado: "Docente + Nombre de Materia"</code>
+      </div>
+
+      <div class="proto-workspace-grid">
+        <div class="proto-bezel-shell">
+          <div class="proto-card">
+            <div class="proto-active-student">
+              <div>
+                <span class="small-kicker">LEGAJO ACTIVO</span>
+                <strong>Jaime Ariel</strong>
+                <span class="mono">DNI 34945012 - Cohorte 2023</span>
+              </div>
+              <span class="btn-mini">Modificar datos</span>
+            </div>
+
+            <div class="proto-card-head">
+              <div class="row-between">
+                <span class="pill-step">Paso 2 de 2 - Selección Curricular</span>
+                <span class="req-note">8 Planes - 211 Asignaturas</span>
+              </div>
+              <h3>Asignatura y Condición de Examen Final</h3>
+            </div>
+
+            <div class="proto-subblock">
+              <h4>Padrón Curricular Oficial</h4>
+              <div class="proto-field">
+                <label>Tecnicatura y Resolución Ministerial *</label>
+                <div class="proto-input">Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</div>
+              </div>
+
+              <div class="proto-field">
+                <label>Año del Plan de Estudios *</label>
+                <div class="proto-pills-3">
+                  <div class="p-pill">1° Año (Primero) <span>8</span></div>
+                  <div class="p-pill active">2° Año (Segundo) <span>8</span></div>
+                  <div class="p-pill">3° Año (Tercero) <span>6</span></div>
+                </div>
+              </div>
+
+              <div class="proto-field">
+                <label>Asignatura a Rendir *</label>
+                <div class="proto-input active">Algebra y lógica</div>
+                <span class="hint">Padrón activo: 8 asignaturas oficiales de 2° Año (RS 5847/19).</span>
+              </div>
+            </div>
+
+            <div class="proto-subblock">
+              <h4>Condición de Examen y Cátedra</h4>
+              <div class="proto-grid-2">
+                <div class="proto-field">
+                  <label>Condición del Estudiante *</label>
+                  <div class="proto-input active">Alumno Regular (Cursada aprobada)</div>
+                </div>
+                <div class="proto-field">
+                  <label>Año en que cursó la materia *</label>
+                  <div class="proto-input">2026</div>
+                </div>
+                <div class="proto-field full">
+                  <label>Docente de la Cátedra (Autocompletado por Padrón) *</label>
+                  <div class="proto-input active">Docente Algebra y lógica</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="proto-actions">
+              <span class="btn-mini">&lt;- Volver a Datos Personales</span>
+              <span class="proto-btn-primary">Confirmar Inscripción a Final</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="proto-bezel-shell">
+          <div class="proto-summary-card">
+            <h4>Resumen de Inscripción</h4>
+            <p>Verificá los datos declarados antes de confirmar la mesa.</p>
+            <div class="proto-sum-block">
+              <div class="sum-head">
+                <span>1. Datos del Estudiante</span>
+                <span class="badge-done">Completo</span>
+              </div>
+              <div class="sum-row"><span>Estudiante</span><strong>Jaime Ariel</strong></div>
+              <div class="sum-row"><span>DNI / Cohorte</span><strong class="mono">DNI 34945012 - Ingreso 2023</strong></div>
+            </div>
+            <div class="proto-sum-block">
+              <div class="sum-head">
+                <span>2. Mesa Examinadora</span>
+                <span class="badge-done">Listo</span>
+              </div>
+              <div class="sum-row"><span>Tecnicatura</span><strong>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</strong></div>
+              <div class="sum-row"><span>Asignatura</span><strong>Algebra y lógica</strong></div>
+              <div class="sum-row"><span>Año y Condición</span><strong>2° Año - Condición Regular</strong></div>
+              <div class="sum-row"><span>Cátedra</span><strong>Cursada 2026 - Docente Algebra y lógica</strong></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PANTALLA 03: PASO 3 (COMPROBANTE OFICIAL SHA-256) -->
+    <section class="proto-screen-frame">
+      <div class="proto-screen-bar">
+        <span>PANTALLA 03 / 04 - PASO 3: COMPROBANTE OFICIAL DEL ALUMNO (SIN DESCARGA DE PADRÓN)</span>
+        <code>Huso Horario: America/Argentina/Buenos_Aires (GMT-3)</code>
+      </div>
+
+      <div class="proto-bezel-shell">
+        <div class="proto-card">
+          <div class="proto-ticket">
+            <div class="proto-ticket-head">
+              <div class="ticket-brand">
+                <img src="/logo-isft191.png" alt="Escudo ISFT 191" width="40" height="40" />
+                <div>
+                  <span class="kicker">INSTITUTO SUPERIOR DE FORMACIÓN TÉCNICA N° 191 - BAHÍA BLANCA</span>
+                  <strong>CONSTANCIA DE INSCRIPCIÓN A MESA EXAMINADORA</strong>
+                </div>
+              </div>
+              <span class="stamp-sha">VERIFICADO SHA-256</span>
+            </div>
+
+            <div class="proto-ticket-meta">
+              <div>
+                <span>CÓDIGO DE COMPROBANTE</span>
+                <strong class="mono">ISFT-2026-TEST01</strong>
+              </div>
+              <div>
+                <span>FECHA Y HORA DE REGISTRO</span>
+                <strong class="mono">27/10/2026, 14:47:15 (GMT-3)</strong>
+              </div>
+            </div>
+
+            <div class="proto-ticket-grid">
+              <div><span>APELLIDO Y NOMBRE</span><strong>Jaime Ariel</strong></div>
+              <div><span>DOCUMENTO (DNI)</span><strong class="mono">34945012</strong></div>
+              <div><span>CORREO ELECTRÓNICO</span><strong>arij.dev@gmail.com</strong></div>
+              <div><span>TELÉFONO / COHORTE</span><strong class="mono">2914400469 - Cohorte 2023</strong></div>
+              <div class="full"><span>TECNICATURA Y RESOLUCIÓN MINISTERIAL</span><strong>Tecnicatura Superior en Desarrollo de Software (RS 5847/19)</strong></div>
+              <div class="full highlight"><span>ASIGNATURA INSCRIPTA</span><strong>Algebra y lógica [SOFT-203]</strong></div>
+              <div><span>AÑO DEL PLAN / CONDICIÓN</span><strong>Segundo (2° Año) - Regular</strong></div>
+              <div><span>CICLO DE CURSADA / CÁTEDRA</span><strong>Ciclo 2026 - Docente Algebra y lógica</strong></div>
+            </div>
+
+            <div class="proto-ticket-foot">
+              <span>Carácter de Declaración Jurada - Secretaría Académica ISFT N° 191</span>
+              <span class="mono">Padrón Homogéneo Oficial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 04: CORREO AUTOMATIZADO QUE RECIBE EL DOCENTE CADA 15 DÍAS -->
+    <section class="proto-screen-frame">
+      <div class="proto-screen-bar">
+        <span>PANTALLA 04 / 04 - BACKOFFICE: CORREO QUINCENAL AUTOMÁTICO AL DOCENTE CON EXCEL ADJUNTO</span>
+        <code>Origen: Directorio_Docentes + Inscripciones_Finales</code>
+      </div>
+
+      <div class="email-preview-card">
+        <div class="email-meta-bar">
+          <div><strong>De:</strong> Secretaría Académica ISFT N° 191</div>
+          <div><strong>Para:</strong> Docente Algebra y lógica &lt;arij.dev@gmail.com&gt;</div>
+          <div><strong>Asunto:</strong> [ISFT N° 191] Nómina de Inscriptos - Algebra y lógica (2 inscriptos)</div>
+          <div><strong>Adjunto:</strong> <code>Nomina_Inscriptos_SOFT-203.csv</code> (Compatible Excel)</div>
+        </div>
+
+        <div class="email-body-frame">
+          <div class="email-banner">
+            <span>ISFT N° 191 - BAHÍA BLANCA - SECRETARÍA ACADÉMICA</span>
+            <h3>Nómina de Inscriptos a Mesa Examinadora</h3>
+          </div>
+          <div class="email-content">
+            <p>Estimado/a <strong>Docente Algebra y lógica</strong>,</p>
+            <p>Se remite el listado actualizado de estudiantes inscriptos hasta el <strong>27/10/2026 14:50 (GMT-3)</strong> para la mesa examinadora de:</p>
+            <div class="email-summary-box">
+              <div><strong>Carrera:</strong> Tecnicatura Superior en Desarrollo de Software (SOFT)</div>
+              <div><strong>Asignatura:</strong> Algebra y lógica [SOFT-203]</div>
+              <div><strong>Total de inscriptos registrados:</strong> 2 estudiantes</div>
+            </div>
+
+            <table class="email-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>DNI</th>
+                  <th>Apellido y Nombre</th>
+                  <th>Condición</th>
+                  <th>Cursada</th>
+                  <th>Correo</th>
+                  <th>Comprobante</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td class="mono">34945012</td>
+                  <td><strong>Jaime Ariel</strong></td>
+                  <td>Regular</td>
+                  <td>2026</td>
+                  <td>arij.dev@gmail.com</td>
+                  <td class="mono">ISFT-2026-TEST01</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td class="mono">42819402</td>
+                  <td><strong>Pérez Juan Ignacio</strong></td>
+                  <td>Regular</td>
+                  <td>2026</td>
+                  <td>alumno.9402@isft191.edu.ar</td>
+                  <td class="mono">ISFT-2026-8B2F1A</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .figma-page-sheet {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+    background: #F6F8FC;
+  }
+
+  .sheet-hero {
+    background: #3438AA;
+    color: #FFFFFF;
+    padding: 2.5rem 3rem;
+    border-radius: 20px;
+    border-bottom: 5px solid #C97026;
+  }
+
+  .sheet-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .sheet-badge {
+    background: rgba(255, 255, 255, 0.16);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+
+  .sheet-hero h1 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 0.65rem;
+  }
+
+  .sheet-hero p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 920px;
+    color: #E2E8F0;
+  }
+
+  .proto-screen-frame {
+    background: #FFFFFF;
+    border: 1px solid #DBE2EF;
+    border-radius: 20px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .proto-screen-bar {
+    background: #1B1F3B;
+    color: #FFFFFF;
+    padding: 0.7rem 1.15rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .proto-inst-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: #F8FAFC;
+    border: 1px solid #DBE2EF;
+    border-top: 3px solid #C97026;
+    border-radius: 14px;
+  }
+
+  .kicker {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #C97026;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .proto-inst-header h2 {
+    font-size: 1.15rem;
+    color: #3438AA;
+    font-weight: 800;
+  }
+
+  .proto-inst-header p {
+    font-size: 0.8rem;
+    color: #646D8C;
+  }
+
+  .proto-workspace-grid {
+    display: grid;
+    grid-template-columns: 1.85fr 1fr;
+    gap: 1.35rem;
+    align-items: start;
+  }
+
+  .proto-bezel-shell {
+    background: #EEF2F9;
+    border: 1px solid #DDE3F0;
+    border-radius: 20px;
+    padding: 6px;
+  }
+
+  .proto-card,
+  .proto-summary-card {
+    background: #FFFFFF;
+    border: 1px solid #DBE2EF;
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+
+  .row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .pill-step {
+    background: #EEF0FF;
+    color: #3438AA;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 99px;
+  }
+
+  .req-note {
+    font-size: 0.74rem;
+    color: #646D8C;
+  }
+
+  .proto-card-head h3 {
+    font-size: 1.2rem;
+    color: #1B1F3B;
+    font-weight: 800;
+  }
+
+  .proto-card-head p {
+    font-size: 0.85rem;
+    color: #4A516D;
+  }
+
+  .proto-subblock {
+    background: #FBFDFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .proto-subblock h4 {
+    font-size: 0.88rem;
+    color: #3438AA;
+    font-weight: 800;
+  }
+
+  .proto-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+  }
+
+  .proto-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .proto-field.full {
+    grid-column: 1 / -1;
+  }
+
+  .proto-field label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1B1F3B;
+  }
+
+  .proto-input {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.86rem;
+    color: #1B1F3B;
+    font-weight: 500;
+  }
+
+  .proto-input.active {
+    border-color: #3438AA;
+    background: #EEF0FF;
+    color: #3438AA;
+    font-weight: 700;
+  }
+
+  .hint {
+    font-size: 0.72rem;
+    color: #646D8C;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  .proto-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+  }
+
+  .autosave-note {
+    font-size: 0.76rem;
+    color: #646D8C;
+  }
+
+  .proto-btn-primary {
+    background: #3438AA;
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10px;
+  }
+
+  .proto-summary-card h4 {
+    font-size: 1rem;
+    color: #3438AA;
+    font-weight: 800;
+  }
+
+  .proto-summary-card p {
+    font-size: 0.8rem;
+    color: #646D8C;
+  }
+
+  .proto-sum-block {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sum-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1B1F3B;
+    border-bottom: 1px solid #E2E8F0;
+    padding-bottom: 0.4rem;
+  }
+
+  .badge-done {
+    background: #DCFCE7;
+    color: #15803D;
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+    font-size: 0.68rem;
+  }
+
+  .badge-pending {
+    background: #FEF3C7;
+    color: #B45309;
+    padding: 0.1rem 0.45rem;
+    border-radius: 6px;
+    font-size: 0.68rem;
+  }
+
+  .sum-row {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.78rem;
+  }
+
+  .sum-row span {
+    color: #646D8C;
+    font-size: 0.7rem;
+  }
+
+  .sum-row strong {
+    color: #1B1F3B;
+  }
+
+  .sum-row strong.muted {
+    color: #94A3B8;
+    font-weight: 500;
+  }
+
+  .proto-active-student {
+    background: #EEF0FF;
+    border: 1px solid #C7D2FE;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+  }
+
+  .small-kicker {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #3438AA;
+  }
+
+  .btn-mini {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .proto-pills-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+
+  .p-pill {
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    background: #FFFFFF;
+  }
+
+  .p-pill.active {
+    background: #EEF0FF;
+    border-color: #3438AA;
+    color: #3438AA;
+  }
+
+  .proto-ticket {
+    border: 1px solid #DBE2EF;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .proto-ticket-head {
+    background: #3438AA;
+    color: #FFFFFF;
+    padding: 1.15rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #C97026;
+  }
+
+  .ticket-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .stamp-sha {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    font-weight: 700;
+  }
+
+  .proto-ticket-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: #F8FAFC;
+    border-bottom: 1px dashed #CBD5E1;
+  }
+
+  .proto-ticket-meta span {
+    display: block;
+    font-size: 0.68rem;
+    color: #646D8C;
+    font-weight: 700;
+  }
+
+  .proto-ticket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1.35rem 1.5rem;
+  }
+
+  .proto-ticket-grid span {
+    display: block;
+    font-size: 0.68rem;
+    color: #646D8C;
+    font-weight: 700;
+  }
+
+  .proto-ticket-grid .full {
+    grid-column: 1 / -1;
+  }
+
+  .proto-ticket-grid .highlight {
+    background: #EEF0FF;
+    border-left: 4px solid #3438AA;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+  }
+
+  .proto-ticket-foot {
+    background: #F8FAFC;
+    border-top: 1px solid #E2E8F0;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #646D8C;
+  }
+
+  .email-preview-card {
+    border: 1px solid #CBD5E1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #F8FAFC;
+  }
+
+  .email-meta-bar {
+    padding: 1rem 1.5rem;
+    background: #F1F5F9;
+    border-bottom: 1px solid #CBD5E1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    color: #334155;
+  }
+
+  .email-body-frame {
+    margin: 1.25rem;
+    background: #FFFFFF;
+    border: 1px solid #DBE2EF;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .email-banner {
+    background: #3438AA;
+    color: #FFFFFF;
+    padding: 1.1rem 1.5rem;
+    border-bottom: 4px solid #C97026;
+  }
+
+  .email-banner span {
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    opacity: 0.9;
+  }
+
+  .email-banner h3 {
+    font-size: 1.1rem;
+    margin-top: 0.25rem;
+  }
+
+  .email-content {
+    padding: 1.4rem 1.5rem;
+    font-size: 0.86rem;
+    color: #1B1F3B;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .email-summary-box {
+    background: #F8FAFC;
+    border-left: 4px solid #3438AA;
+    padding: 0.85rem 1.1rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .email-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+
+  .email-table th {
+    background: #F1F5F9;
+    text-align: left;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 2px solid #CBD5E1;
+  }
+
+  .email-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #E2E8F0;
+  }
+</style>
